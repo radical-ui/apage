@@ -4,6 +4,7 @@ import android.app.ActionBar.Tab
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
@@ -28,7 +29,38 @@ data class Theme(
 
 	@Description("The color scheme that will be applied when the system is in dark mode, when the dynamic theme is disabled")
 	val darkColorScheme: ColorScheme = ColorScheme(),
+
+	@Description("The type of icons that will be displayed in other parts of the app")
+	val iconPack: IconPack,
 )
+
+@Serializable
+sealed class IconPack {
+	@Serializable
+	data object Rounded: IconPack()
+
+	@Serializable
+	data object Sharp: IconPack()
+
+	@Serializable
+	data object Filled: IconPack()
+
+	fun getJavaName(): String {
+		return when (this) {
+			is Filled -> "filled"
+			is Sharp -> "sharp"
+			is Rounded -> "rounded"
+		}
+	}
+
+	fun getIcons(): Any {
+		return when (this) {
+			is Filled -> Icons.Filled
+			is Sharp -> Icons.Sharp
+			is Rounded -> Icons.Rounded
+		}
+	}
+}
 
 @Serializable
 data class SurfaceTheme(
