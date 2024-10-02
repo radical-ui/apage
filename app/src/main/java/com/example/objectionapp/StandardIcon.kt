@@ -38,14 +38,3 @@ fun StandardIcon(
     if (icon == null) Icon(Icons.Rounded.QuestionMark, "no icon", tint = tint, modifier = modifier)
     else Icon(icon, "$name icon", tint = tint, modifier = modifier)
 }
-
-private fun getTone(outline: Boolean, rounding: CornerRounding): String {
-    if (outline) return "outlined"
-
-    if (rounding == CornerRounding.ROUND) return "filled"
-    if (rounding == CornerRounding.EXTRA_ROUND) return "rounded"
-    if (rounding == CornerRounding.SHARP) return "sharp"
-
-    println("Unreachable")
-    return "filled"
-}
