@@ -33,25 +33,22 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Page(
-    @Description("The page title will be displayed prominently at the top of the screen") val title: String? = null,
+	@Description("The page title will be displayed prominently at the top of the screen") val title: String? = null,
 //	@Description("The images will be displayed in carousel form, directly below the title") val imageUrls: List<String>? = null,
 //	@Description("The page subtitle is displayed directly under any images on the page") val subtitle: String? = null,
 
-    @Description(
-        "The page that will be pulled up for a presumed search through the contents of this page"
-    ) @ObjectReference(Object.PlainPage::class) val searchPageId: String? = null,
+	@Description(
+		"The page that will be pulled up for a presumed search through the contents of this page"
+	) @ObjectReference(Object.PlainPage::class) val searchPageId: String? = null,
 
-    val view: View? = null,
+	val view: View? = null,
 
-    val type: PageType,
-
-//	// TODO: refine these
-//	val content: List<Content> = listOf(),
-//	val actions: List<Action> = listOf(),
+	val type: PageType,
 )
 
 @Serializable
-sealed data class PageType(
+sealed class PageType {
+	@Serializable
 	data class Post(
 		@Description("The images will be displayed in carousel form, directly below the title")
 		val imageUrls: List<String>? = null,
@@ -59,90 +56,172 @@ sealed data class PageType(
 		val supertitle: String? = null,
 		@Description("The additional info is displayed directly below any images on the page")
 		val aditionalInfo: String? = null,
-	): PageType()
+	) : PageType()
 
+	@Serializable
 	data class Profile(
+		@Description("The the banner image for the user profile")
 		val bannerImageUrl: String,
+		@Description("The avatar image for the user profile")
 		val avatarImageUrl: String,
-	): PageType()
+	) : PageType()
 
-	object class Plain(): PageType()
-)
+
+	@Serializable
+	data object Plain : PageType()
+}
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.PageRender(
-    id: String, bottomPadding: Dp, animatedVisibilityScope: AnimatedVisibilityScope?
+	id: String,
+	bottomPadding: Dp,
+	animatedVisibilityScope: AnimatedVisibilityScope?,
 ) {
-    val navController = useNavController()
-    val layout = useDefaultLayout()
-    val isRoot = layout.getRoots().contains(id)
-    val page = usePage(id)
+	val page = usePage(id) ?: return
 
-    val scrollBehavior = if (isRoot) {
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-    } else {
-        TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    }
 
-    Column(
-        Modifier.padding(bottom = bottomPadding)
-    ) {
-        if (isRoot) {
-            LargeTopAppBar(
-                title = { Text("${page?.title}") },
-                scrollBehavior = scrollBehavior,
-            )
-        } else {
-            TopAppBar(
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        StandardIcon("ArrowBack")
-                    }
-                },
-                title = { Text("${page?.title}") },
-                scrollBehavior = scrollBehavior,
-            )
-        }
+	when (page.type) {
+		is PageType.Plain -> PlainPageRender(
+			id,
+			bottomPadding,
+			animatedVisibilityScope,
+			pageType = page.type,
+			view = page.view,
+			title = page.title,
+			searchPageId = page.searchPageId
+		)
 
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(20.dp),
-            modifier = Modifier
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .fillMaxWidth()
-                .fillMaxHeight()
-        ) {
-            val childPadding = PaddingValues(horizontal = 16.dp)
+		is PageType.Post -> PostPageRender(
+			id,
+			bottomPadding,
+			animatedVisibilityScope,
+			pageType = page.type,
+			view = page.view,
+			title = page.title,
+			searchPageId = page.searchPageId
+		)
 
-            // TODO support multiple images, but keep in mind that probably only the first one should take part in
-            //  the shared element animation
-            page?.imageUrls?.first()?.let { url ->
-                item {
-                    AsyncImage(
-                        model = url,
-                        contentDescription = "An image",
-                        clipToBounds = true,
-                        contentScale = ContentScale.Crop,
-                        modifier = if (animatedVisibilityScope != null) {
-                            Modifier.sharedElement(state = rememberSharedContentState("${id}/image"),
-                                animatedVisibilityScope = animatedVisibilityScope,
-                                boundsTransform = { _, _ ->
-                                    tween(durationMillis = 300)
-                                })
-                        } else {
-                            Modifier
-                        }
-                            .padding(childPadding)
-                            .clip(RoundedCornerShape(8))
-                            .height(300.dp)
-                            .fillMaxWidth()
-                    )
-                }
-            }
+		is PageType.Profile -> ProfilePageRender(
+			id,
+			bottomPadding,
+			animatedVisibilityScope,
+			pageType = page.type,
+			view = page.view,
+			title = page.title,
+			searchPageId = page.searchPageId
+		)
+	}
+}
 
-            item {
-                Box(Modifier.padding(vertical = 8.dp))
-            }
-        }
-    }
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@Composable
+fun SharedTransitionScope.ProfilePageRender(
+	id: String,
+	bottomPadding: Dp,
+	animatedVisibilityScope: AnimatedVisibilityScope?,
+	pageType: PageType.Profile,
+	view: View? = null,
+	title: String? = null,
+	searchPageId: String? = null,
+) {
+	return
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@Composable
+fun SharedTransitionScope.PlainPageRender(
+	id: String,
+	bottomPadding: Dp,
+	animatedVisibilityScope: AnimatedVisibilityScope?,
+	pageType: PageType.Plain,
+	view: View? = null,
+	title: String? = null,
+	searchPageId: String? = null,
+) {
+	return
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@Composable
+fun SharedTransitionScope.PostPageRender(
+	id: String,
+	bottomPadding: Dp,
+	animatedVisibilityScope: AnimatedVisibilityScope?,
+	pageType: PageType.Post,
+	view: View? = null,
+	title: String? = null,
+	searchPageId: String? = null,
+) {
+	val navController = useNavController()
+	val layout = useDefaultLayout()
+	val isRoot = layout.getRoots().contains(id)
+
+	val scrollBehavior = if (isRoot) {
+		TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+	} else {
+		TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+	}
+
+	Column(
+		Modifier.padding(bottom = bottomPadding)
+	) {
+		if (isRoot) {
+			LargeTopAppBar(
+				title = { Text("$title") },
+				scrollBehavior = scrollBehavior,
+			)
+		} else {
+			TopAppBar(
+				navigationIcon = {
+					IconButton(onClick = { navController.popBackStack() }) {
+						StandardIcon("ArrowBack")
+					}
+				},
+				title = { Text("$title") },
+				scrollBehavior = scrollBehavior,
+			)
+		}
+
+		LazyColumn(
+			verticalArrangement = Arrangement.spacedBy(20.dp),
+			modifier = Modifier
+				.nestedScroll(scrollBehavior.nestedScrollConnection)
+				.fillMaxWidth()
+				.fillMaxHeight()
+		) {
+			val childPadding = PaddingValues(horizontal = 16.dp)
+
+			// TODO support multiple images, but keep in mind that probably only the first one should take part in
+			//  the shared element animation
+			pageType.imageUrls?.first()?.let { url ->
+				item {
+					AsyncImage(
+						model = url,
+						contentDescription = "An image",
+						clipToBounds = true,
+						contentScale = ContentScale.Crop,
+						modifier = if (animatedVisibilityScope != null) {
+							Modifier.sharedElement(state = rememberSharedContentState("${id}/image"),
+								animatedVisibilityScope = animatedVisibilityScope,
+								boundsTransform = { _, _ ->
+									tween(durationMillis = 300)
+								})
+						} else {
+							Modifier
+						}
+							.padding(childPadding)
+							.clip(RoundedCornerShape(8))
+							.height(300.dp)
+							.fillMaxWidth()
+					)
+				}
+			}
+
+			item {
+				Box(Modifier.padding(vertical = 8.dp))
+			}
+		}
+	}
 }
