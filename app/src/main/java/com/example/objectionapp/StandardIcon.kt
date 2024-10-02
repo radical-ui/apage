@@ -14,44 +14,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import java.lang.System.console
 
-
 @Composable
 fun StandardIcon(
-	name: String,
-	modifier: Modifier = Modifier,
-	outline: Boolean = false,
-	tint: Color = LocalContentColor.current,
+    name: String,
+    modifier: Modifier = Modifier,
+    tint: Color = LocalContentColor.current,
 ) {
-//    val theme = useTheme()
+    val logger = useController().logger.scope("StandardIcon")
+    val theme = useDefaultTheme()
+    val icon: ImageVector? = remember(name) {
+        try {
+            val cl =
+                Class.forName("androidx.compose.material.icons.${theme.iconPack.getJavaName()}.${name}Kt")
 
-//    val tone = getTone(outline, theme.value.cornerRounding)
-	val tone = "rounded"
-	val icon: ImageVector? = remember(name) {
-		try {
-			val cl = Class.forName("androidx.compose.material.icons.$tone.${name}Kt")
-			println(cl)
-			val method = cl.declaredMethods.first()
-			method.invoke(null, Icons.Rounded) as ImageVector
-		} catch (err: Throwable) {
-			println("Error with icon loading: $err")
-			null
-		}
-	}
+            val method = cl.declaredMethods.first()
+            method.invoke(null, theme.iconPack.getIcons()) as ImageVector
+        } catch (err: Throwable) {
+            logger.error("failed to load icon: $err")
+            null
+        }
+    }
 
-	if (icon == null) {
-	Icon(Icons.Rounded.QuestionMark, "no icon", tint = tint, modifier = modifier)
-	} else Icon(icon, "$name icon, $tone", tint = tint, modifier = modifier)
-
-
-}
-
-private fun getTone(outline: Boolean, rounding: CornerRounding): String {
-	if (outline) return "outlined"
-
-	if (rounding == CornerRounding.ROUND) return "filled"
-	if (rounding == CornerRounding.EXTRA_ROUND) return "rounded"
-	if (rounding == CornerRounding.SHARP) return "sharp"
-
-	println("Unreachable")
-	return "filled"
+    if (icon == null) Icon(Icons.Rounded.QuestionMark, "no icon", tint = tint, modifier = modifier)
+    else Icon(icon, "$name icon", tint = tint, modifier = modifier)
 }
