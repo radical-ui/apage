@@ -118,8 +118,13 @@ fun TestProvider(controller: Controller) {
 }
 
 @Composable
+fun useController(): Controller {
+	return LocalController.current!!
+}
+
+@Composable
 fun useObject(id: String?): Object? {
-	val controller = LocalController.current!!
+	val controller = useController()
 	var obj by remember { mutableStateOf(id?.let { controller.objectStore.getCurrentObject(id) }) }
 
 	DisposableEffect(id) {

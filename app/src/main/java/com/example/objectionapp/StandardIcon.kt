@@ -14,23 +14,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import java.lang.System.console
 
-
 @Composable
 fun StandardIcon(
     name: String,
     modifier: Modifier = Modifier,
     tint: Color = LocalContentColor.current,
 ) {
+    val logger = useController().logger.scope("StandardIcon")
     val theme = useDefaultTheme()
     val icon: ImageVector? = remember(name) {
         try {
             val cl =
                 Class.forName("androidx.compose.material.icons.${theme.iconPack.getJavaName()}.${name}Kt")
-            println(cl)
+
             val method = cl.declaredMethods.first()
             method.invoke(null, theme.iconPack.getIcons()) as ImageVector
         } catch (err: Throwable) {
-            println("Error with icon loading: $err")
+            logger.error("failed to load icon: $err")
             null
         }
     }
