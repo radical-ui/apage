@@ -62,8 +62,6 @@ enum class CornerRounding {
 	EXTRA_ROUND,
 }
 
-
-
 @Composable
 fun RenderTheme(content: @Composable () -> Unit) {
 	val theme = useDefaultTheme()

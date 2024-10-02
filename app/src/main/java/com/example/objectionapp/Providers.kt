@@ -27,7 +27,6 @@ private var LocalNavController = compositionLocalOf<NavHostController?> { null }
 
 @Composable
 fun Provider(controller: Controller = Controller.fromConstants()) {
-
 	CompositionLocalProvider(LocalController provides controller) {
 		val navController = rememberNavController()
 		val hasInternet = remember { mutableStateOf(controller.bridge.onHasInternet.getLastValue() ?: true) }
@@ -157,10 +156,10 @@ fun useDefaultLayout(): Layout {
 }
 
 @Composable
-fun usePage(id: String?): PostPage? {
+fun usePage(id: String?): Page? {
 	val obj = useObject(id) ?: return null
 
-	return if (obj is Object.PostPage) obj.def else throw Exception("Object '$id' was not a page")
+	return if (obj is Object.Page) obj.def else throw Exception("Object '$id' was not a page")
 }
 
 @Composable

@@ -10,7 +10,7 @@ class Logger(private var session: Session, private var scope: String) {
     }
 
     fun warn(message: String) {
-        session.pushLog("WARN: $message")
+        session.pushLog("[$scope] WARN: $message")
     }
 
     fun info(message: String) {

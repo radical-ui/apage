@@ -32,115 +32,117 @@ import coil.compose.AsyncImage
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PlainPage(
-	@Description("The page title will be displayed prominently at the top of the screen") val title: String? = null,
-	@Description("The images will be displayed in carousel form, directly below the title") val imageUrls: List<String>? = null,
-	@Description("The page subtitle is displayed directly under any images on the page") val subtitle: String? = null,
+data class Page(
+    @Description("The page title will be displayed prominently at the top of the screen") val title: String? = null,
+//	@Description("The images will be displayed in carousel form, directly below the title") val imageUrls: List<String>? = null,
+//	@Description("The page subtitle is displayed directly under any images on the page") val subtitle: String? = null,
 
-	@Description(
-		"The page that will be pulled up for a presumed search through the contents of this page"
-	) @ObjectReference(Object.PlainPage::class) val searchPage: String? = null,
+    @Description(
+        "The page that will be pulled up for a presumed search through the contents of this page"
+    ) @ObjectReference(Object.PlainPage::class) val searchPageId: String? = null,
 
-	val view: View? = null,
+    val view: View? = null,
 
-	// TODO: refine these
-	val content: List<Content> = listOf(),
-	val actions: List<Action> = listOf(),
+    val type: PageType,
+
+//	// TODO: refine these
+//	val content: List<Content> = listOf(),
+//	val actions: List<Action> = listOf(),
 )
 
 @Serializable
-data class PostPage(
-	@Description("The page title will be displayed prominently at the top of the screen") val title: String? = null,
-	@Description("The images will be displayed in carousel form, directly below the title") val imageUrls: List<String>? = null,
-	@Description("The page supertitle is displayed directly below any images on the page") val supertitle: String? = null,
-	@Description("The additional info is displayed directly below any images on the page") val aditionalInfo: String? = null,
+sealed data class PageType(
+	data class Post(
+		@Description("The images will be displayed in carousel form, directly below the title")
+		val imageUrls: List<String>? = null,
+		@Description("The page supertitle is displayed directly below any images on the page")
+		val supertitle: String? = null,
+		@Description("The additional info is displayed directly below any images on the page")
+		val aditionalInfo: String? = null,
+	): PageType()
 
+	data class Profile(
+		val bannerImageUrl: String,
+		val avatarImageUrl: String,
+	): PageType()
 
-
-	@Description(
-		"The page that will be pulled up for a presumed search through the contents of this page"
-	) @ObjectReference(Object.PostPage::class) val searchPage: String? = null,
-
-	val view: View? = null,
-
-	// TODO: refine these
-	val actions: List<Action> = listOf(),
+	object class Plain(): PageType()
 )
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.PageRender(
-	id: String, bottomPadding: Dp, animatedVisibilityScope: AnimatedVisibilityScope?
+    id: String, bottomPadding: Dp, animatedVisibilityScope: AnimatedVisibilityScope?
 ) {
-	val navController = useNavController()
-	val layout = useDefaultLayout()
-	val isRoot = layout.getRoots().contains(id)
-	val page = usePage(id)
+    val navController = useNavController()
+    val layout = useDefaultLayout()
+    val isRoot = layout.getRoots().contains(id)
+    val page = usePage(id)
 
-	val scrollBehavior = if (isRoot) {
-		TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-	} else {
-		TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-	}
+    val scrollBehavior = if (isRoot) {
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    } else {
+        TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    }
 
-	Column(
-		Modifier.padding(bottom = bottomPadding)
-	) {
-		if (isRoot) {
-			LargeTopAppBar(
-				title = { Text("${page?.title}") },
-				scrollBehavior = scrollBehavior,
-			)
-		} else {
-			TopAppBar(
-				navigationIcon = {
-					IconButton(onClick = { navController.popBackStack() }) {
-						StandardIcon("ArrowBack")
-					}
-				},
-				title = { Text("${page?.title}") },
-				scrollBehavior = scrollBehavior,
-			)
-		}
+    Column(
+        Modifier.padding(bottom = bottomPadding)
+    ) {
+        if (isRoot) {
+            LargeTopAppBar(
+                title = { Text("${page?.title}") },
+                scrollBehavior = scrollBehavior,
+            )
+        } else {
+            TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        StandardIcon("ArrowBack")
+                    }
+                },
+                title = { Text("${page?.title}") },
+                scrollBehavior = scrollBehavior,
+            )
+        }
 
-		LazyColumn(
-			verticalArrangement = Arrangement.spacedBy(20.dp),
-			modifier = Modifier
-				.nestedScroll(scrollBehavior.nestedScrollConnection)
-				.fillMaxWidth()
-				.fillMaxHeight()
-		) {
-			val childPadding = PaddingValues(horizontal = 16.dp)
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(20.dp),
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .fillMaxWidth()
+                .fillMaxHeight()
+        ) {
+            val childPadding = PaddingValues(horizontal = 16.dp)
 
-			// TODO support multiple images, but keep in mind that probably only the first one should take part in
-			//  the shared element animation
-			page?.imageUrls?.first()?.let { url ->
-				item {
-					AsyncImage(
-						model = url,
-						contentDescription = "An image",
-						clipToBounds = true,
-						contentScale = ContentScale.Crop,
-						modifier = if (animatedVisibilityScope != null) {
-							Modifier.sharedElement(state = rememberSharedContentState("${id}/image"),
-								animatedVisibilityScope = animatedVisibilityScope,
-								boundsTransform = { _, _ ->
-									tween(durationMillis = 300)
-								})
-						} else {
-							Modifier
-						}
-							.padding(childPadding)
-							.clip(RoundedCornerShape(8))
-							.height(300.dp)
-							.fillMaxWidth()
-					)
-				}
-			}
+            // TODO support multiple images, but keep in mind that probably only the first one should take part in
+            //  the shared element animation
+            page?.imageUrls?.first()?.let { url ->
+                item {
+                    AsyncImage(
+                        model = url,
+                        contentDescription = "An image",
+                        clipToBounds = true,
+                        contentScale = ContentScale.Crop,
+                        modifier = if (animatedVisibilityScope != null) {
+                            Modifier.sharedElement(state = rememberSharedContentState("${id}/image"),
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                boundsTransform = { _, _ ->
+                                    tween(durationMillis = 300)
+                                })
+                        } else {
+                            Modifier
+                        }
+                            .padding(childPadding)
+                            .clip(RoundedCornerShape(8))
+                            .height(300.dp)
+                            .fillMaxWidth()
+                    )
+                }
+            }
 
-			item {
-				Box(Modifier.padding(vertical = 8.dp))
-			}
-		}
-	}
+            item {
+                Box(Modifier.padding(vertical = 8.dp))
+            }
+        }
+    }
 }

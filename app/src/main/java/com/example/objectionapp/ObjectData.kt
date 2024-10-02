@@ -9,12 +9,10 @@ import kotlinx.serialization.json.JsonClassDiscriminator
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
 @JsonClassDiscriminator("kind")
+@ContentKey("def")
 sealed class Object {
 	@Serializable
-	data class PlainPage(val def: com.example.objectionapp.PlainPage) : Object()
-
-//	@Serializable
-//	data class ProfilePage(val def: com.example.objectionapp.ProfilePage) : Object()
+	data class Page(val def: com.example.objectionapp.Page) : Object()
 
 	@Serializable
 	data class PostPage(val def: com.example.objectionapp.PostPage) : Object()
@@ -24,10 +22,6 @@ sealed class Object {
 
 	@Serializable
 	data class Layout(val def: com.example.objectionapp.Layout) : Object()
-
-	fun assertPostPage(): PostPage {
-
-	}
 }
 
 @OptIn(ExperimentalSerializationApi::class)
