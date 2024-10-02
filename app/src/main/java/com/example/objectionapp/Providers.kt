@@ -147,6 +147,11 @@ fun useObject(id: String?): Object? {
 }
 
 @Composable
+fun useLogger(scope: String): Logger {
+	return useController().logger.scope(scope)
+}
+
+@Composable
 fun useDefaultTheme(): Theme {
 	val obj = useObject(defaultThemeId) ?: throw Exception("No object exists for '$defaultThemeId'")
 
