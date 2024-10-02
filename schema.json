@@ -3,7 +3,1137 @@
 		"$": "enum",
 		"discriminator_key": "kind",
 		"content_key": null,
-		"variants": []
+		"variants": [
+			{
+				"name": "com.example.objectionapp.Object.Layout",
+				"description": null,
+				"type": {
+					"$": "struct",
+					"properties": [
+						{
+							"name": "def",
+							"description": null,
+							"type": {
+								"$": "struct",
+								"properties": [
+									{
+										"name": "tabBar",
+										"description": "The tab bar is shown at the bottom of the application. If there is no current page set, the current page will default to the first tab bar item.",
+										"type": {
+											"$": "struct",
+											"properties": [
+												{
+													"name": "buttons",
+													"description": null,
+													"type": {
+														"$": "list",
+														"option": {
+															"$": "struct",
+															"properties": [
+																{
+																	"name": "pageId",
+																	"description": null,
+																	"type": {
+																		"$": "reference",
+																		"expectedTopLevelVariant": "com.example.objectionapp.Object.Page"
+																	},
+																	"optional": false
+																},
+																{
+																	"name": "icon",
+																	"description": null,
+																	"type": {
+																		"$": "string"
+																	},
+																	"optional": false
+																}
+															]
+														}
+													},
+													"optional": false
+												}
+											]
+										},
+										"optional": true
+									},
+									{
+										"name": "currentPageId",
+										"description": "The page that is to be shown by default",
+										"type": {
+											"$": "reference",
+											"expectedTopLevelVariant": "com.example.objectionapp.Object.Page"
+										},
+										"optional": true
+									}
+								]
+							},
+							"optional": false
+						}
+					]
+				}
+			},
+			{
+				"name": "com.example.objectionapp.Object.Page",
+				"description": null,
+				"type": {
+					"$": "struct",
+					"properties": [
+						{
+							"name": "def",
+							"description": null,
+							"type": {
+								"$": "struct",
+								"properties": [
+									{
+										"name": "title",
+										"description": "The page title will be displayed prominently at the top of the screen",
+										"type": {
+											"$": "string"
+										},
+										"optional": true
+									},
+									{
+										"name": "imageUrls",
+										"description": "The images will be displayed in carousel form, directly below the title",
+										"type": {
+											"$": "list",
+											"option": {
+												"$": "string"
+											}
+										},
+										"optional": true
+									},
+									{
+										"name": "subtitle",
+										"description": "The page subtitle is displayed directly under any images on the page",
+										"type": {
+											"$": "string"
+										},
+										"optional": true
+									},
+									{
+										"name": "searchPage",
+										"description": "The page that will be pulled up for a presumed search through the contents of this page",
+										"type": {
+											"$": "reference",
+											"expectedTopLevelVariant": "com.example.objectionapp.Object.Page"
+										},
+										"optional": true
+									},
+									{
+										"name": "content",
+										"description": null,
+										"type": {
+											"$": "list",
+											"option": {
+												"$": "enum",
+												"discriminator_key": "kind",
+												"content_key": null,
+												"variants": [
+													{
+														"name": "call_to_action",
+														"description": null,
+														"type": {
+															"$": "struct",
+															"properties": [
+																{
+																	"name": "def",
+																	"description": null,
+																	"type": {
+																		"$": "struct",
+																		"properties": [
+																			{
+																				"name": "title",
+																				"description": null,
+																				"type": {
+																					"$": "string"
+																				},
+																				"optional": false
+																			},
+																			{
+																				"name": "icon",
+																				"description": null,
+																				"type": {
+																					"$": "string"
+																				},
+																				"optional": true
+																			},
+																			{
+																				"name": "target_object",
+																				"description": null,
+																				"type": {
+																					"$": "string"
+																				},
+																				"optional": false
+																			},
+																			{
+																				"name": "surface",
+																				"description": null,
+																				"type": {
+																					"$": "string"
+																				},
+																				"optional": false
+																			}
+																		]
+																	},
+																	"optional": false
+																}
+															]
+														}
+													},
+													{
+														"name": "headline",
+														"description": null,
+														"type": {
+															"$": "struct",
+															"properties": [
+																{
+																	"name": "def",
+																	"description": null,
+																	"type": {
+																		"$": "struct",
+																		"properties": [
+																			{
+																				"name": "text",
+																				"description": null,
+																				"type": {
+																					"$": "string"
+																				},
+																				"optional": false
+																			},
+																			{
+																				"name": "color",
+																				"description": null,
+																				"type": {
+																					"$": "color"
+																				},
+																				"optional": true
+																			}
+																		]
+																	},
+																	"optional": false
+																}
+															]
+														}
+													},
+													{
+														"name": "object_group",
+														"description": null,
+														"type": {
+															"$": "struct",
+															"properties": [
+																{
+																	"name": "def",
+																	"description": null,
+																	"type": {
+																		"$": "struct",
+																		"properties": [
+																			{
+																				"name": "title",
+																				"description": null,
+																				"type": {
+																					"$": "string"
+																				},
+																				"optional": false
+																			},
+																			{
+																				"name": "description",
+																				"description": null,
+																				"type": {
+																					"$": "string"
+																				},
+																				"optional": true
+																			},
+																			{
+																				"name": "objects",
+																				"description": null,
+																				"type": {
+																					"$": "list",
+																					"option": {
+																						"$": "string"
+																					}
+																				},
+																				"optional": false
+																			}
+																		]
+																	},
+																	"optional": false
+																}
+															]
+														}
+													},
+													{
+														"name": "object_preview",
+														"description": null,
+														"type": {
+															"$": "struct",
+															"properties": [
+																{
+																	"name": "def",
+																	"description": null,
+																	"type": {
+																		"$": "struct",
+																		"properties": [
+																			{
+																				"name": "objectId",
+																				"description": "The object that is to be previewed",
+																				"type": {
+																					"$": "reference",
+																					"expectedTopLevelVariant": "paragraph"
+																				},
+																				"optional": false
+																			},
+																			{
+																				"name": "containerColor",
+																				"description": null,
+																				"type": {
+																					"$": "color"
+																				},
+																				"optional": true
+																			},
+																			{
+																				"name": "contentColor",
+																				"description": null,
+																				"type": {
+																					"$": "color"
+																				},
+																				"optional": true
+																			}
+																		]
+																	},
+																	"optional": false
+																}
+															]
+														}
+													},
+													{
+														"name": "paragraph",
+														"description": null,
+														"type": {
+															"$": "struct",
+															"properties": [
+																{
+																	"name": "def",
+																	"description": null,
+																	"type": {
+																		"$": "struct",
+																		"properties": [
+																			{
+																				"name": "text",
+																				"description": null,
+																				"type": {
+																					"$": "string"
+																				},
+																				"optional": false
+																			},
+																			{
+																				"name": "color",
+																				"description": null,
+																				"type": {
+																					"$": "color"
+																				},
+																				"optional": true
+																			}
+																		]
+																	},
+																	"optional": false
+																}
+															]
+														}
+													},
+													{
+														"name": "quote",
+														"description": null,
+														"type": {
+															"$": "struct",
+															"properties": [
+																{
+																	"name": "def",
+																	"description": null,
+																	"type": {
+																		"$": "struct",
+																		"properties": [
+																			{
+																				"name": "text",
+																				"description": null,
+																				"type": {
+																					"$": "string"
+																				},
+																				"optional": false
+																			},
+																			{
+																				"name": "attribution",
+																				"description": null,
+																				"type": {
+																					"$": "string"
+																				},
+																				"optional": false
+																			},
+																			{
+																				"name": "surface",
+																				"description": null,
+																				"type": {
+																					"$": "string"
+																				},
+																				"optional": false
+																			},
+																			{
+																				"name": "attributionSurface",
+																				"description": null,
+																				"type": {
+																					"$": "string"
+																				},
+																				"optional": false
+																			}
+																		]
+																	},
+																	"optional": false
+																}
+															]
+														}
+													}
+												]
+											}
+										},
+										"optional": false
+									},
+									{
+										"name": "actions",
+										"description": null,
+										"type": {
+											"$": "list",
+											"option": {
+												"$": "struct",
+												"properties": [
+													{
+														"name": "kind",
+														"description": null,
+														"type": {
+															"$": "enum",
+															"discriminator_key": "kind",
+															"content_key": null,
+															"variants": []
+														},
+														"optional": false
+													},
+													{
+														"name": "title",
+														"description": null,
+														"type": {
+															"$": "string"
+														},
+														"optional": false
+													},
+													{
+														"name": "icon",
+														"description": null,
+														"type": {
+															"$": "string"
+														},
+														"optional": true
+													},
+													{
+														"name": "process",
+														"description": null,
+														"type": {
+															"$": "enum",
+															"discriminator_key": "kind",
+															"content_key": null,
+															"variants": [
+																{
+																	"name": "perform_operation",
+																	"description": null,
+																	"type": {
+																		"$": "struct",
+																		"properties": [
+																			{
+																				"name": "def",
+																				"description": null,
+																				"type": {
+																					"$": "struct",
+																					"properties": [
+																						{
+																							"name": "key",
+																							"description": null,
+																							"type": {
+																								"$": "string"
+																							},
+																							"optional": false
+																						}
+																					]
+																				},
+																				"optional": false
+																			}
+																		]
+																	}
+																},
+																{
+																	"name": "show_object",
+																	"description": null,
+																	"type": {
+																		"$": "struct",
+																		"properties": [
+																			{
+																				"name": "def",
+																				"description": null,
+																				"type": {
+																					"$": "struct",
+																					"properties": [
+																						{
+																							"name": "id",
+																							"description": null,
+																							"type": {
+																								"$": "string"
+																							},
+																							"optional": false
+																						}
+																					]
+																				},
+																				"optional": false
+																			}
+																		]
+																	}
+																}
+															]
+														},
+														"optional": false
+													}
+												]
+											}
+										},
+										"optional": false
+									}
+								]
+							},
+							"optional": false
+						}
+					]
+				}
+			},
+			{
+				"name": "com.example.objectionapp.Object.Theme",
+				"description": null,
+				"type": {
+					"$": "struct",
+					"properties": [
+						{
+							"name": "def",
+							"description": null,
+							"type": {
+								"$": "struct",
+								"properties": [
+									{
+										"name": "disableDynamicTheme",
+										"description": "Unless otherwise specified, the supplied light and dark color schemes will be overridden with the android-supplied color scheme, which is computed from the home screen background.",
+										"type": {
+											"$": "boolean"
+										},
+										"optional": false
+									},
+									{
+										"name": "lightColorScheme",
+										"description": "The color scheme that will be applied when the system is in light mode, when the dynamic theme is disabled",
+										"type": {
+											"$": "struct",
+											"properties": [
+												{
+													"name": "primary",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onPrimary",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "primaryContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onPrimaryContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "inversePrimary",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "secondary",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onSecondary",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "secondaryContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onSecondaryContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "tertiary",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onTertiary",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "tertiaryContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onTertiaryContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "background",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onBackground",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surface",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onSurface",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceVariant",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onSurfaceVariant",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceTint",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "inverseSurface",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "inverseOnSurface",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "error",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onError",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "errorContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onErrorContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "outline",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "outlineVariant",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "scrim",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceBright",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceContainerHigh",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceContainerHighest",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceContainerLow",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceContainerLowest",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceDim",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												}
+											]
+										},
+										"optional": false
+									},
+									{
+										"name": "darkColorScheme",
+										"description": "The color scheme that will be applied when the system is in dark mode, when the dynamic theme is disabled",
+										"type": {
+											"$": "struct",
+											"properties": [
+												{
+													"name": "primary",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onPrimary",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "primaryContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onPrimaryContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "inversePrimary",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "secondary",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onSecondary",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "secondaryContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onSecondaryContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "tertiary",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onTertiary",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "tertiaryContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onTertiaryContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "background",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onBackground",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surface",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onSurface",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceVariant",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onSurfaceVariant",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceTint",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "inverseSurface",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "inverseOnSurface",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "error",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onError",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "errorContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "onErrorContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "outline",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "outlineVariant",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "scrim",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceBright",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceContainer",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceContainerHigh",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceContainerHighest",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceContainerLow",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceContainerLowest",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												},
+												{
+													"name": "surfaceDim",
+													"description": null,
+													"type": {
+														"$": "color"
+													},
+													"optional": true
+												}
+											]
+										},
+										"optional": false
+									}
+								]
+							},
+							"optional": false
+						}
+					]
+				}
+			}
+		]
 	},
 	"version": "0.1",
 	"initial_objects": [

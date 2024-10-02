@@ -1,16 +1,22 @@
 package com.example.objectionapp
 
+
+import android.graphics.drawable.RippleDrawable
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -19,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,12 +35,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TabBar(
-	val buttons: List<TabBarButton>
+	val stupid: Boolean = false,
+	val buttons: List<TabBarButton>,
 )
 
 @Serializable
 data class TabBarButton(
-	@ObjectReference(Object.Page::class) val pageId: String,
+	@ObjectReference(Object.PlainPage::class) val pageId: String,
 	val icon: String,
 )
 
@@ -41,7 +49,9 @@ data class TabBarButton(
 fun TabBarRender(tabBar: TabBar) {
 	val navController = useNavController()
 	val currentBackStackEntry = navController.currentBackStackEntryAsState()
-	val currentPageId = currentBackStackEntry.value?.arguments?.let { decodeObjectIdFromRouteArgs(it) }
+	val currentPageId =
+		currentBackStackEntry.value?.arguments?.let { decodeObjectIdFromRouteArgs(it) }
+
 
 	Column {
 		currentPageId?.let { pageId ->
@@ -64,7 +74,7 @@ fun TabBarRender(tabBar: TabBar) {
 						horizontalArrangement = Arrangement.spacedBy(10.dp)
 					) {
 						StandardIcon(
-							"search",
+							"Search",
 							modifier = Modifier.size(30.dp),
 						)
 
@@ -90,6 +100,36 @@ fun TabBarRender(tabBar: TabBar) {
 				}
 			}
 		}
+	}
+
+	if (tabBar.stupid) {
+		Surface(
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(16.dp)
+				.clip(RoundedCornerShape(60))
+				.height(50.dp),
+			color = MaterialTheme.colorScheme.surfaceVariant,
+		) {
+			Row(
+				verticalAlignment = Alignment.CenterVertically,
+				horizontalArrangement = Arrangement.SpaceEvenly
+			) {
+				for (button in tabBar.buttons) {
+					val page = usePage(button.pageId)
+					Surface(
+						modifier = Modifier
+							.fillMaxWidth()
+							.fillMaxHeight(),
+						color = selected(button.pageId) ?: Color.Transparent
+					) {
+						StandardIcon(button.icon)
+
+					}
+				}
+			}
+		}
+	} else {
 
 		NavigationBar {
 			val history = remember { mutableStateOf<List<String>>(listOf()) }
@@ -125,3 +165,13 @@ fun TabBarRender(tabBar: TabBar) {
 		}
 	}
 }
+
+
+fun selected(pageId: String): Color {
+	return if (useDefaultLayout().tabBar?.buttons?.map { it.pageId }?.contains(pageId) == true) {
+		MaterialTheme.colorScheme.primary
+	} else {
+		null
+	}
+}
+

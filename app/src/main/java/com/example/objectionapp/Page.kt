@@ -32,17 +32,38 @@ import coil.compose.AsyncImage
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Page(
+data class PlainPage(
 	@Description("The page title will be displayed prominently at the top of the screen") val title: String? = null,
 	@Description("The images will be displayed in carousel form, directly below the title") val imageUrls: List<String>? = null,
 	@Description("The page subtitle is displayed directly under any images on the page") val subtitle: String? = null,
 
 	@Description(
 		"The page that will be pulled up for a presumed search through the contents of this page"
-	) @ObjectReference(Object.Page::class) val searchPage: String? = null,
+	) @ObjectReference(Object.PlainPage::class) val searchPage: String? = null,
+
+	val view: View? = null,
 
 	// TODO: refine these
 	val content: List<Content> = listOf(),
+	val actions: List<Action> = listOf(),
+)
+
+@Serializable
+data class PostPage(
+	@Description("The page title will be displayed prominently at the top of the screen") val title: String? = null,
+	@Description("The images will be displayed in carousel form, directly below the title") val imageUrls: List<String>? = null,
+	@Description("The page supertitle is displayed directly below any images on the page") val supertitle: String? = null,
+	@Description("The additional info is displayed directly below any images on the page") val aditionalInfo: String? = null,
+
+
+
+	@Description(
+		"The page that will be pulled up for a presumed search through the contents of this page"
+	) @ObjectReference(Object.PostPage::class) val searchPage: String? = null,
+
+	val view: View? = null,
+
+	// TODO: refine these
 	val actions: List<Action> = listOf(),
 )
 
@@ -114,12 +135,6 @@ fun SharedTransitionScope.PageRender(
 							.height(300.dp)
 							.fillMaxWidth()
 					)
-				}
-			}
-
-			page?.content?.let { content ->
-				for (item in content) {
-					item { ContentView(item, childPadding, animatedVisibilityScope) }
 				}
 			}
 

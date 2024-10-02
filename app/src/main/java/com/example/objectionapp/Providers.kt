@@ -1,6 +1,5 @@
 package com.example.objectionapp
 
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -22,7 +21,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.activity.enableEdgeToEdge
 
 private val LocalController = compositionLocalOf<Controller?> { null }
 private var LocalNavController = compositionLocalOf<NavHostController?> { null }
@@ -159,10 +157,10 @@ fun useDefaultLayout(): Layout {
 }
 
 @Composable
-fun usePage(id: String?): Page? {
+fun usePage(id: String?): PostPage? {
 	val obj = useObject(id) ?: return null
 
-	return if (obj is Object.Page) obj.def else throw Exception("Object '$id' was not a page")
+	return if (obj is Object.PostPage) obj.def else throw Exception("Object '$id' was not a page")
 }
 
 @Composable
