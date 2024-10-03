@@ -104,32 +104,32 @@ fun SharedTransitionScope.ObjectPreviewView(
 //                disabledContainerColor = surface.value.backgroundColor2.intoColor()
 //            )
 		) {
-			obj?.imageUrls?.first()?.let {
-				AsyncImage(
-					model = it,
-					contentDescription = "An image",
-					clipToBounds = true,
-					contentScale = ContentScale.Crop,
-					modifier = if (animatedVisibilityScope != null) {
-						Modifier
-							.sharedElement(
-								state = rememberSharedContentState("${content.objectId}/image"),
-								animatedVisibilityScope = animatedVisibilityScope,
-								boundsTransform = { _, _ ->
-									tween(durationMillis = 300)
-								}
-							)
-					} else {
-						Modifier
-					}
-						.height(200.dp)
-						.fillMaxWidth()
-						.clip(RoundedCornerShape(12.dp)),
-					onState = { state ->
-						println(state)
-					}
-				)
-			}
+//			obj?.imageUrls?.first()?.let {
+//				AsyncImage(
+//					model = it,
+//					contentDescription = "An image",
+//					clipToBounds = true,
+//					contentScale = ContentScale.Crop,
+//					modifier = if (animatedVisibilityScope != null) {
+//						Modifier
+//							.sharedElement(
+//								state = rememberSharedContentState("${content.objectId}/image"),
+//								animatedVisibilityScope = animatedVisibilityScope,
+//								boundsTransform = { _, _ ->
+//									tween(durationMillis = 300)
+//								}
+//							)
+//					} else {
+//						Modifier
+//					}
+//						.height(200.dp)
+//						.fillMaxWidth()
+//						.clip(RoundedCornerShape(12.dp)),
+//					onState = { state ->
+//						println(state)
+//					}
+//				)
+//			}
 
 			Column(
 				Modifier.padding(horizontal = 10.dp, vertical = 12.dp),

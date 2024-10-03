@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -32,6 +33,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.serialization.Serializable
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.NavigationBarItemColors
+import kotlinx.serialization.json.JsonNull.content
 
 @Serializable
 data class TabBar(
@@ -41,7 +48,7 @@ data class TabBar(
 
 @Serializable
 data class TabBarButton(
-	@ObjectReference(Object.PlainPage::class) val pageId: String,
+	@ObjectReference(Object.Page::class) val pageId: String,
 	val icon: String,
 )
 
@@ -88,7 +95,7 @@ fun TabBarRender(tabBar: TabBar) {
 								)
 							}
 
-							searchPage?.subtitle?.let {
+							searchPage?.title?.let {
 								Text(
 									it,
 									color = MaterialTheme.colorScheme.onBackground,
@@ -103,75 +110,108 @@ fun TabBarRender(tabBar: TabBar) {
 	}
 
 	if (tabBar.stupid) {
-		Surface(
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(16.dp)
-				.clip(RoundedCornerShape(60))
-				.height(50.dp),
-			color = MaterialTheme.colorScheme.surfaceVariant,
+		Column(
+			modifier = Modifier.fillMaxWidth(),
+			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
-			Row(
-				verticalAlignment = Alignment.CenterVertically,
-				horizontalArrangement = Arrangement.SpaceEvenly
-			) {
-				for (button in tabBar.buttons) {
-					val page = usePage(button.pageId)
-					Surface(
-						modifier = Modifier
-							.fillMaxWidth()
-							.fillMaxHeight(),
-						color = selected(button.pageId) ?: Color.Transparent
-					) {
-						StandardIcon(button.icon)
+			Surface(
+				modifier = Modifier
+//				.fillMaxWidth()
+				.padding(0.dp)
+					.clip(RoundedCornerShape(60))
+					.height(50.dp),
+				color = MaterialTheme.colorScheme.surfaceVariant,
 
-					}
+				) {
+				Row(
+					verticalAlignment = Alignment.CenterVertically,
+					horizontalArrangement = Arrangement.SpaceEvenly,
+					modifier = Modifier.padding(0.dp),
+
+				) {
+					SomeNavigatableTabBar(
+						buttons = tabBar.buttons.map { button ->
+							NavButton(pageId = button.pageId) { didClick, isActive ->
+								val color = if (isActive) Color.Yellow
+								else MaterialTheme.colorScheme.surfaceVariant
+								Button(
+									colors = ButtonDefaults.buttonColors(
+										containerColor = color,
+										contentColor = Color.Black,
+									),
+								modifier = Modifier.padding(0.dp).fillMaxHeight(),
+									shape = RoundedCornerShape(0),
+									onClick = { didClick() },
+									content = {
+										StandardIcon(
+											button.icon,
+											modifier = Modifier.size(30.dp),
+										)
+									}
+								)
+							}
+						}
+					)
 				}
 			}
 		}
+
 	} else {
 
 		NavigationBar {
-			val history = remember { mutableStateOf<List<String>>(listOf()) }
-
-			DisposableEffect(Unit) {
-				val listener = NavController.OnDestinationChangedListener { _, _, arguments ->
-					history.value += listOf(decodeObjectIdFromRouteArgs(arguments))
+			SomeNavigatableTabBar(
+				buttons = tabBar.buttons.map { button ->
+					NavButton(pageId = button.pageId) { didClick, isActive ->
+						NavigationBarItem(
+							selected = isActive,
+							icon = { StandardIcon(button.icon) },
+							onClick = { didClick() },
+						)
+					}
 				}
-
-				navController.addOnDestinationChangedListener(listener)
-
-				onDispose {
-					navController.removeOnDestinationChangedListener(listener)
-				}
-			}
-
-			for (button in tabBar.buttons) {
-				val page = usePage(button.pageId)
-
-				NavigationBarItem(
-					selected = history.value.contains(button.pageId),
-					icon = { StandardIcon(button.icon) },
-					onClick = {
-						history.value = listOf(button.pageId)
-						navController.navigate(route = encodeObjectIdIntoPageRoute(button.pageId)) {
-							popUpTo(button.pageId)
-							launchSingleTop = true
-						}
-					},
-					label = { Text("${page?.title}") },
-				)
-			}
+			)
 		}
 	}
 }
 
+data class NavButton(
+	val pageId: String,
+	val component: @Composable (() -> Unit, Boolean) -> Unit,
+)
 
-fun selected(pageId: String): Color {
-	return if (useDefaultLayout().tabBar?.buttons?.map { it.pageId }?.contains(pageId) == true) {
-		MaterialTheme.colorScheme.primary
-	} else {
-		null
+
+@Composable
+fun SomeNavigatableTabBar(buttons: List<NavButton>) {
+	val navController = useNavController()
+	val history = remember { mutableStateOf<List<String>>(listOf()) }
+
+	DisposableEffect(Unit) {
+		val listener = NavController.OnDestinationChangedListener { _, _, arguments ->
+			history.value += listOf(decodeObjectIdFromRouteArgs(arguments))
+		}
+
+		navController.addOnDestinationChangedListener(listener)
+
+		onDispose {
+			navController.removeOnDestinationChangedListener(listener)
+		}
+	}
+
+	for (button in buttons) {
+
+		val page = usePage(button.pageId)
+		val isActive = history.value.contains(button.pageId)
+
+		button.component(
+			{
+				history.value = listOf(button.pageId)
+				navController.navigate(route = encodeObjectIdIntoPageRoute(button.pageId)) {
+					popUpTo(button.pageId)
+					launchSingleTop = true
+				}
+			}, isActive
+		)
 	}
 }
+
 

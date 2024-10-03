@@ -15,9 +15,6 @@ sealed class Object {
 	data class Page(val def: com.example.objectionapp.Page) : Object()
 
 	@Serializable
-	data class PostPage(val def: com.example.objectionapp.PostPage) : Object()
-
-	@Serializable
 	data class Theme(val def: com.example.objectionapp.Theme) : Object()
 
 	@Serializable

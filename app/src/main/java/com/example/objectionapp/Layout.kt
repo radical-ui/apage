@@ -2,6 +2,7 @@ package com.example.objectionapp
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,7 +17,7 @@ data class Layout(
 		"The tab bar is shown at the bottom of the application. If there is no current page set, the current page will default to the first tab bar item."
 	) val tabBar: TabBar? = null,
 
-	@Description("The page that is to be shown by default") @ObjectReference(Object.PlainPage::class) val currentPageId: String? = null,
+	@Description("The page that is to be shown by default") @ObjectReference(Object.Page::class) val currentPageId: String? = null,
 ) {
 	fun getRoots(): List<String> {
 		return (tabBar?.buttons?.map { it.pageId } ?: listOf()) + (currentPageId?.let { listOf(it) } ?: listOf())
@@ -67,7 +68,7 @@ fun RenderDefaultLayout() {
 @Preview()
 fun SingleLayoutTest() {
 	val controller = Controller.fromConstants()
-	controller.objectStore.preload("theme_default", Object.Theme(Theme()))
+	controller.objectStore.preload("theme_default", Object.Theme(Theme(iconPack = IconPack.Rounded)))
 	controller.objectStore.preload(
 		"layout_default", Object.Layout(
 			Layout(
@@ -83,18 +84,18 @@ fun SingleLayoutTest() {
 		)
 	)
 	controller.objectStore.preload(
-		"Services", Object.PostPage(
-			PostPage(title = "Services")
+		"Services", Object.Page(
+			Page(title = "Services", type = PageType.Plain)
 		)
 	)
 	controller.objectStore.preload(
-		"Home", Object.PostPage(
-			PostPage(title = "Home")
+		"Home", Object.Page(
+			Page(title = "Home", type = PageType.Plain)
 		)
 	)
 	controller.objectStore.preload(
-		"Products", Object.PostPage(
-			PostPage(title = "Products",)
+		"Products", Object.Page(
+			Page(title = "Products", type = PageType.Plain)
 		)
 	)
 

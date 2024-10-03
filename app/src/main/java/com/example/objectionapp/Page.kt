@@ -39,7 +39,7 @@ data class Page(
 
 	@Description(
 		"The page that will be pulled up for a presumed search through the contents of this page"
-	) @ObjectReference(Object.PlainPage::class) val searchPageId: String? = null,
+	) @ObjectReference(Object.Page::class) val searchPageId: String? = null,
 
 	val view: View? = null,
 
