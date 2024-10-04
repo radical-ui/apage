@@ -2,7 +2,8 @@ package com.example.objectionapp
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.material.icons.Icons
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,7 +30,7 @@ data class Layout(
 	}
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun RenderDefaultLayout() {
 	val navController = useNavController()
@@ -58,6 +59,17 @@ fun RenderDefaultLayout() {
 							animatedVisibilityScope = null,
 						)
 					}
+					dialog(getObjectIdSheetRouteTemplate()) { navBackStackEntry ->
+						ModalBottomSheet(onDismissRequest = {
+							navController.popBackStack()
+						}) {
+							PageRender(
+								id = decodeObjectIdFromRouteArgs(navBackStackEntry.arguments),
+								bottomPadding = padding.calculateBottomPadding(),
+								animatedVisibilityScope = null,
+							)
+						}
+					}
 				}
 			}
 		}
@@ -75,7 +87,8 @@ fun SingleLayoutTest() {
 		"layout_default", Object.Layout(
 			Layout(
 				tabBar = TabBar(
-					stupid = true, buttons = listOf(
+					useSheet = true,
+					stupid = false, buttons = listOf(
 						TabBarButton("Products", "ShoppingBasket"),
 						TabBarButton("Home", "Home"),
 						TabBarButton("Services", "Group"),

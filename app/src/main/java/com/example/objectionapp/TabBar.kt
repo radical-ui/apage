@@ -1,19 +1,18 @@
 package com.example.objectionapp
 
 
-import android.graphics.drawable.RippleDrawable
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -21,8 +20,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,19 +32,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.serialization.Serializable
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.NavigationBarDefaults
-import androidx.compose.material3.NavigationBarItemColors
-import kotlinx.serialization.json.JsonNull.content
 
 @Serializable
 data class TabBar(
-	val stupid: Boolean = false,
-	val buttons: List<TabBarButton>,
+	val stupid: Boolean = false, val buttons: List<TabBarButton>, val useSheet: Boolean
 )
 
 @Serializable
@@ -53,24 +48,26 @@ data class TabBarButton(
 )
 
 @Composable
-fun TabBarRender(tabBar: TabBar) {
+fun TabBarRender(
+	tabBar: TabBar,
+) {
 	val navController = useNavController()
 	val currentBackStackEntry = navController.currentBackStackEntryAsState()
 	val currentPageId =
 		currentBackStackEntry.value?.arguments?.let { decodeObjectIdFromRouteArgs(it) }
 
 	Column(
-		modifier = Modifier.padding(20.dp),
 		horizontalAlignment = Alignment.CenterHorizontally,
 		verticalArrangement = Arrangement.spacedBy(20.dp),
 	) {
 
+		val searchPage = usePage(currentPageId)?.searchPageId
 
 		if (tabBar.stupid) {
-			StupidSearchRender(currentPageId)
+			if (searchPage != null) StupidSearchRender(currentPageId, tabBar.useSheet)
 			StupidNavigationRender(tabBar)
 		} else {
-			SearchRender(currentPageId)
+			if (searchPage != null) SearchRender(currentPageId, tabBar.useSheet)
 			NavigationRender(tabBar)
 		}
 	}
@@ -78,10 +75,10 @@ fun TabBarRender(tabBar: TabBar) {
 }
 
 @Composable
-private fun SearchRender(currentPageId: String?) {
+private fun SearchRender(currentPageId: String?, useSheet: Boolean) {
 	Column {
 		currentPageId?.let { pageId ->
-			val searchPage = usePage(pageId)
+			val page = usePage(pageId)
 
 			Box(
 				modifier = Modifier
@@ -105,7 +102,7 @@ private fun SearchRender(currentPageId: String?) {
 						)
 
 						Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-							searchPage?.title?.let {
+							page?.title?.let {
 								Text(
 									it,
 									color = MaterialTheme.colorScheme.onBackground,
@@ -114,7 +111,7 @@ private fun SearchRender(currentPageId: String?) {
 								)
 							}
 
-							searchPage?.title?.let {
+							page?.title?.let {
 								Text(
 									it,
 									color = MaterialTheme.colorScheme.onBackground,
@@ -129,49 +126,84 @@ private fun SearchRender(currentPageId: String?) {
 	}
 }
 
+
 @Composable
-private fun StupidSearchRender(currentPageId: String?) {
+private fun StupidSearchRender(
+	currentPageId: String?,
+	useSheet: Boolean
+) {
+	val navController = useNavController()
+
 	Row {
 		currentPageId?.let { pageId ->
+
 			val searchPage = usePage(pageId)
+			var searching by remember { mutableStateOf(false) }
 
 			Surface(
+				onClick = {
+					search(navController, pageId, useSheet)
+				},
 				modifier = Modifier
 					.clip(RoundedCornerShape(60))
 					.height(50.dp)
 					.fillMaxWidth(),
 				color = MaterialTheme.colorScheme.surfaceVariant,
 			) {
-				Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(horizontal = 10.dp)){
+				Row(
+					verticalAlignment = Alignment.CenterVertically,
+					horizontalArrangement = Arrangement.spacedBy(10.dp),
+					modifier = Modifier.padding(horizontal = 10.dp)
+				) {
 					StandardIcon("Search")
-					Text("Click to Search")
+					searchPage?.title?.let {
+						Text(
+							it,
+							color = MaterialTheme.colorScheme.onBackground,
+							fontSize = 16.sp,
+							fontWeight = FontWeight.Bold
+						)
+					}
+					searchPage?.subtitle?.let {
+						Text(
+							it,
+							color = MaterialTheme.colorScheme.onBackground,
+							fontSize = 16.sp,
+							fontWeight = FontWeight.Bold
+						)
+					}
 				}
 			}
 		}
 	}
 }
 
+private fun search(navController: NavHostController, pageId: String, useSheet: Boolean) {
+	if (useSheet) navController.navigate(route = encodeObjectIdIntoSheetRoute(pageId))
+	else navController.navigate(route = encodeObjectIdIntoPageRoute(pageId))
+}
+
 @Composable
 private fun NavigationRender(tabBar: TabBar) {
 	NavigationBar {
-		SomeNavigatableTabBar(
-			buttons = tabBar.buttons.map { button ->
-				NavButton(pageId = button.pageId) { didClick, isActive ->
-					NavigationBarItem(
-						selected = isActive,
-						icon = { StandardIcon(button.icon) },
-						onClick = { didClick() },
-					)
-				}
+		NavigableTabBar(buttons = tabBar.buttons.map { button ->
+			NavButton(pageId = button.pageId) { didClick, isActive ->
+				NavigationBarItem(
+					selected = isActive,
+					icon = { StandardIcon(button.icon) },
+					onClick = { didClick() },
+				)
 			}
-		)
+		})
 	}
 }
 
 @Composable
 private fun StupidNavigationRender(tabBar: TabBar) {
 	Column(
-		modifier = Modifier.fillMaxWidth(),
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(20.dp),
 		horizontalAlignment = Alignment.CenterHorizontally,
 	) {
 		Surface(
@@ -188,29 +220,25 @@ private fun StupidNavigationRender(tabBar: TabBar) {
 				modifier = Modifier.padding(0.dp),
 
 				) {
-				SomeNavigatableTabBar(
-					buttons = tabBar.buttons.map { button ->
-						NavButton(pageId = button.pageId) { didClick, isActive ->
-							val color = if (isActive) Color.Yellow
-							else MaterialTheme.colorScheme.surfaceVariant
-							Button(
-								colors = ButtonDefaults.buttonColors(
-									containerColor = color,
-									contentColor = Color.Black,
-								),
-								modifier = Modifier.fillMaxHeight(),
-								shape = RoundedCornerShape(0),
-								onClick = { didClick() },
-								content = {
-									StandardIcon(
-										button.icon,
-										modifier = Modifier.size(30.dp),
-									)
-								}
-							)
-						}
+				NavigableTabBar(buttons = tabBar.buttons.map { button ->
+					NavButton(pageId = button.pageId) { didClick, isActive ->
+						val color = if (isActive) MaterialTheme.colorScheme.primary
+						else MaterialTheme.colorScheme.surfaceVariant
+						Button(colors = ButtonDefaults.buttonColors(
+							containerColor = color,
+							contentColor = Color.Black,
+						),
+							modifier = Modifier.fillMaxHeight(),
+							shape = RoundedCornerShape(0),
+							onClick = { didClick() },
+							content = {
+								StandardIcon(
+									button.icon,
+									modifier = Modifier.size(30.dp),
+								)
+							})
 					}
-				)
+				})
 			}
 		}
 	}
@@ -223,7 +251,7 @@ data class NavButton(
 
 
 @Composable
-fun SomeNavigatableTabBar(buttons: List<NavButton>) {
+fun NavigableTabBar(buttons: List<NavButton>) {
 	val navController = useNavController()
 	val history = remember { mutableStateOf<List<String>>(listOf()) }
 
@@ -255,5 +283,3 @@ fun SomeNavigatableTabBar(buttons: List<NavButton>) {
 		)
 	}
 }
-
-

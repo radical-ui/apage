@@ -4,15 +4,11 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -25,7 +21,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -35,12 +30,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Page(
 	@Description("The page title will be displayed prominently at the top of the screen") val title: String? = null,
-//	@Description("The images will be displayed in carousel form, directly below the title") val imageUrls: List<String>? = null,
-//	@Description("The page subtitle is displayed directly under any images on the page") val subtitle: String? = null,
-
+	@Description("The page subtitle is displayed directly under any images on the page") val subtitle: String? = null,
 	@Description(
 		"The page that will be pulled up for a presumed search through the contents of this page"
 	) @ObjectReference(Object.Page::class) val searchPageId: String? = null,
+
 
 	val view: View? = null,
 
