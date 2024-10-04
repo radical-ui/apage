@@ -20,6 +20,7 @@ import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -79,81 +80,6 @@ fun SharedTransitionScope.PageRender(
 	animatedVisibilityScope: AnimatedVisibilityScope?,
 ) {
 	val page = usePage(id) ?: return
-
-
-	when (page.type) {
-		is PageType.Plain -> PlainPageRender(
-			id,
-			bottomPadding,
-			animatedVisibilityScope,
-			pageType = page.type,
-			view = page.view,
-			title = page.title,
-			searchPageId = page.searchPageId
-		)
-
-		is PageType.Post -> PostPageRender(
-			id,
-			bottomPadding,
-			animatedVisibilityScope,
-			pageType = page.type,
-			view = page.view,
-			title = page.title,
-			searchPageId = page.searchPageId
-		)
-
-		is PageType.Profile -> ProfilePageRender(
-			id,
-			bottomPadding,
-			animatedVisibilityScope,
-			pageType = page.type,
-			view = page.view,
-			title = page.title,
-			searchPageId = page.searchPageId
-		)
-	}
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
-@Composable
-fun SharedTransitionScope.ProfilePageRender(
-	id: String,
-	bottomPadding: Dp,
-	animatedVisibilityScope: AnimatedVisibilityScope?,
-	pageType: PageType.Profile,
-	view: View? = null,
-	title: String? = null,
-	searchPageId: String? = null,
-) {
-	return
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
-@Composable
-fun SharedTransitionScope.PlainPageRender(
-	id: String,
-	bottomPadding: Dp,
-	animatedVisibilityScope: AnimatedVisibilityScope?,
-	pageType: PageType.Plain,
-	view: View? = null,
-	title: String? = null,
-	searchPageId: String? = null,
-) {
-	return
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
-@Composable
-fun SharedTransitionScope.PostPageRender(
-	id: String,
-	bottomPadding: Dp,
-	animatedVisibilityScope: AnimatedVisibilityScope?,
-	pageType: PageType.Post,
-	view: View? = null,
-	title: String? = null,
-	searchPageId: String? = null,
-) {
 	val navController = useNavController()
 	val layout = useDefaultLayout()
 	val isRoot = layout.getRoots().contains(id)
@@ -169,7 +95,7 @@ fun SharedTransitionScope.PostPageRender(
 	) {
 		if (isRoot) {
 			LargeTopAppBar(
-				title = { Text("$title") },
+				title = { Text("${page.title}") },
 				scrollBehavior = scrollBehavior,
 			)
 		} else {
@@ -179,49 +105,119 @@ fun SharedTransitionScope.PostPageRender(
 						StandardIcon("ArrowBack")
 					}
 				},
-				title = { Text("$title") },
+				title = { Text("${page.title}") },
 				scrollBehavior = scrollBehavior,
 			)
 		}
 
-		LazyColumn(
-			verticalArrangement = Arrangement.spacedBy(20.dp),
-			modifier = Modifier
-				.nestedScroll(scrollBehavior.nestedScrollConnection)
-				.fillMaxWidth()
-				.fillMaxHeight()
-		) {
-			val childPadding = PaddingValues(horizontal = 16.dp)
+		when (page.type) {
+			is PageType.Plain -> PlainPageRender(
+				id,
+				bottomPadding,
+				animatedVisibilityScope,
+				pageType = page.type,
+				view = page.view,
+				title = page.title,
+				searchPageId = page.searchPageId,
+				scrollBehavior = scrollBehavior,
 
-			// TODO support multiple images, but keep in mind that probably only the first one should take part in
-			//  the shared element animation
-			pageType.imageUrls?.first()?.let { url ->
-				item {
-					AsyncImage(
-						model = url,
-						contentDescription = "An image",
-						clipToBounds = true,
-						contentScale = ContentScale.Crop,
-						modifier = if (animatedVisibilityScope != null) {
-							Modifier.sharedElement(state = rememberSharedContentState("${id}/image"),
-								animatedVisibilityScope = animatedVisibilityScope,
-								boundsTransform = { _, _ ->
-									tween(durationMillis = 300)
-								})
-						} else {
-							Modifier
-						}
-							.padding(childPadding)
-							.clip(RoundedCornerShape(8))
-							.height(300.dp)
-							.fillMaxWidth()
-					)
-				}
-			}
+				)
 
-			item {
-				Box(Modifier.padding(vertical = 8.dp))
-			}
+			is PageType.Post -> PostPageRender(
+				id,
+				bottomPadding,
+				animatedVisibilityScope,
+				pageType = page.type,
+				view = page.view,
+				title = page.title,
+				searchPageId = page.searchPageId,
+				scrollBehavior = scrollBehavior,
+			)
+
+			is PageType.Profile -> ProfilePageRender(
+				id,
+				bottomPadding,
+				animatedVisibilityScope,
+				pageType = page.type,
+				view = page.view,
+				title = page.title,
+				searchPageId = page.searchPageId,
+				scrollBehavior = scrollBehavior,
+			)
 		}
+
+	}
+
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@Composable
+fun SharedTransitionScope.ProfilePageRender(
+	id: String,
+	bottomPadding: Dp,
+	animatedVisibilityScope: AnimatedVisibilityScope?,
+	pageType: PageType.Profile,
+	view: View? = null,
+	title: String? = null,
+	searchPageId: String? = null,
+	scrollBehavior: TopAppBarScrollBehavior,
+) {
+	return
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@Composable
+fun SharedTransitionScope.PlainPageRender(
+	id: String,
+	bottomPadding: Dp,
+	animatedVisibilityScope: AnimatedVisibilityScope?,
+	pageType: PageType.Plain,
+	view: View? = null,
+	title: String? = null,
+	searchPageId: String? = null,
+	scrollBehavior: TopAppBarScrollBehavior,
+) {
+	if (view != null) ViewRender(view, scrollBehavior)
+	else return
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@Composable
+fun SharedTransitionScope.PostPageRender(
+	id: String,
+	bottomPadding: Dp,
+	animatedVisibilityScope: AnimatedVisibilityScope?,
+	pageType: PageType.Post,
+	view: View? = null,
+	title: String? = null,
+	searchPageId: String? = null,
+	scrollBehavior: TopAppBarScrollBehavior
+) {
+	val childPadding = PaddingValues(horizontal = 16.dp)
+
+	// TODO support multiple images, but keep in mind that probably only the first one should take part in
+	//  the shared element animation
+	pageType.imageUrls?.first()?.let { url ->
+		AsyncImage(
+			model = url,
+			contentDescription = "An image",
+			clipToBounds = true,
+			contentScale = ContentScale.Crop,
+			modifier = if (animatedVisibilityScope != null) {
+				Modifier.sharedElement(state = rememberSharedContentState("${id}/image"),
+					animatedVisibilityScope = animatedVisibilityScope,
+					boundsTransform = { _, _ ->
+						tween(durationMillis = 300)
+					})
+			} else {
+				Modifier
+			}
+				.padding(childPadding)
+				.clip(RoundedCornerShape(8))
+				.height(300.dp)
+				.fillMaxWidth()
+		)
 	}
 }

@@ -59,7 +59,26 @@ fun TabBarRender(tabBar: TabBar) {
 	val currentPageId =
 		currentBackStackEntry.value?.arguments?.let { decodeObjectIdFromRouteArgs(it) }
 
+	Column(
+		modifier = Modifier.padding(20.dp),
+		horizontalAlignment = Alignment.CenterHorizontally,
+		verticalArrangement = Arrangement.spacedBy(20.dp),
+	) {
 
+
+		if (tabBar.stupid) {
+			StupidSearchRender(currentPageId)
+			StupidNavigationRender(tabBar)
+		} else {
+			SearchRender(currentPageId)
+			NavigationRender(tabBar)
+		}
+	}
+
+}
+
+@Composable
+private fun SearchRender(currentPageId: String?) {
 	Column {
 		currentPageId?.let { pageId ->
 			val searchPage = usePage(pageId)
@@ -108,68 +127,91 @@ fun TabBarRender(tabBar: TabBar) {
 			}
 		}
 	}
+}
 
-	if (tabBar.stupid) {
-		Column(
-			modifier = Modifier.fillMaxWidth(),
-			horizontalAlignment = Alignment.CenterHorizontally,
-		) {
+@Composable
+private fun StupidSearchRender(currentPageId: String?) {
+	Row {
+		currentPageId?.let { pageId ->
+			val searchPage = usePage(pageId)
+
 			Surface(
 				modifier = Modifier
-//				.fillMaxWidth()
-				.padding(0.dp)
 					.clip(RoundedCornerShape(60))
-					.height(50.dp),
+					.height(50.dp)
+					.fillMaxWidth(),
 				color = MaterialTheme.colorScheme.surfaceVariant,
-
-				) {
-				Row(
-					verticalAlignment = Alignment.CenterVertically,
-					horizontalArrangement = Arrangement.SpaceEvenly,
-					modifier = Modifier.padding(0.dp),
-
-				) {
-					SomeNavigatableTabBar(
-						buttons = tabBar.buttons.map { button ->
-							NavButton(pageId = button.pageId) { didClick, isActive ->
-								val color = if (isActive) Color.Yellow
-								else MaterialTheme.colorScheme.surfaceVariant
-								Button(
-									colors = ButtonDefaults.buttonColors(
-										containerColor = color,
-										contentColor = Color.Black,
-									),
-								modifier = Modifier.padding(0.dp).fillMaxHeight(),
-									shape = RoundedCornerShape(0),
-									onClick = { didClick() },
-									content = {
-										StandardIcon(
-											button.icon,
-											modifier = Modifier.size(30.dp),
-										)
-									}
-								)
-							}
-						}
-					)
+			) {
+				Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(horizontal = 10.dp)){
+					StandardIcon("Search")
+					Text("Click to Search")
 				}
 			}
 		}
+	}
+}
 
-	} else {
-
-		NavigationBar {
-			SomeNavigatableTabBar(
-				buttons = tabBar.buttons.map { button ->
-					NavButton(pageId = button.pageId) { didClick, isActive ->
-						NavigationBarItem(
-							selected = isActive,
-							icon = { StandardIcon(button.icon) },
-							onClick = { didClick() },
-						)
-					}
+@Composable
+private fun NavigationRender(tabBar: TabBar) {
+	NavigationBar {
+		SomeNavigatableTabBar(
+			buttons = tabBar.buttons.map { button ->
+				NavButton(pageId = button.pageId) { didClick, isActive ->
+					NavigationBarItem(
+						selected = isActive,
+						icon = { StandardIcon(button.icon) },
+						onClick = { didClick() },
+					)
 				}
-			)
+			}
+		)
+	}
+}
+
+@Composable
+private fun StupidNavigationRender(tabBar: TabBar) {
+	Column(
+		modifier = Modifier.fillMaxWidth(),
+		horizontalAlignment = Alignment.CenterHorizontally,
+	) {
+		Surface(
+			modifier = Modifier
+				.padding(0.dp)
+				.clip(RoundedCornerShape(60))
+				.height(50.dp),
+			color = MaterialTheme.colorScheme.surfaceVariant,
+
+			) {
+			Row(
+				verticalAlignment = Alignment.CenterVertically,
+				horizontalArrangement = Arrangement.SpaceEvenly,
+				modifier = Modifier.padding(0.dp),
+
+				) {
+				SomeNavigatableTabBar(
+					buttons = tabBar.buttons.map { button ->
+						NavButton(pageId = button.pageId) { didClick, isActive ->
+							val color = if (isActive) Color.Yellow
+							else MaterialTheme.colorScheme.surfaceVariant
+							Button(
+								colors = ButtonDefaults.buttonColors(
+									containerColor = color,
+									contentColor = Color.Black,
+								),
+								modifier = Modifier.fillMaxHeight(),
+								shape = RoundedCornerShape(0),
+								onClick = { didClick() },
+								content = {
+									StandardIcon(
+										button.icon,
+										modifier = Modifier.size(30.dp),
+									)
+								}
+							)
+						}
+					}
+				)
+			}
 		}
 	}
 }

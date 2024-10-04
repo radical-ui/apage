@@ -20,7 +20,8 @@ data class Layout(
 	@Description("The page that is to be shown by default") @ObjectReference(Object.Page::class) val currentPageId: String? = null,
 ) {
 	fun getRoots(): List<String> {
-		return (tabBar?.buttons?.map { it.pageId } ?: listOf()) + (currentPageId?.let { listOf(it) } ?: listOf())
+		return (tabBar?.buttons?.map { it.pageId } ?: listOf()) + (currentPageId?.let { listOf(it) }
+			?: listOf())
 	}
 
 	fun getInitialPageId(): String? {
@@ -34,47 +35,47 @@ fun RenderDefaultLayout() {
 	val navController = useNavController()
 	val layout = useDefaultLayout()
 
-	Scaffold(
-		bottomBar = { layout.tabBar?.let { TabBarRender(it) } },
-		content = { padding ->
-			val initialObjectId = layout.getInitialPageId()
+	Scaffold(bottomBar = { layout.tabBar?.let { TabBarRender(it) } }, content = { padding ->
+		val initialObjectId = layout.getInitialPageId()
 
-			if (initialObjectId != null) {
-				SharedTransitionLayout {
-					NavHost(
-						navController = navController, startDestination = encodeObjectIdIntoPageRoute(initialObjectId)
-					) {
-						composable(getObjectIdPageRouteTemplate()) { navBackStackEntry ->
-							PageRender(
-								id = decodeObjectIdFromRouteArgs(navBackStackEntry.arguments),
-								bottomPadding = padding.calculateBottomPadding(),
-								animatedVisibilityScope = this,
-							)
-						}
-						dialog(getObjectIdDialogRouteTemplate()) { navBackStackEntry ->
-							PageRender(
-								id = decodeObjectIdFromRouteArgs(navBackStackEntry.arguments),
-								bottomPadding = padding.calculateBottomPadding(),
-								animatedVisibilityScope = null,
-							)
-						}
+		if (initialObjectId != null) {
+			SharedTransitionLayout {
+				NavHost(
+					navController = navController,
+					startDestination = encodeObjectIdIntoPageRoute(initialObjectId)
+				) {
+					composable(getObjectIdPageRouteTemplate()) { navBackStackEntry ->
+						PageRender(
+							id = decodeObjectIdFromRouteArgs(navBackStackEntry.arguments),
+							bottomPadding = padding.calculateBottomPadding(),
+							animatedVisibilityScope = this,
+						)
+					}
+					dialog(getObjectIdDialogRouteTemplate()) { navBackStackEntry ->
+						PageRender(
+							id = decodeObjectIdFromRouteArgs(navBackStackEntry.arguments),
+							bottomPadding = padding.calculateBottomPadding(),
+							animatedVisibilityScope = null,
+						)
 					}
 				}
 			}
-		})
+		}
+	})
 }
 
 @Composable
 @Preview()
 fun SingleLayoutTest() {
 	val controller = Controller.fromConstants()
-	controller.objectStore.preload("theme_default", Object.Theme(Theme(iconPack = IconPack.Rounded)))
+	controller.objectStore.preload(
+		"theme_default", Object.Theme(Theme(iconPack = IconPack.Rounded))
+	)
 	controller.objectStore.preload(
 		"layout_default", Object.Layout(
 			Layout(
 				tabBar = TabBar(
-					stupid = true,
-					buttons = listOf(
+					stupid = true, buttons = listOf(
 						TabBarButton("Products", "ShoppingBasket"),
 						TabBarButton("Home", "Home"),
 						TabBarButton("Services", "Group"),
@@ -90,7 +91,15 @@ fun SingleLayoutTest() {
 	)
 	controller.objectStore.preload(
 		"Home", Object.Page(
-			Page(title = "Home", type = PageType.Plain)
+			Page(
+				title = "Home", type = PageType.Plain, view = View.CardView(
+					listOf(
+						CardContainer.SingularCardContainer("Products"),
+						CardContainer.SingularCardContainer("Products"),
+						CardContainer.SingularCardContainer("Products"),
+					)
+				)
+			)
 		)
 	)
 	controller.objectStore.preload(
