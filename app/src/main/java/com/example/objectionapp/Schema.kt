@@ -1,5 +1,7 @@
 package com.example.objectionapp
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialInfo
 import kotlinx.serialization.SerialName
@@ -33,12 +35,33 @@ annotation class AnyObjectReference
 @OptIn(ExperimentalSerializationApi::class)
 @SerialInfo
 @Target(AnnotationTarget.CLASS)
-annotation class IsColor
+private annotation class IsColor
+
+@OptIn(ExperimentalSerializationApi::class)
+@SerialInfo
+@Target(AnnotationTarget.CLASS)
+private annotation class IsBinding
 
 @OptIn(ExperimentalSerializationApi::class)
 @SerialInfo
 @Target(AnnotationTarget.CLASS)
 annotation class ContentKey(val key: String)
+
+@Serializable
+@IsBinding
+data class Binding<T>(
+    val key: String, val child: T
+)
+
+@Serializable
+@IsColor
+data class ColorData(
+    val red: Int, val green: Int, val blue: Int, val alpha: Int
+) {
+    fun intoColor(): Color {
+        return Color(red = red, green = green, blue = blue, alpha = alpha)
+    }
+}
 
 fun getSchema(klass: KClass<*>): Schema {
     return Schema(getItemSchema(serialDescriptor(klass.createType())))
@@ -126,6 +149,19 @@ private fun getClassSchema(descriptor: SerialDescriptor): ItemSchema {
 
     for (annotation in descriptor.annotations) {
         if (annotation is IsColor) return ItemSchema.ColorSchema
+        if (annotation is IsBinding) {
+            var childDescriptor: SerialDescriptor? = null
+
+            for (childIndex in 0..<descriptor.elementsCount) {
+                if (descriptor.getElementName(childIndex) === "child") {
+                    childDescriptor = descriptor.getElementDescriptor(childIndex)
+                }
+            }
+
+            if (childDescriptor == null) throw Exception("Binding class did not have a 'child' property")
+
+            return ItemSchema.BindingSchema(child = getItemSchema(childDescriptor))
+        }
     }
 
     for (childIndex in 0..<descriptor.elementsCount) {
@@ -241,6 +277,10 @@ sealed class ItemSchema {
     data class ReferenceSchema(
         @SerialName("expected_top_level_variant") val expectedTopLevelVariant: String?
     ) : ItemSchema()
+
+    @Serializable
+    @SerialName("binding")
+    data class BindingSchema(val child: ItemSchema) : ItemSchema()
 }
 
 @Serializable

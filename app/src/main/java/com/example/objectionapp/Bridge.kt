@@ -71,27 +71,10 @@ class Bridge(private var logger: Logger, private var session: Session) : Corouti
 		)
 	}
 
-	fun emitNullEvent(objectId: String, key: String, onComplete: () -> Unit) {
+	fun emitBindingUpdate(key: String, data: JsonElement, onComplete: () -> Unit) {
 		sendMessage(
-			OutgoingMessage.EmitEvent(
+			OutgoingMessage.EmitBindingUpdate(
 				requestId = listenForAcknowledgement(onComplete),
-				objectId = objectId,
-				key = key,
-				data = JsonNull
-			)
-		)
-	}
-
-	fun emitEvent(
-		objectId: String,
-		key: String,
-		data: JsonElement,
-		onComplete: () -> Unit
-	) {
-		sendMessage(
-			OutgoingMessage.EmitEvent(
-				requestId = listenForAcknowledgement(onComplete),
-				objectId = objectId,
 				key = key,
 				data = data
 			)
@@ -209,10 +192,9 @@ sealed class OutgoingMessage {
 	) : OutgoingMessage()
 
 	@Serializable
-	@SerialName("emit_event")
-	data class EmitEvent(
+	@SerialName("emit_binding_update")
+	data class EmitBindingUpdate(
 		@SerialName("request_id") val requestId: String,
-		@SerialName("object_id") val objectId: String,
 		val key: String,
 		val data: JsonElement
 	) : OutgoingMessage()

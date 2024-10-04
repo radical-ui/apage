@@ -20,7 +20,7 @@ fun StandardIcon(
     modifier: Modifier = Modifier,
     tint: Color = LocalContentColor.current,
 ) {
-    val logger = useController().logger.scope("StandardIcon")
+    val logger = useLogger("StandardIcon")
     val theme = useDefaultTheme()
     val icon: ImageVector? = remember(name) {
         try {
