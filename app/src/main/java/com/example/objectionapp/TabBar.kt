@@ -253,11 +253,13 @@ data class NavButton(
 @Composable
 fun NavigableTabBar(buttons: List<NavButton>) {
 	val navController = useNavController()
-	val history = remember { mutableStateOf<List<String>>(listOf()) }
+	var currentButton by remember { mutableStateOf<String?>(null) }
 
 	DisposableEffect(Unit) {
 		val listener = NavController.OnDestinationChangedListener { _, _, arguments ->
-			history.value += listOf(decodeObjectIdFromRouteArgs(arguments))
+			val pageId = decodeObjectIdFromRouteArgs(arguments)
+
+			if (buttons.find { button -> button.pageId == pageId } != null) currentButton = pageId
 		}
 
 		navController.addOnDestinationChangedListener(listener)
@@ -268,18 +270,14 @@ fun NavigableTabBar(buttons: List<NavButton>) {
 	}
 
 	for (button in buttons) {
+		val isActive = currentButton == button.pageId
+		val onDidClick = {
+			navController.navigate(route = encodeObjectIdIntoPageRoute(button.pageId)) {
+				popUpTo(button.pageId)
+				launchSingleTop = true
+			}
+		}
 
-		val page = usePage(button.pageId)
-		val isActive = history.value.contains(button.pageId)
-
-		button.component(
-			{
-				history.value = listOf(button.pageId)
-				navController.navigate(route = encodeObjectIdIntoPageRoute(button.pageId)) {
-					popUpTo(button.pageId)
-					launchSingleTop = true
-				}
-			}, isActive
-		)
+		button.component(onDidClick, isActive)
 	}
 }
