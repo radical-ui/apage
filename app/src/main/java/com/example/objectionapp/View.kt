@@ -5,16 +5,11 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,17 +21,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonNull.content
 
 @Serializable
 sealed class View {
 	class CardView(
 		val containers: List<CardContainer>,
+	) : View()
+
+	class ListView(
+		val items: List<ListViewItem>
 	) : View()
 }
 
@@ -58,6 +55,7 @@ sealed class CardContainer {
 fun ViewRender(view: View, scrollBehavior: TopAppBarScrollBehavior) {
 	when (view) {
 		is View.CardView -> CardViewRender(view, scrollBehavior)
+		is View.ListView -> ListView(view, scrollBehavior)
 	}
 }
 
@@ -65,7 +63,9 @@ fun ViewRender(view: View, scrollBehavior: TopAppBarScrollBehavior) {
 @Composable
 fun CardViewRender(view: View.CardView, scrollBehavior: TopAppBarScrollBehavior) {
 	LazyColumn(
-		modifier = Modifier.padding(bottom = 90.dp).nestedScroll(scrollBehavior.nestedScrollConnection),
+		modifier = Modifier
+			.padding(bottom = 90.dp)
+			.nestedScroll(scrollBehavior.nestedScrollConnection),
 		verticalArrangement = Arrangement.spacedBy(10.dp),
 	) {
 		view.containers.map {
