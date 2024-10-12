@@ -25,8 +25,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 
+
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("$")
 @Serializable
 data class Page(
 	@Description("The page title will be displayed prominently at the top of the screen") val title: String? = null,
@@ -41,6 +46,8 @@ data class Page(
 	val type: PageType,
 )
 
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("$")
 @Serializable
 sealed class PageType {
 	@Serializable
@@ -53,6 +60,7 @@ sealed class PageType {
 		val aditionalInfo: String? = null,
 	) : PageType()
 
+
 	@Serializable
 	data class Profile(
 		@Description("The the banner image for the user profile")
@@ -63,7 +71,9 @@ sealed class PageType {
 
 
 	@Serializable
-	data object Plain : PageType()
+	data class Plain(
+		val icon: String?
+	) : PageType()
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)

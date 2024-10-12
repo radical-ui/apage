@@ -8,7 +8,7 @@ import kotlinx.serialization.json.JsonClassDiscriminator
 
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
-@JsonClassDiscriminator("kind")
+@JsonClassDiscriminator("$")
 @ContentKey("def")
 sealed class Object {
 	@Serializable
@@ -23,7 +23,7 @@ sealed class Object {
 
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
-@JsonClassDiscriminator("kind")
+@JsonClassDiscriminator("$")
 sealed class ActionKind {
 	@SerialName("danger")
 	data object Danger : ActionKind()
@@ -55,7 +55,7 @@ data class ShowObjectActionProcess(
 
 @Serializable
 @OptIn(ExperimentalSerializationApi::class)
-@JsonClassDiscriminator("kind")
+@JsonClassDiscriminator("$")
 sealed class ActionProcess {
 	@Serializable
 	@SerialName("perform_operation")

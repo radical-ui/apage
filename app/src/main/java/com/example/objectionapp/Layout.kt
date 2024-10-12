@@ -100,32 +100,34 @@ fun SingleLayoutTest() {
 	controller.objectStore.preload(
 		"Services", Object.Page(
 			Page(
-				title = "Services", type = PageType.Plain, view = View.ListView(
+				title = "Services", type = PageType.Plain("settings"), view = View.ListView(
 					mutableListOf(
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Setttings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-						ListViewItem("Products", "Settings", "ShevronRight"),
-
+						mutableListOf(
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
+							ListViewItem("Products"),
 						)
+					),
+					trailingIcon = "ChevronRight"
 				)
 			)
 		)
@@ -133,7 +135,7 @@ fun SingleLayoutTest() {
 	controller.objectStore.preload(
 		"Home", Object.Page(
 			Page(
-				title = "Home", type = PageType.Plain, view = View.CardView(
+				title = "Home", type = PageType.Plain("Settings"), view = View.CardView(
 					listOf(
 						CardContainer.SingularCardContainer("Products"),
 						CardContainer.SingularCardContainer("Products"),
@@ -144,14 +146,22 @@ fun SingleLayoutTest() {
 		)
 	)
 	controller.objectStore.preload(
+		"Post", Object.Page(
+			Page(
+				title = "Home",
+				type = PageType.Plain("Settings"),
+
+				)
+		)
+	)
+	controller.objectStore.preload(
 		"Products", Object.Page(
 			Page(
 				title = "Products",
-				type = PageType.Plain,
-				subtitle = "This is a subtitle. I had to add it so that the listview has enough content to create a proper list. Thanks everyone for reading, don't get too bored."
+				type = PageType.Plain("Settings"),
+				subtitle = "This is a subtitle. I had to add it so that the listview has enough content."
 			)
 		)
 	)
-
 	TestProvider(controller)
 }

@@ -1,6 +1,5 @@
 package com.example.objectionapp
 
-import android.app.ActionBar.Tab
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,8 +15,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 @Serializable
 data class Theme(
@@ -34,16 +35,18 @@ data class Theme(
 	val iconPack: IconPack,
 )
 
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("$")
 @Serializable
 sealed class IconPack {
 	@Serializable
-	data object Rounded: IconPack()
+	data object Rounded : IconPack()
 
 	@Serializable
-	data object Sharp: IconPack()
+	data object Sharp : IconPack()
 
 	@Serializable
-	data object Filled: IconPack()
+	data object Filled : IconPack()
 
 	fun getJavaName(): String {
 		return when (this) {
@@ -82,18 +85,6 @@ data class SurfaceTheme(
 	@SerialName("glow_color") val glowColor: ColorData?
 )
 
-@Serializable
-enum class CornerRounding {
-	@SerialName("sharp")
-	SHARP,
-
-	@SerialName("round")
-	ROUND,
-
-	@SerialName("extra_round")
-	EXTRA_ROUND,
-}
-
 @Composable
 fun RenderTheme(content: @Composable () -> Unit) {
 	val theme = useDefaultTheme()
@@ -102,8 +93,14 @@ fun RenderTheme(content: @Composable () -> Unit) {
 	val shouldDoDynamicTheme = theme.disableDynamicTheme
 
 	val colorScheme = when {
-		supportsDynamicColor && isDarkTheme && shouldDoDynamicTheme -> dynamicDarkColorScheme(LocalContext.current)
-		supportsDynamicColor && !isDarkTheme && shouldDoDynamicTheme -> dynamicLightColorScheme(LocalContext.current)
+		supportsDynamicColor && isDarkTheme && shouldDoDynamicTheme -> dynamicDarkColorScheme(
+			LocalContext.current
+		)
+
+		supportsDynamicColor && !isDarkTheme && shouldDoDynamicTheme -> dynamicLightColorScheme(
+			LocalContext.current
+		)
+
 		isDarkTheme -> fillDarkDefaults(theme.darkColorScheme)
 		else -> fillLightDefaults(theme.lightColorScheme)
 	}
