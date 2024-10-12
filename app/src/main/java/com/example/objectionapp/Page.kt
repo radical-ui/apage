@@ -26,8 +26,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
+import java.io.Serial
 
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -51,17 +53,18 @@ data class Page(
 @Serializable
 sealed class PageType {
 	@Serializable
+	@SerialName("Post")
 	data class Post(
 		@Description("The images will be displayed in carousel form, directly below the title")
 		val imageUrls: List<String>? = null,
 		@Description("The page supertitle is displayed directly below any images on the page")
 		val supertitle: String? = null,
 		@Description("The additional info is displayed directly below any images on the page")
-		val aditionalInfo: String? = null,
+		val additionalInfo: String? = null,
 	) : PageType()
 
-
 	@Serializable
+	@SerialName("Profile")
 	data class Profile(
 		@Description("The the banner image for the user profile")
 		val bannerImageUrl: String,
@@ -69,8 +72,8 @@ sealed class PageType {
 		val avatarImageUrl: String,
 	) : PageType()
 
-
 	@Serializable
+	@SerialName("Plain")
 	data class Plain(
 		val icon: String?
 	) : PageType()

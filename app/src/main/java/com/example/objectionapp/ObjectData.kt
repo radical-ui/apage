@@ -12,12 +12,15 @@ import kotlinx.serialization.json.JsonClassDiscriminator
 @ContentKey("def")
 sealed class Object {
 	@Serializable
+	@SerialName("Page")
 	data class Page(val def: com.example.objectionapp.Page) : Object()
 
 	@Serializable
+	@SerialName("Theme")
 	data class Theme(val def: com.example.objectionapp.Theme) : Object()
 
 	@Serializable
+	@SerialName("Layout")
 	data class Layout(val def: com.example.objectionapp.Layout) : Object()
 }
 

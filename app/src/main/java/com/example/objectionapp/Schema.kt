@@ -81,7 +81,7 @@ private fun getItemSchema(
         StructureKind.LIST -> getListSchema(descriptor)
         PolymorphicKind.SEALED -> getSealedSchema(descriptor)
         SerialKind.ENUM -> throw Exception("Use a sealed class with objects instead of an enum. Failed at: $descriptor")
-        else -> throw Exception("unknown item at $descriptor")
+        else -> throw Exception("unknown item at $descriptor: ${descriptor.kind}")
     }
 }
 
@@ -113,7 +113,7 @@ private fun getSealedSchema(descriptor: SerialDescriptor): ItemSchema.EnumSchema
         variants.add(
             EnumVariantSchema(
                 name = variant.serialName, description = getDescription(listOf()), // FIXME
-                type = getItemSchema(variant)
+                type = if (variant.kind == StructureKind.OBJECT) null else getItemSchema(variant)
             )
         )
     }
@@ -289,4 +289,4 @@ data class StructPropertySchema(
 )
 
 @Serializable
-data class EnumVariantSchema(val name: String, val description: String?, val type: ItemSchema)
+data class EnumVariantSchema(val name: String, val description: String?, val type: ItemSchema?)

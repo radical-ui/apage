@@ -1,11 +1,11 @@
 {
 	"object": {
 		"$": "enum",
-		"discriminator_key": "kind",
-		"content_key": null,
+		"discriminator_key": "$",
+		"content_key": "def",
 		"variants": [
 			{
-				"name": "com.example.objectionapp.Object.Layout",
+				"name": "Layout",
 				"description": null,
 				"type": {
 					"$": "struct",
@@ -23,6 +23,14 @@
 											"$": "struct",
 											"properties": [
 												{
+													"name": "stupid",
+													"description": null,
+													"type": {
+														"$": "boolean"
+													},
+													"optional": false
+												},
+												{
 													"name": "buttons",
 													"description": null,
 													"type": {
@@ -35,7 +43,7 @@
 																	"description": null,
 																	"type": {
 																		"$": "reference",
-																		"expectedTopLevelVariant": "com.example.objectionapp.Object.Page"
+																		"expected_top_level_variant": "Page"
 																	},
 																	"optional": false
 																},
@@ -51,6 +59,14 @@
 														}
 													},
 													"optional": false
+												},
+												{
+													"name": "useSheet",
+													"description": null,
+													"type": {
+														"$": "boolean"
+													},
+													"optional": false
 												}
 											]
 										},
@@ -61,7 +77,7 @@
 										"description": "The page that is to be shown by default",
 										"type": {
 											"$": "reference",
-											"expectedTopLevelVariant": "com.example.objectionapp.Object.Page"
+											"expected_top_level_variant": "Page"
 										},
 										"optional": true
 									}
@@ -73,7 +89,7 @@
 				}
 			},
 			{
-				"name": "com.example.objectionapp.Object.Page",
+				"name": "Page",
 				"description": null,
 				"type": {
 					"$": "struct",
@@ -93,17 +109,6 @@
 										"optional": true
 									},
 									{
-										"name": "imageUrls",
-										"description": "The images will be displayed in carousel form, directly below the title",
-										"type": {
-											"$": "list",
-											"option": {
-												"$": "string"
-											}
-										},
-										"optional": true
-									},
-									{
 										"name": "subtitle",
 										"description": "The page subtitle is displayed directly under any images on the page",
 										"type": {
@@ -112,348 +117,74 @@
 										"optional": true
 									},
 									{
-										"name": "searchPage",
+										"name": "searchPageId",
 										"description": "The page that will be pulled up for a presumed search through the contents of this page",
 										"type": {
 											"$": "reference",
-											"expectedTopLevelVariant": "com.example.objectionapp.Object.Page"
+											"expected_top_level_variant": "Page"
 										},
 										"optional": true
 									},
 									{
-										"name": "content",
+										"name": "view",
 										"description": null,
 										"type": {
-											"$": "list",
-											"option": {
-												"$": "enum",
-												"discriminator_key": "kind",
-												"content_key": null,
-												"variants": [
-													{
-														"name": "call_to_action",
-														"description": null,
-														"type": {
-															"$": "struct",
-															"properties": [
-																{
-																	"name": "def",
-																	"description": null,
-																	"type": {
-																		"$": "struct",
-																		"properties": [
+											"$": "enum",
+											"discriminator_key": "$",
+											"content_key": null,
+											"variants": [
+												{
+													"name": "CardView",
+													"description": null,
+													"type": {
+														"$": "struct",
+														"properties": [
+															{
+																"name": "containers",
+																"description": null,
+																"type": {
+																	"$": "list",
+																	"option": {
+																		"$": "enum",
+																		"discriminator_key": "$",
+																		"content_key": null,
+																		"variants": [
 																			{
-																				"name": "title",
-																				"description": null,
-																				"type": {
-																					"$": "string"
-																				},
-																				"optional": false
-																			},
-																			{
-																				"name": "icon",
-																				"description": null,
-																				"type": {
-																					"$": "string"
-																				},
-																				"optional": true
-																			},
-																			{
-																				"name": "target_object",
-																				"description": null,
-																				"type": {
-																					"$": "string"
-																				},
-																				"optional": false
-																			},
-																			{
-																				"name": "surface",
-																				"description": null,
-																				"type": {
-																					"$": "string"
-																				},
-																				"optional": false
-																			}
-																		]
-																	},
-																	"optional": false
-																}
-															]
-														}
-													},
-													{
-														"name": "headline",
-														"description": null,
-														"type": {
-															"$": "struct",
-															"properties": [
-																{
-																	"name": "def",
-																	"description": null,
-																	"type": {
-																		"$": "struct",
-																		"properties": [
-																			{
-																				"name": "text",
-																				"description": null,
-																				"type": {
-																					"$": "string"
-																				},
-																				"optional": false
-																			},
-																			{
-																				"name": "color",
-																				"description": null,
-																				"type": {
-																					"$": "color"
-																				},
-																				"optional": true
-																			}
-																		]
-																	},
-																	"optional": false
-																}
-															]
-														}
-													},
-													{
-														"name": "object_group",
-														"description": null,
-														"type": {
-															"$": "struct",
-															"properties": [
-																{
-																	"name": "def",
-																	"description": null,
-																	"type": {
-																		"$": "struct",
-																		"properties": [
-																			{
-																				"name": "title",
-																				"description": null,
-																				"type": {
-																					"$": "string"
-																				},
-																				"optional": false
-																			},
-																			{
-																				"name": "description",
-																				"description": null,
-																				"type": {
-																					"$": "string"
-																				},
-																				"optional": true
-																			},
-																			{
-																				"name": "objects",
-																				"description": null,
-																				"type": {
-																					"$": "list",
-																					"option": {
-																						"$": "string"
-																					}
-																				},
-																				"optional": false
-																			}
-																		]
-																	},
-																	"optional": false
-																}
-															]
-														}
-													},
-													{
-														"name": "object_preview",
-														"description": null,
-														"type": {
-															"$": "struct",
-															"properties": [
-																{
-																	"name": "def",
-																	"description": null,
-																	"type": {
-																		"$": "struct",
-																		"properties": [
-																			{
-																				"name": "objectId",
-																				"description": "The object that is to be previewed",
-																				"type": {
-																					"$": "reference",
-																					"expectedTopLevelVariant": "paragraph"
-																				},
-																				"optional": false
-																			},
-																			{
-																				"name": "containerColor",
-																				"description": null,
-																				"type": {
-																					"$": "color"
-																				},
-																				"optional": true
-																			},
-																			{
-																				"name": "contentColor",
-																				"description": null,
-																				"type": {
-																					"$": "color"
-																				},
-																				"optional": true
-																			}
-																		]
-																	},
-																	"optional": false
-																}
-															]
-														}
-													},
-													{
-														"name": "paragraph",
-														"description": null,
-														"type": {
-															"$": "struct",
-															"properties": [
-																{
-																	"name": "def",
-																	"description": null,
-																	"type": {
-																		"$": "struct",
-																		"properties": [
-																			{
-																				"name": "text",
-																				"description": null,
-																				"type": {
-																					"$": "string"
-																				},
-																				"optional": false
-																			},
-																			{
-																				"name": "color",
-																				"description": null,
-																				"type": {
-																					"$": "color"
-																				},
-																				"optional": true
-																			}
-																		]
-																	},
-																	"optional": false
-																}
-															]
-														}
-													},
-													{
-														"name": "quote",
-														"description": null,
-														"type": {
-															"$": "struct",
-															"properties": [
-																{
-																	"name": "def",
-																	"description": null,
-																	"type": {
-																		"$": "struct",
-																		"properties": [
-																			{
-																				"name": "text",
-																				"description": null,
-																				"type": {
-																					"$": "string"
-																				},
-																				"optional": false
-																			},
-																			{
-																				"name": "attribution",
-																				"description": null,
-																				"type": {
-																					"$": "string"
-																				},
-																				"optional": false
-																			},
-																			{
-																				"name": "surface",
-																				"description": null,
-																				"type": {
-																					"$": "string"
-																				},
-																				"optional": false
-																			},
-																			{
-																				"name": "attributionSurface",
-																				"description": null,
-																				"type": {
-																					"$": "string"
-																				},
-																				"optional": false
-																			}
-																		]
-																	},
-																	"optional": false
-																}
-															]
-														}
-													}
-												]
-											}
-										},
-										"optional": false
-									},
-									{
-										"name": "actions",
-										"description": null,
-										"type": {
-											"$": "list",
-											"option": {
-												"$": "struct",
-												"properties": [
-													{
-														"name": "kind",
-														"description": null,
-														"type": {
-															"$": "enum",
-															"discriminator_key": "kind",
-															"content_key": null,
-															"variants": []
-														},
-														"optional": false
-													},
-													{
-														"name": "title",
-														"description": null,
-														"type": {
-															"$": "string"
-														},
-														"optional": false
-													},
-													{
-														"name": "icon",
-														"description": null,
-														"type": {
-															"$": "string"
-														},
-														"optional": true
-													},
-													{
-														"name": "process",
-														"description": null,
-														"type": {
-															"$": "enum",
-															"discriminator_key": "kind",
-															"content_key": null,
-															"variants": [
-																{
-																	"name": "perform_operation",
-																	"description": null,
-																	"type": {
-																		"$": "struct",
-																		"properties": [
-																			{
-																				"name": "def",
+																				"name": "PluralCardContainer",
 																				"description": null,
 																				"type": {
 																					"$": "struct",
 																					"properties": [
 																						{
-																							"name": "key",
+																							"name": "objectIds",
+																							"description": null,
+																							"type": {
+																								"$": "list",
+																								"option": {
+																									"$": "string"
+																								}
+																							},
+																							"optional": false
+																						},
+																						{
+																							"name": "title",
+																							"description": null,
+																							"type": {
+																								"$": "string"
+																							},
+																							"optional": true
+																						}
+																					]
+																				}
+																			},
+																			{
+																				"name": "SingularCardContainer",
+																				"description": null,
+																				"type": {
+																					"$": "struct",
+																					"properties": [
+																						{
+																							"name": "objectId",
 																							"description": null,
 																							"type": {
 																								"$": "string"
@@ -461,45 +192,148 @@
 																							"optional": false
 																						}
 																					]
-																				},
-																				"optional": false
+																				}
 																			}
 																		]
 																	}
 																},
-																{
-																	"name": "show_object",
-																	"description": null,
-																	"type": {
-																		"$": "struct",
-																		"properties": [
-																			{
-																				"name": "def",
-																				"description": null,
-																				"type": {
-																					"$": "struct",
-																					"properties": [
-																						{
-																							"name": "id",
-																							"description": null,
-																							"type": {
-																								"$": "string"
-																							},
-																							"optional": false
-																						}
-																					]
-																				},
-																				"optional": false
-																			}
-																		]
-																	}
-																}
-															]
-														},
-														"optional": false
+																"optional": false
+															}
+														]
 													}
-												]
-											}
+												},
+												{
+													"name": "ListView",
+													"description": null,
+													"type": {
+														"$": "struct",
+														"properties": [
+															{
+																"name": "items",
+																"description": null,
+																"type": {
+																	"$": "list",
+																	"option": {
+																		"$": "list",
+																		"option": {
+																			"$": "struct",
+																			"properties": [
+																				{
+																					"name": "pageId",
+																					"description": null,
+																					"type": {
+																						"$": "string"
+																					},
+																					"optional": false
+																				}
+																			]
+																		}
+																	}
+																},
+																"optional": false
+															},
+															{
+																"name": "trailingIcon",
+																"description": null,
+																"type": {
+																	"$": "string"
+																},
+																"optional": true
+															}
+														]
+													}
+												}
+											]
+										},
+										"optional": true
+									},
+									{
+										"name": "type",
+										"description": null,
+										"type": {
+											"$": "enum",
+											"discriminator_key": "$",
+											"content_key": null,
+											"variants": [
+												{
+													"name": "Plain",
+													"description": null,
+													"type": {
+														"$": "struct",
+														"properties": [
+															{
+																"name": "icon",
+																"description": null,
+																"type": {
+																	"$": "string"
+																},
+																"optional": true
+															}
+														]
+													}
+												},
+												{
+													"name": "Post",
+													"description": null,
+													"type": {
+														"$": "struct",
+														"properties": [
+															{
+																"name": "imageUrls",
+																"description": "The images will be displayed in carousel form, directly below the title",
+																"type": {
+																	"$": "list",
+																	"option": {
+																		"$": "string"
+																	}
+																},
+																"optional": true
+															},
+															{
+																"name": "supertitle",
+																"description": "The page supertitle is displayed directly below any images on the page",
+																"type": {
+																	"$": "string"
+																},
+																"optional": true
+															},
+															{
+																"name": "additionalInfo",
+																"description": "The additional info is displayed directly below any images on the page",
+																"type": {
+																	"$": "string"
+																},
+																"optional": true
+															}
+														]
+													}
+												},
+												{
+													"name": "Profile",
+													"description": null,
+													"type": {
+														"$": "struct",
+														"properties": [
+															{
+																"name": "bannerImageUrl",
+																"description": "The the banner image for the user profile",
+																"type": {
+																	"$": "string"
+																},
+																"optional": false
+															},
+															{
+																"name": "avatarImageUrl",
+																"description": "The avatar image for the user profile",
+																"type": {
+																	"$": "string"
+																},
+																"optional": false
+															}
+														]
+													}
+												}
+											]
 										},
 										"optional": false
 									}
@@ -511,7 +345,7 @@
 				}
 			},
 			{
-				"name": "com.example.objectionapp.Object.Theme",
+				"name": "Theme",
 				"description": null,
 				"type": {
 					"$": "struct",
@@ -1121,6 +955,33 @@
 														"$": "color"
 													},
 													"optional": true
+												}
+											]
+										},
+										"optional": false
+									},
+									{
+										"name": "iconPack",
+										"description": "The type of icons that will be displayed in other parts of the app",
+										"type": {
+											"$": "enum",
+											"discriminator_key": "$",
+											"content_key": null,
+											"variants": [
+												{
+													"name": "com.example.objectionapp.IconPack.Filled",
+													"description": null,
+													"type": null
+												},
+												{
+													"name": "com.example.objectionapp.IconPack.Rounded",
+													"description": null,
+													"type": null
+												},
+												{
+													"name": "com.example.objectionapp.IconPack.Sharp",
+													"description": null,
+													"type": null
 												}
 											]
 										},
