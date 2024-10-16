@@ -42,6 +42,13 @@ sealed class CardContainer {
 		val objectIds: List<String>,
 		val title: String? = null,
 	) : CardContainer()
+
+	data class CustomCardContainer(
+		val objectId: String? = null,
+		val title: String? = null,
+		val icon: String? = null,
+		val imageUrl: String? = null
+	) : CardContainer()
 }
 
 
