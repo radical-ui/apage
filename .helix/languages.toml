@@ -1,0 +1,45 @@
+[[language]]
+name = "typescript"
+roots = ["deno.json", "deno.jsonc"]
+language-servers = [ "deno-lsp" ]
+indent = { tab-width = 4, unit = "\t" }
+
+[[language]]
+name = "tsx"
+roots = ["deno.json", "deno.jsonc"]
+language-servers = [ "deno-lsp" ]
+indent = { tab-width = 4, unit = "\t" }
+
+[[language]]
+name = "javascript"
+roots = ["deno.json", "deno.jsonc"]
+language-servers = [ "deno-lsp" ]
+indent = { tab-width = 4, unit = "\t" }
+
+[[language]]
+name = "jsx"
+roots = ["deno.json", "deno.jsonc"]
+language-servers = [ "deno-lsp" ]
+indent = { tab-width = 4, unit = "\t" }
+
+[[language]]
+name = "json"
+language-servers = [ "deno-lsp" ]
+indent = { tab-width = 4, unit = "\t" }
+
+[[language]]
+name = "jsonc"
+language-servers = [ "deno-lsp" ]
+indent = { tab-width = 4, unit = "\t" }
+
+[language-server.deno-lsp]
+command = "deno"
+args = ["lsp"]
+config.deno.enable = true
+config.deno.inlayHints.enumMemberValues.enabled = true
+config.deno.inlayHints.functionLikeReturnTypes.enabled = true
+config.deno.inlayHints.parameterNames.enabled = "all"
+config.deno.inlayHints.parameterTypes.enabled = true
+config.deno.inlayHints.propertyDeclarationTypes.enabled = true
+config.deno.inlayHints.variableTypes.enabled = true
+
