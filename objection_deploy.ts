@@ -1,8 +1,3 @@
-// gradlw assemble
-// build/outputs/apk/release/app-release-unsigned.apk
-// sd ObjectionApp Talents app/src/main/AndroidManifest.xml app/src/main/res/values/strings.xml settings.gradle.kts app/src/main/res/values/themes.xml
-//
-
 import { dtils, getConfigValue } from './deps.ts'
 
 class Color {
@@ -87,6 +82,10 @@ await writeIcon(162, 'mipmap-hdpi')
 await writeIcon(216, 'mipmap-xhdpi')
 await writeIcon(324, 'mipmap-xxhdpi')
 await writeIcon(432, 'mipmap-xxxhdpi')
+
+await dtils.exec(['./gradlew', 'assemble'])
+
+console.log('APK is located at: app/build/outputs/apk/release/app-release-unsigned.apk')
 
 async function writeIcon(height: number, space: string) {
 	console.log(`Writing icon to space ${space} with height=${height}`)
