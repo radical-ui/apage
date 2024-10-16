@@ -62,10 +62,10 @@ await replaceLine('app/src/main/java/com/example/objectionapp/Constants.kt', [
 	{ match: 'const val noInternetHeader', write: `const val noInternetHeader = "${noInternetHeader}"` },
 	{ match: 'const val noInternetContent', write: `const val noInternetContent = "${noInternetContent}"` },
 	{ match: 'const val errorHeader', write: `const val errorHeader = "${errorHeader}"` },
-	{ match: 'const val lightBackgroundColor', write: `const val lightBackgroundColor = ${lightBackgroundColor.toKotlin()}` },
-	{ match: 'const val lightForegroundColor', write: `const val lightForegroundColor = ${lightForegroundColor.toKotlin()}` },
-	{ match: 'const val darkBackgroundColor', write: `const val darkBackgroundColor = ${darkBackgroundColor.toKotlin()}` },
-	{ match: 'const val darkForegroundColor', write: `const val darkForegroundColor = ${darkForegroundColor.toKotlin()}` },
+	{ match: 'val lightBackgroundColor', write: `val lightBackgroundColor = ${lightBackgroundColor.toKotlin()}` },
+	{ match: 'val lightForegroundColor', write: `val lightForegroundColor = ${lightForegroundColor.toKotlin()}` },
+	{ match: 'val darkBackgroundColor', write: `val darkBackgroundColor = ${darkBackgroundColor.toKotlin()}` },
+	{ match: 'val darkForegroundColor', write: `val darkForegroundColor = ${darkForegroundColor.toKotlin()}` },
 ])
 await replaceLine('app/src/main/res/values/colors.xml', [
 	{ match: '<color name="foreground"', write: `<color name="foreground">${lightForegroundColor.toHex()}</color>` },
