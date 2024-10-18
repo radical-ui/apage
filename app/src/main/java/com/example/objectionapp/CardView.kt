@@ -1,7 +1,6 @@
 package com.example.objectionapp
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,11 +25,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -52,27 +52,16 @@ fun PostCardRender(
 		verticalAlignment = Alignment.CenterVertically
 	) {
 		type.imageUrls?.first()?.let {
-//			AsyncImage(
-//				model = it,
-//				contentDescription = "An image",
-//				clipToBounds = true,
-//				contentScale = ContentScale.Crop,
-//				modifier = Modifier
-//					.width(90.dp)
-//					.height(90.dp)
-//					.clip(RoundedCornerShape(12.dp))
-//			)
-			Image(
-				painter = painterResource(id = R.drawable.hammer),
+			AsyncImage(
+				model = it,
 				contentDescription = "An image",
+				clipToBounds = true,
+				contentScale = ContentScale.Crop,
 				modifier = Modifier
 					.width(90.dp)
 					.height(90.dp)
 					.clip(RoundedCornerShape(12.dp))
 			)
-
-		}
-
 		Column(
 			Modifier.padding(horizontal = 10.dp, vertical = 12.dp),
 			verticalArrangement = Arrangement.spacedBy(2.dp)
