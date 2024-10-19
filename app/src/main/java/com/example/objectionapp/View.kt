@@ -24,7 +24,48 @@ sealed class View {
 		val items: List<List<ListViewItem>>,
 		val trailingIcon: String?
 	) : View()
+
+	@Serializable
+	@SerialName("FormView")
+	class FormView(
+		val items: List<FormItem>,
+		val actions: List<FormAction>
+	) : View()
 }
+
+@Serializable
+sealed class FormAction {
+	data class SubmitAction(
+		val color: ActionColor,
+		val text: String,
+
+		)
+
+	data class CancelAction(
+		val text: String
+	)
+}
+
+@Serializable
+data class FormItem(
+	val type: FormItemType,
+	val textValue: Binding<String>,
+	val submitStrategy: SubmitStrategy,
+	val label: String
+)
+
+enum class FormItemType {
+	Text,
+	File,
+	ProfilePicture,
+}
+
+enum class SubmitStrategy {
+	OnBlur,
+	OnKeyUp,
+	OnSubmit,
+}
+
 
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
@@ -58,6 +99,7 @@ fun ViewRender(view: View, scrollBehavior: TopAppBarScrollBehavior) {
 	when (view) {
 		is View.CardView -> CardViewRender(view, scrollBehavior)
 		is View.ListView -> ListView(view, scrollBehavior)
+		is View.FormView -> FormViewRender(view, scrollBehavior)
 	}
 }
 

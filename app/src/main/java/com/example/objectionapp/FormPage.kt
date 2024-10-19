@@ -15,20 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 
-data class FormPage(
-	val header: FormActions,
-	val inputs: List<Input>, // TODO: Add other form variations. Currently there is only the option for a field
-)
-
-class FormActions(
-	val right: FormAction,
-	val left: FormAction,
-)
-
-class FormAction(
-	val icon: String,
-)
-
 
 enum class FileInputForm {
 	button,
