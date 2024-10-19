@@ -62,46 +62,45 @@ fun PostCardRender(
 					.height(90.dp)
 					.clip(RoundedCornerShape(12.dp))
 			)
-		Column(
-			Modifier.padding(horizontal = 10.dp, vertical = 12.dp),
-			verticalArrangement = Arrangement.spacedBy(2.dp)
-		) {
-			type.supertitle?.let {
-				Text(
-					it,
-					color = MaterialTheme.colorScheme.onSurfaceVariant,
-					fontSize = 10.sp,
-					fontWeight = FontWeight.SemiBold,
-				)
+			Column(
+				Modifier.padding(horizontal = 10.dp, vertical = 12.dp),
+				verticalArrangement = Arrangement.spacedBy(2.dp)
+			) {
+				type.supertitle?.let {
+					Text(
+						it,
+						color = MaterialTheme.colorScheme.onSurfaceVariant,
+						fontSize = 10.sp,
+						fontWeight = FontWeight.SemiBold,
+					)
+				}
+				title?.let {
+					Text(
+						it,
+						color = MaterialTheme.colorScheme.onSurfaceVariant,
+						fontSize = 16.sp,
+						fontWeight = FontWeight.Bold,
+					)
+				}
+				subtitle?.let {
+					Text(
+						it,
+						fontSize = 12.sp,
+						color = MaterialTheme.colorScheme.primary
+					)
+				}
+				type.additionalInfo?.let {
+					Text(
+						it,
+						fontSize = 14.sp,
+						color = MaterialTheme.colorScheme.onSurfaceVariant,
+						fontWeight = FontWeight.Bold
+					)
+				}
 			}
-			title?.let {
-				Text(
-					it,
-					color = MaterialTheme.colorScheme.onSurfaceVariant,
-					fontSize = 16.sp,
-					fontWeight = FontWeight.Bold,
-				)
-			}
-			subtitle?.let {
-				Text(
-					it,
-					fontSize = 12.sp,
-					color = MaterialTheme.colorScheme.primary
-				)
-			}
-			type.additionalInfo?.let {
-				Text(
-					it,
-					fontSize = 14.sp,
-					color = MaterialTheme.colorScheme.onSurfaceVariant,
-					fontWeight = FontWeight.Bold
-				)
-			}
-
 		}
 	}
 }
-
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -130,7 +129,7 @@ fun CardRender(
 				subtitle = obj.subtitle
 			)
 //		is PageType.Profile -> ProfileCardRender(objectId, isVertical)
-			is PageType.Plain -> PlainCardRender(objectId, isVertical)
+//			is PageType.Plain -> PlainCardRender(objectId, isVertical)
 			else -> return@Card
 		}
 	}
