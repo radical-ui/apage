@@ -1,5 +1,6 @@
 package com.example.objectionapp
 
+import android.content.ClipData.Item
 import androidx.compose.ui.graphics.Color
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
@@ -46,7 +47,9 @@ private annotation class IsBinding
 @Target(AnnotationTarget.CLASS)
 annotation class ContentKey(val key: String)
 
-@Serializable @IsBinding data class Binding<T>(val key: String, val child: T)
+@Serializable
+@IsBinding
+data class Binding<T>(val key: String, val child: T)
 
 @Serializable
 @IsColor
@@ -62,10 +65,9 @@ fun getSchema(klass: KClass<*>): Schema {
 
 @OptIn(ExperimentalSerializationApi::class)
 private fun getItemSchema(
-        descriptor: SerialDescriptor,
-        annotations: List<Annotation> = listOf()
+    descriptor: SerialDescriptor, annotations: List<Annotation> = listOf()
 ): ItemSchema {
-    return when (descriptor.kind) {
+    val schema = when (descriptor.kind) {
         StructureKind.CLASS -> getClassSchema(descriptor)
         PrimitiveKind.STRING -> getStringSchema(annotations)
         PrimitiveKind.DOUBLE -> ItemSchema.NumberSchema
@@ -74,28 +76,27 @@ private fun getItemSchema(
         PrimitiveKind.BOOLEAN -> ItemSchema.BooleanSchema
         StructureKind.LIST -> getListSchema(descriptor)
         PolymorphicKind.SEALED -> getSealedSchema(descriptor)
-        SerialKind.ENUM ->
-                throw Exception(
-                        "Use a sealed class with objects instead of an enum. Failed at: $descriptor"
-                )
+        SerialKind.ENUM -> throw Exception(
+            "Use a sealed class with objects instead of an enum. Failed at: $descriptor"
+        )
+
         else -> throw Exception("unknown item at $descriptor: ${descriptor.kind}")
     }
+
+    return if (descriptor.isNullable) ItemSchema.OptionalSchema(child = schema) else schema
 }
 
 @OptIn(ExperimentalSerializationApi::class)
 private fun getStringSchema(annotations: List<Annotation>): ItemSchema {
     for (annotation in annotations) {
         when (annotation) {
-            is ObjectReference ->
-                    return ItemSchema.ReferenceSchema(
-                            expectedTopLevelVariant =
-                                    serialDescriptor(
-                                                    annotation.expectedTopLevelVariant.createType()
-                                            )
-                                            .serialName
-                    )
-            is AnyObjectReference ->
-                    return ItemSchema.ReferenceSchema(expectedTopLevelVariant = null)
+            is ObjectReference -> return ItemSchema.ReferenceSchema(
+                expectedTopLevelVariant = serialDescriptor(
+                    annotation.expectedTopLevelVariant.createType()
+                ).serialName
+            )
+
+            is AnyObjectReference -> return ItemSchema.ReferenceSchema(expectedTopLevelVariant = null)
         }
     }
 
@@ -111,13 +112,11 @@ private fun getSealedSchema(descriptor: SerialDescriptor): ItemSchema.EnumSchema
 
     for (variant in child.elementDescriptors) {
         variants.add(
-                EnumVariantSchema(
-                        name = variant.serialName,
-                        description = getDescription(listOf()), // FIXME
-                        type =
-                                if (variant.kind == StructureKind.OBJECT) null
-                                else getItemSchema(variant)
-                )
+            EnumVariantSchema(
+                name = variant.serialName, description = getDescription(listOf()), // FIXME
+                type = if (variant.kind == StructureKind.OBJECT) null
+                else getItemSchema(variant)
+            )
         )
     }
 
@@ -132,7 +131,7 @@ private fun getSealedSchema(descriptor: SerialDescriptor): ItemSchema.EnumSchema
 
     if (discriminatorKey == null) {
         throw Exception(
-                "All sealed classes must have a JsonDiscriminatorKey annotation. Failed at: $descriptor"
+            "All sealed classes must have a JsonDiscriminatorKey annotation. Failed at: $descriptor"
         )
     }
 
@@ -157,30 +156,28 @@ private fun getClassSchema(descriptor: SerialDescriptor): ItemSchema {
         if (annotation is IsBinding) {
             var childDescriptor: SerialDescriptor? = null
 
-            for (childIndex in 0 ..< descriptor.elementsCount) {
+            for (childIndex in 0..<descriptor.elementsCount) {
                 if (descriptor.getElementName(childIndex) === "child") {
                     childDescriptor = descriptor.getElementDescriptor(childIndex)
                 }
             }
 
-            if (childDescriptor == null)
-                    throw Exception("Binding class did not have a 'child' property")
+            if (childDescriptor == null) throw Exception("Binding class did not have a 'child' property")
 
             return ItemSchema.BindingSchema(child = getItemSchema(childDescriptor))
         }
     }
 
-    for (childIndex in 0 ..< descriptor.elementsCount) {
+    for (childIndex in 0..<descriptor.elementsCount) {
         val child = descriptor.getElementDescriptor(childIndex)
         val annotations = descriptor.getElementAnnotations(childIndex)
 
         items.add(
-                StructPropertySchema(
-                        name = descriptor.getElementName(childIndex),
-                        type = getItemSchema(child, annotations),
-                        description = getDescription(annotations),
-                        optional = child.isNullable
-                )
+            StructPropertySchema(
+                name = descriptor.getElementName(childIndex),
+                type = getItemSchema(child, annotations),
+                description = getDescription(annotations),
+            )
         )
     }
 
@@ -215,27 +212,25 @@ data class Schema(@SerialName("object") val obj: ItemSchema) {
     val version = "0.1"
 
     @SerialName("initial_objects")
-    val initialObjects =
-            listOf(
-                    InitialObject(
-                            id = "theme_default",
-                            description =
-                                    "The theme that will be applied by default to all UI elements",
-                            expectedTopLevelVariant = getTopLevelVariant(Theme::class)
-                    ),
-                    InitialObject(
-                            id = "layout_default",
-                            description = "The layout that will wrap everything",
-                            expectedTopLevelVariant = getTopLevelVariant(Theme::class)
-                    ),
-            )
+    val initialObjects = listOf(
+        InitialObject(
+            id = "theme_default",
+            description = "The theme that will be applied by default to all UI elements",
+            expectedTopLevelVariant = getTopLevelVariant(Theme::class)
+        ),
+        InitialObject(
+            id = "layout_default",
+            description = "The layout that will wrap everything",
+            expectedTopLevelVariant = getTopLevelVariant(Theme::class)
+        ),
+    )
 }
 
 @Serializable
 data class InitialObject(
-        val id: String,
-        val description: String,
-        @SerialName("expected_top_level_variant") val expectedTopLevelVariant: String?,
+    val id: String,
+    val description: String,
+    @SerialName("expected_top_level_variant") val expectedTopLevelVariant: String?,
 )
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -249,38 +244,51 @@ sealed class ItemSchema {
     @Serializable
     @SerialName("enum")
     data class EnumSchema(
-            @SerialName("discriminator_key") val discriminatorKey: String,
-            @SerialName("content_key") val contentKey: String?,
-            val variants: List<EnumVariantSchema>
+        @SerialName("discriminator_key") val discriminatorKey: String,
+        @SerialName("content_key") val contentKey: String?,
+        val variants: List<EnumVariantSchema>
     ) : ItemSchema()
 
-    @Serializable @SerialName("string") data object StringSchema : ItemSchema()
+    @Serializable
+    @SerialName("string")
+    data object StringSchema : ItemSchema()
 
-    @Serializable @SerialName("number") data object NumberSchema : ItemSchema()
+    @Serializable
+    @SerialName("number")
+    data object NumberSchema : ItemSchema()
 
-    @Serializable @SerialName("boolean") data object BooleanSchema : ItemSchema()
+    @Serializable
+    @SerialName("boolean")
+    data object BooleanSchema : ItemSchema()
 
-    @Serializable @SerialName("color") data object ColorSchema : ItemSchema()
+    @Serializable
+    @SerialName("color")
+    data object ColorSchema : ItemSchema()
 
-    @Serializable @SerialName("list") data class ListSchema(val option: ItemSchema) : ItemSchema()
+    @Serializable
+    @SerialName("list")
+    data class ListSchema(val option: ItemSchema) : ItemSchema()
 
     @Serializable
     @SerialName("reference")
     data class ReferenceSchema(
-            @SerialName("expected_top_level_variant") val expectedTopLevelVariant: String?
+        @SerialName("expected_top_level_variant") val expectedTopLevelVariant: String?
     ) : ItemSchema()
 
     @Serializable
     @SerialName("binding")
     data class BindingSchema(val child: ItemSchema) : ItemSchema()
+
+    @Serializable
+    @SerialName("optional")
+    data class OptionalSchema(val child: ItemSchema) : ItemSchema()
 }
 
 @Serializable
 data class StructPropertySchema(
-        val name: String,
-        val description: String?,
-        val type: ItemSchema,
-        val optional: Boolean
+    val name: String,
+    val description: String?,
+    val type: ItemSchema,
 )
 
 @Serializable

@@ -20,70 +20,68 @@
 										"name": "tabBar",
 										"description": "The tab bar is shown at the bottom of the application. If there is no current page set, the current page will default to the first tab bar item.",
 										"type": {
-											"$": "struct",
-											"properties": [
-												{
-													"name": "stupid",
-													"description": null,
-													"type": {
-														"$": "boolean"
-													},
-													"optional": false
-												},
-												{
-													"name": "buttons",
-													"description": null,
-													"type": {
-														"$": "list",
-														"option": {
-															"$": "struct",
-															"properties": [
-																{
-																	"name": "pageId",
-																	"description": null,
-																	"type": {
-																		"$": "reference",
-																		"expected_top_level_variant": "Page"
-																	},
-																	"optional": false
-																},
-																{
-																	"name": "icon",
-																	"description": null,
-																	"type": {
-																		"$": "string"
-																	},
-																	"optional": false
-																}
-															]
+											"$": "optional",
+											"child": {
+												"$": "struct",
+												"properties": [
+													{
+														"name": "stupid",
+														"description": null,
+														"type": {
+															"$": "boolean"
 														}
 													},
-													"optional": false
-												},
-												{
-													"name": "useSheet",
-													"description": null,
-													"type": {
-														"$": "boolean"
+													{
+														"name": "buttons",
+														"description": null,
+														"type": {
+															"$": "list",
+															"option": {
+																"$": "struct",
+																"properties": [
+																	{
+																		"name": "pageId",
+																		"description": null,
+																		"type": {
+																			"$": "reference",
+																			"expected_top_level_variant": "Page"
+																		}
+																	},
+																	{
+																		"name": "icon",
+																		"description": null,
+																		"type": {
+																			"$": "string"
+																		}
+																	}
+																]
+															}
+														}
 													},
-													"optional": false
-												}
-											]
-										},
-										"optional": true
+													{
+														"name": "useSheet",
+														"description": null,
+														"type": {
+															"$": "boolean"
+														}
+													}
+												]
+											}
+										}
 									},
 									{
 										"name": "currentPageId",
 										"description": "The page that is to be shown by default",
 										"type": {
-											"$": "reference",
-											"expected_top_level_variant": "Page"
-										},
-										"optional": true
+											"$": "optional",
+											"child": {
+												"$": "reference",
+												"expected_top_level_variant": "Page"
+											}
+										}
 									}
 								]
-							},
-							"optional": false
+							}
 						}
 					]
 				}
@@ -104,148 +102,155 @@
 										"name": "title",
 										"description": "The page title will be displayed prominently at the top of the screen",
 										"type": {
-											"$": "string"
-										},
-										"optional": true
+											"$": "optional",
+											"child": {
+												"$": "string"
+											}
+										}
 									},
 									{
 										"name": "subtitle",
 										"description": "The page subtitle is displayed directly under any images on the page",
 										"type": {
-											"$": "string"
-										},
-										"optional": true
+											"$": "optional",
+											"child": {
+												"$": "string"
+											}
+										}
 									},
 									{
 										"name": "searchPageId",
 										"description": "The page that will be pulled up for a presumed search through the contents of this page",
 										"type": {
-											"$": "reference",
-											"expected_top_level_variant": "Page"
-										},
-										"optional": true
+											"$": "optional",
+											"child": {
+												"$": "reference",
+												"expected_top_level_variant": "Page"
+											}
+										}
 									},
 									{
 										"name": "view",
 										"description": null,
 										"type": {
-											"$": "enum",
-											"discriminator_key": "$",
-											"content_key": null,
-											"variants": [
-												{
-													"name": "CardView",
-													"description": null,
-													"type": {
-														"$": "struct",
-														"properties": [
-															{
-																"name": "containers",
-																"description": null,
-																"type": {
-																	"$": "list",
-																	"option": {
-																		"$": "enum",
-																		"discriminator_key": "$",
-																		"content_key": null,
-																		"variants": [
-																			{
-																				"name": "PluralCardContainer",
-																				"description": null,
-																				"type": {
-																					"$": "struct",
-																					"properties": [
-																						{
-																							"name": "objectIds",
-																							"description": null,
-																							"type": {
-																								"$": "list",
-																								"option": {
-																									"$": "string"
-																								}
-																							},
-																							"optional": false
-																						},
-																						{
-																							"name": "title",
-																							"description": null,
-																							"type": {
-																								"$": "string"
-																							},
-																							"optional": true
-																						}
-																					]
-																				}
-																			},
-																			{
-																				"name": "SingularCardContainer",
-																				"description": null,
-																				"type": {
-																					"$": "struct",
-																					"properties": [
-																						{
-																							"name": "objectId",
-																							"description": null,
-																							"type": {
-																								"$": "string"
-																							},
-																							"optional": false
-																						}
-																					]
-																				}
-																			}
-																		]
-																	}
-																},
-																"optional": false
-															}
-														]
-													}
-												},
-												{
-													"name": "ListView",
-													"description": null,
-													"type": {
-														"$": "struct",
-														"properties": [
-															{
-																"name": "items",
-																"description": null,
-																"type": {
-																	"$": "list",
-																	"option": {
+											"$": "optional",
+											"child": {
+												"$": "enum",
+												"discriminator_key": "$",
+												"content_key": null,
+												"variants": [
+													{
+														"name": "CardView",
+														"description": null,
+														"type": {
+															"$": "struct",
+															"properties": [
+																{
+																	"name": "containers",
+																	"description": null,
+																	"type": {
 																		"$": "list",
 																		"option": {
-																			"$": "struct",
-																			"properties": [
+																			"$": "enum",
+																			"discriminator_key": "$",
+																			"content_key": null,
+																			"variants": [
 																				{
-																					"name": "pageId",
+																					"name": "PluralCardContainer",
 																					"description": null,
 																					"type": {
-																						"$": "string"
-																					},
-																					"optional": false
+																						"$": "struct",
+																						"properties": [
+																							{
+																								"name": "objectIds",
+																								"description": null,
+																								"type": {
+																									"$": "list",
+																									"option": {
+																										"$": "string"
+																									}
+																								}
+																							},
+																							{
+																								"name": "title",
+																								"description": null,
+																								"type": {
+																									"$": "optional",
+																									"child": {
+																										"$": "string"
+																									}
+																								}
+																							}
+																						]
+																					}
+																				},
+																				{
+																					"name": "SingularCardContainer",
+																					"description": null,
+																					"type": {
+																						"$": "struct",
+																						"properties": [
+																							{
+																								"name": "objectId",
+																								"description": null,
+																								"type": {
+																									"$": "string"
+																								}
+																							}
+																						]
+																					}
 																				}
 																			]
 																		}
 																	}
+																}
+															]
+														}
+													},
+													{
+														"name": "ListView",
+														"description": null,
+														"type": {
+															"$": "struct",
+															"properties": [
+																{
+																	"name": "items",
+																	"description": null,
+																	"type": {
+																		"$": "list",
+																		"option": {
+																			"$": "list",
+																			"option": {
+																				"$": "struct",
+																				"properties": [
+																					{
+																						"name": "pageId",
+																						"description": null,
+																						"type": {
+																							"$": "string"
+																						}
+																					}
+																				]
+																			}
+																		}
+																	}
 																},
-																"optional": false
-															},
-															{
-																"name": "trailingIcon",
-																"description": null,
-																"type": {
-																	"$": "string"
-																},
-																"optional": true
-															}
-														]
+																{
+																	"name": "trailingIcon",
+																	"description": null,
+																	"type": {
+																		"$": "optional",
+																		"child": {
+																			"$": "string"
+																		}
+																	}
+																}
+															]
+														}
 													}
-												}
-											]
-										},
-										"optional": true
+												]
+											}
+										}
 									},
 									{
 										"name": "type",
@@ -265,9 +270,11 @@
 																"name": "icon",
 																"description": null,
 																"type": {
-																	"$": "string"
-																},
-																"optional": true
+																	"$": "optional",
+																	"child": {
+																		"$": "string"
+																	}
+																}
 															}
 														]
 													}
@@ -282,28 +289,34 @@
 																"name": "imageUrls",
 																"description": "The images will be displayed in carousel form, directly below the title",
 																"type": {
-																	"$": "list",
-																	"option": {
-																		"$": "string"
+																	"$": "optional",
+																	"child": {
+																		"$": "list",
+																		"option": {
+																			"$": "string"
+																		}
 																	}
-																},
-																"optional": true
+																}
 															},
 															{
 																"name": "supertitle",
 																"description": "The page supertitle is displayed directly below any images on the page",
 																"type": {
-																	"$": "string"
-																},
-																"optional": true
+																	"$": "optional",
+																	"child": {
+																		"$": "string"
+																	}
+																}
 															},
 															{
 																"name": "additionalInfo",
 																"description": "The additional info is displayed directly below any images on the page",
 																"type": {
-																	"$": "string"
-																},
-																"optional": true
+																	"$": "optional",
+																	"child": {
+																		"$": "string"
+																	}
+																}
 															}
 														]
 													}
@@ -319,27 +332,23 @@
 																"description": "The the banner image for the user profile",
 																"type": {
 																	"$": "string"
-																},
-																"optional": false
+																}
 															},
 															{
 																"name": "avatarImageUrl",
 																"description": "The avatar image for the user profile",
 																"type": {
 																	"$": "string"
-																},
-																"optional": false
+																}
 															}
 														]
 													}
 												}
 											]
-										},
-										"optional": false
+										}
 									}
 								]
-							},
-							"optional": false
+							}
 						}
 					]
 				}
@@ -361,8 +370,7 @@
 										"description": "Unless otherwise specified, the supplied light and dark color schemes will be overridden with the android-supplied color scheme, which is computed from the home screen background.",
 										"type": {
 											"$": "boolean"
-										},
-										"optional": false
+										}
 									},
 									{
 										"name": "lightColorScheme",
@@ -374,293 +382,364 @@
 													"name": "primary",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onPrimary",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "primaryContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onPrimaryContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "inversePrimary",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "secondary",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onSecondary",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "secondaryContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onSecondaryContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "tertiary",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onTertiary",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "tertiaryContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onTertiaryContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "background",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onBackground",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surface",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onSurface",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceVariant",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onSurfaceVariant",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceTint",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "inverseSurface",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "inverseOnSurface",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "error",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onError",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "errorContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onErrorContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "outline",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "outlineVariant",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "scrim",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceBright",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceContainerHigh",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceContainerHighest",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceContainerLow",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceContainerLowest",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceDim",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												}
 											]
-										},
-										"optional": false
+										}
 									},
 									{
 										"name": "darkColorScheme",
@@ -672,293 +751,364 @@
 													"name": "primary",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onPrimary",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "primaryContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onPrimaryContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "inversePrimary",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "secondary",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onSecondary",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "secondaryContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onSecondaryContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "tertiary",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onTertiary",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "tertiaryContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onTertiaryContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "background",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onBackground",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surface",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onSurface",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceVariant",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onSurfaceVariant",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceTint",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "inverseSurface",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "inverseOnSurface",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "error",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onError",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "errorContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "onErrorContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "outline",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "outlineVariant",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "scrim",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceBright",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceContainer",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceContainerHigh",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceContainerHighest",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceContainerLow",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceContainerLowest",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												},
 												{
 													"name": "surfaceDim",
 													"description": null,
 													"type": {
-														"$": "color"
-													},
-													"optional": true
+														"$": "optional",
+														"child": {
+															"$": "color"
+														}
+													}
 												}
 											]
-										},
-										"optional": false
+										}
 									},
 									{
 										"name": "iconPack",
@@ -984,12 +1134,10 @@
 													"type": null
 												}
 											]
-										},
-										"optional": false
+										}
 									}
 								]
-							},
-							"optional": false
+							}
 						}
 					]
 				}
