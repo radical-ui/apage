@@ -144,7 +144,7 @@ private fun getListSchema(descriptor: SerialDescriptor): ItemSchema {
         throw Exception("A list must have exactly on child element")
     }
 
-    return ItemSchema.ListSchema(option = getItemSchema(descriptor.getElementDescriptor(0)))
+    return ItemSchema.ListSchema(item = getItemSchema(descriptor.getElementDescriptor(0)))
 }
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -267,7 +267,9 @@ sealed class ItemSchema {
 
     @Serializable
     @SerialName("list")
-    data class ListSchema(val option: ItemSchema) : ItemSchema()
+    data class ListSchema(val item: ItemSchema) : ItemSchema() {
+        @SerialName("batch_size") val batchSize = 50
+    }
 
     @Serializable
     @SerialName("reference")

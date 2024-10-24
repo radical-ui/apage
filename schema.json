@@ -36,7 +36,7 @@
 														"description": null,
 														"type": {
 															"$": "list",
-															"option": {
+															"item": {
 																"$": "struct",
 																"properties": [
 																	{
@@ -55,7 +55,8 @@
 																		}
 																	}
 																]
-															}
+															},
+															"batch_size": 50
 														}
 													},
 													{
@@ -150,7 +151,7 @@
 																	"description": null,
 																	"type": {
 																		"$": "list",
-																		"option": {
+																		"item": {
 																			"$": "enum",
 																			"discriminator_key": "$",
 																			"content_key": null,
@@ -166,9 +167,10 @@
 																								"description": null,
 																								"type": {
 																									"$": "list",
-																									"option": {
+																									"item": {
 																										"$": "string"
-																									}
+																									},
+																									"batch_size": 50
 																								}
 																							},
 																							{
@@ -201,7 +203,8 @@
 																					}
 																				}
 																			]
-																		}
+																		},
+																		"batch_size": 50
 																	}
 																}
 															]
@@ -218,9 +221,9 @@
 																	"description": null,
 																	"type": {
 																		"$": "list",
-																		"option": {
+																		"item": {
 																			"$": "list",
-																			"option": {
+																			"item": {
 																				"$": "struct",
 																				"properties": [
 																					{
@@ -231,8 +234,10 @@
 																						}
 																					}
 																				]
-																			}
-																		}
+																			},
+																			"batch_size": 50
+																		},
+																		"batch_size": 50
 																	}
 																},
 																{
@@ -292,9 +297,10 @@
 																	"$": "optional",
 																	"child": {
 																		"$": "list",
-																		"option": {
+																		"item": {
 																			"$": "string"
-																		}
+																		},
+																		"batch_size": 50
 																	}
 																}
 															},
