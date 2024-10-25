@@ -134,6 +134,7 @@
 										"name": "view",
 										"description": null,
 										"type": {
+<<<<<<< HEAD
 											"$": "optional",
 											"child": {
 												"$": "enum",
@@ -150,6 +151,331 @@
 																	"name": "containers",
 																	"description": null,
 																	"type": {
+=======
+											"$": "enum",
+											"discriminator_key": "$",
+											"content_key": null,
+											"variants": [
+												{
+													"name": "CardView",
+													"description": null,
+													"type": {
+														"$": "struct",
+														"properties": [
+															{
+																"name": "containers",
+																"description": null,
+																"type": {
+																	"$": "list",
+																	"option": {
+																		"$": "enum",
+																		"discriminator_key": "$",
+																		"content_key": null,
+																		"variants": [
+																			{
+																				"name": "PluralCardContainer",
+																				"description": null,
+																				"type": {
+																					"$": "struct",
+																					"properties": [
+																						{
+																							"name": "objectIds",
+																							"description": null,
+																							"type": {
+																								"$": "list",
+																								"option": {
+																									"$": "string"
+																								}
+																							},
+																							"optional": false
+																						},
+																						{
+																							"name": "title",
+																							"description": null,
+																							"type": {
+																								"$": "string"
+																							},
+																							"optional": true
+																						}
+																					]
+																				}
+																			},
+																			{
+																				"name": "SingularCardContainer",
+																				"description": null,
+																				"type": {
+																					"$": "struct",
+																					"properties": [
+																						{
+																							"name": "objectId",
+																							"description": null,
+																							"type": {
+																								"$": "string"
+																							},
+																							"optional": false
+																						}
+																					]
+																				}
+																			}
+																		]
+																	}
+																},
+																"optional": false
+															}
+														]
+													}
+												},
+												{
+													"name": "FormView",
+													"description": null,
+													"type": {
+														"$": "struct",
+														"properties": [
+															{
+																"name": "items",
+																"description": null,
+																"type": {
+																	"$": "list",
+																	"option": {
+																		"$": "struct",
+																		"properties": [
+																			{
+																				"name": "submitStrategy",
+																				"description": null,
+																				"type": {
+																					"$": "enum",
+																					"discriminator_key": "$",
+																					"content_key": null,
+																					"variants": []
+																				},
+																				"optional": false
+																			},
+																			{
+																				"name": "label",
+																				"description": null,
+																				"type": {
+																					"$": "string"
+																				},
+																				"optional": true
+																			},
+																			{
+																				"name": "description",
+																				"description": null,
+																				"type": {
+																					"$": "string"
+																				},
+																				"optional": true
+																			},
+																			{
+																				"name": "input",
+																				"description": null,
+																				"type": {
+																					"$": "enum",
+																					"discriminator_key": "$",
+																					"content_key": null,
+																					"variants": [
+																						{
+																							"name": "com.example.objectionapp.Input.File",
+																							"description": null,
+																							"type": null
+																						},
+																						{
+																							"name": "com.example.objectionapp.Input.ProfilePicture",
+																							"description": null,
+																							"type": null
+																						},
+																						{
+																							"name": "com.example.objectionapp.Input.Text",
+																							"description": null,
+																							"type": {
+																								"$": "struct",
+																								"properties": [
+																									{
+																										"name": "startingValue",
+																										"description": null,
+																										"type": {
+																											"$": "binding",
+																											"child": {
+																												"$": "string"
+																											}
+																										},
+																										"optional": false
+																									},
+																									{
+																										"name": "readOnly",
+																										"description": null,
+																										"type": {
+																											"$": "boolean"
+																										},
+																										"optional": false
+																									},
+																									{
+																										"name": "fieldStatus",
+																										"description": null,
+																										"type": {
+																											"$": "enum",
+																											"discriminator_key": "$",
+																											"content_key": null,
+																											"variants": []
+																										},
+																										"optional": true
+																									},
+																									{
+																										"name": "placeholder",
+																										"description": null,
+																										"type": {
+																											"$": "string"
+																										},
+																										"optional": true
+																									},
+																									{
+																										"name": "mode",
+																										"description": null,
+																										"type": {
+																											"$": "enum",
+																											"discriminator_key": "$",
+																											"content_key": null,
+																											"variants": []
+																										},
+																										"optional": false
+																									}
+																								]
+																							}
+																						}
+																					]
+																				},
+																				"optional": false
+																			}
+																		]
+																	}
+																},
+																"optional": false
+															},
+															{
+																"name": "actionStyle",
+																"description": null,
+																"type": {
+																	"$": "enum",
+																	"discriminator_key": "$",
+																	"content_key": null,
+																	"variants": []
+																},
+																"optional": false
+															},
+															{
+																"name": "actions",
+																"description": null,
+																"type": {
+																	"$": "struct",
+																	"properties": [
+																		{
+																			"name": "primaryAction",
+																			"description": null,
+																			"type": {
+																				"$": "struct",
+																				"properties": [
+																					{
+																						"name": "title",
+																						"description": null,
+																						"type": {
+																							"$": "string"
+																						},
+																						"optional": false
+																					},
+																					{
+																						"name": "link",
+																						"description": null,
+																						"type": {
+																							"$": "struct",
+																							"properties": [
+																								{
+																									"name": "pageId",
+																									"description": null,
+																									"type": {
+																										"$": "string"
+																									},
+																									"optional": false
+																								},
+																								{
+																									"name": "useSheet",
+																									"description": null,
+																									"type": {
+																										"$": "boolean"
+																									},
+																									"optional": false
+																								}
+																							]
+																						},
+																						"optional": true
+																					}
+																				]
+																			},
+																			"optional": false
+																		},
+																		{
+																			"name": "secondaryAction",
+																			"description": null,
+																			"type": {
+																				"$": "struct",
+																				"properties": [
+																					{
+																						"name": "title",
+																						"description": null,
+																						"type": {
+																							"$": "string"
+																						},
+																						"optional": false
+																					},
+																					{
+																						"name": "link",
+																						"description": null,
+																						"type": {
+																							"$": "struct",
+																							"properties": [
+																								{
+																									"name": "pageId",
+																									"description": null,
+																									"type": {
+																										"$": "string"
+																									},
+																									"optional": false
+																								},
+																								{
+																									"name": "useSheet",
+																									"description": null,
+																									"type": {
+																										"$": "boolean"
+																									},
+																									"optional": false
+																								}
+																							]
+																						},
+																						"optional": true
+																					}
+																				]
+																			},
+																			"optional": true
+																		}
+																	]
+																},
+																"optional": false
+															}
+														]
+													}
+												},
+												{
+													"name": "ListView",
+													"description": null,
+													"type": {
+														"$": "struct",
+														"properties": [
+															{
+																"name": "items",
+																"description": null,
+																"type": {
+																	"$": "list",
+																	"option": {
+>>>>>>> 340587a (run getSchema)
 																		"$": "list",
 																		"item": {
 																			"$": "enum",
