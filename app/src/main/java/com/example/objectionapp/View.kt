@@ -138,11 +138,16 @@ sealed class Input() {
 		val mode: InputMode
 	) : Input()
 
-	@Serializable
-	data object File : Input()
+//	@Serializable
+//	data object File : Input()
+//
+//	@Serializable
+//	data object ProfilePicture : Input()
 
 	@Serializable
-	data object ProfilePicture : Input()
+	data class Switch(
+		val switched: Binding<Boolean>,
+	) : Input()
 }
 
 @OptIn(ExperimentalSerializationApi::class)

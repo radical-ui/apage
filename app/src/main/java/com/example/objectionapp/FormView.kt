@@ -19,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -44,9 +45,8 @@ fun FormViewRender(view: View.FormView, scrollBehavior: TopAppBarScrollBehavior)
 	val controller = useController()
 	Column(
 		modifier = Modifier
-			.nestedScroll(scrollBehavior.nestedScrollConnection)
 			.fillMaxHeight()
-			.padding(10.dp),
+			.padding(20.dp),
 		verticalArrangement = if (view.actionStyle is FormActionStyle.Relative) Arrangement.spacedBy(
 			10.dp
 		) else if (view.actionStyle is FormActionStyle.BottomFixed) Arrangement.SpaceBetween else Arrangement.Top
@@ -57,12 +57,13 @@ fun FormViewRender(view: View.FormView, scrollBehavior: TopAppBarScrollBehavior)
 			Modifier
 				.fillMaxWidth()
 				.nestedScroll(scrollBehavior.nestedScrollConnection),
+			verticalArrangement = Arrangement.spacedBy(8.dp)
 		) {
-			item {
 				view.items.map {
-					FormItemRender(it)
+					item {
+						FormItemRender(it)
+					}
 				}
-			}
 		}
 		Box {
 			if (view.actionStyle is FormActionStyle.Relative || view.actionStyle is FormActionStyle.BottomFixed) actionLayout(
@@ -81,8 +82,7 @@ fun actionLayout(view: View.FormView) {
 	val weight = if (view.actionStyle !is FormActionStyle.TopBar) 1f else null
 
 	Row(
-		modifier = buttonSize,
-		horizontalArrangement = Arrangement.spacedBy(20.dp)
+		modifier = buttonSize, horizontalArrangement = Arrangement.spacedBy(20.dp)
 	) {
 		view.actions.secondaryAction?.let {
 			Box(modifier = weight?.let { Modifier.weight(it) } ?: Modifier) {
@@ -97,16 +97,14 @@ fun actionLayout(view: View.FormView) {
 		view.actions.primaryAction.let {
 
 			Box(modifier = weight?.let { Modifier.weight(it) } ?: Modifier) {
-				ElevatedButton(modifier = buttonSize,
-					colors = ButtonColors(
-						containerColor = MaterialTheme.colorScheme.primary,
-						contentColor = MaterialTheme.colorScheme.onPrimary,
-						disabledContainerColor = MaterialTheme.colorScheme.primaryContainer,
-						disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-					),
-					onClick = {
-						println("clicked")
-					})
+				ElevatedButton(modifier = buttonSize, colors = ButtonColors(
+					containerColor = MaterialTheme.colorScheme.primary,
+					contentColor = MaterialTheme.colorScheme.onPrimary,
+					disabledContainerColor = MaterialTheme.colorScheme.primaryContainer,
+					disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+				), onClick = {
+					println("clicked")
+				})
 
 				{
 					Text(it.title)
@@ -122,8 +120,30 @@ fun actionLayout(view: View.FormView) {
 fun FormItemRender(item: FormItem) {
 	when (item.input) {
 		is Input.Text -> TextFieldRender(item = item, input = item.input, mode = item.input.mode)
-		is Input.File -> FileFormItemRender(item)
-		is Input.ProfilePicture -> ProfilePictureFormItemRender(item)
+		is Input.Switch -> SwitchRender(item = item, input = item.input)
+	}
+}
+
+@Composable
+fun SwitchRender(item: FormItem, input: Input.Switch) {
+	val controller = useController()
+	var checked by remember { mutableStateOf(input.switched.child) }
+
+	Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+		Column {
+			item.label?.let { Text(it, fontSize = MaterialTheme.typography.bodyLarge.fontSize) }
+			item.description?.let {
+				Text(
+					it,
+					fontSize = MaterialTheme.typography.labelSmall.fontSize
+				)
+			}
+		}
+
+		Switch(checked = checked, onCheckedChange = {
+			checked = it
+			controller.bridge.emitBindingUpdate(input.switched.key, Json.encodeToJsonElement(it)) {}
+		})
 	}
 }
 
@@ -149,8 +169,7 @@ fun TextFieldRender(
 	val focusManager = LocalFocusManager.current
 
 
-	OutlinedTextField(
-		singleLine = !multiline,
+	OutlinedTextField(singleLine = !multiline,
 		readOnly = readOnly,
 		supportingText = { description?.let { Text(it) } },
 		isError = status == TextFieldStatus.Error,
@@ -166,8 +185,7 @@ fun TextFieldRender(
 		},
 		visualTransformation = if (password && hiddenState) PasswordVisualTransformation() else VisualTransformation.None,
 		label = { label?.let { Text(it) } },
-		modifier = Modifier
-			.fillMaxWidth(),
+		modifier = Modifier.fillMaxWidth(),
 		keyboardOptions = KeyboardOptions(
 			keyboardType = mode.getKeyboardType()
 		),
@@ -183,17 +201,6 @@ fun TextFieldRender(
 
 			trailingIcon?.let { StandardIcon(it) }
 		})
-}
-
-@Composable
-fun FileFormItemRender(item: FormItem) {
-	val controller = useController()
-}
-
-
-@Composable
-fun ProfilePictureFormItemRender(item: FormItem) {
-
 }
 
 @Preview
@@ -227,8 +234,8 @@ fun FormViewTest() {
 					items = listOf(
 						FormItem(
 							submitStrategy = SubmitStrategy.OnSubmit,
-							label = "little note",
-							description = "this is about a little note",
+							label = "Text Input",
+							description = "some supporting text",
 							input = Input.Text(
 								startingValue = Binding("start", ""),
 								placeholder = "not a little note",
@@ -237,8 +244,8 @@ fun FormViewTest() {
 						),
 						FormItem(
 							submitStrategy = SubmitStrategy.OnSubmit,
-							label = "little note",
-							description = "this is about a little note",
+							label = "Password Input",
+							description = "Your password is too gay. Try again.",
 							input = Input.Text(
 								fieldStatus = TextFieldStatus.Error,
 								startingValue = Binding("start", ""),
@@ -246,11 +253,16 @@ fun FormViewTest() {
 								mode = InputMode.Password,
 							)
 						),
+						FormItem(
+							submitStrategy = SubmitStrategy.OnSubmit,
+							label = "Switch Input",
+							description = "A quick description of what is getting switched.",
+							input = Input.Switch(switched = Binding("key", true))
+						),
 					), actionStyle = FormActionStyle.TopBar, actions = FormActions(
 						primaryAction = FormAction(
 							title = "Login", link = Link("Products")
-						),
-						secondaryAction = FormAction(
+						), secondaryAction = FormAction(
 							title = "Sign up", link = Link("Products")
 						)
 					)
