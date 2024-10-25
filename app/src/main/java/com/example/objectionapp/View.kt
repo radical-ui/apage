@@ -3,6 +3,7 @@ package com.example.objectionapp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.input.KeyboardType
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -29,41 +30,136 @@ sealed class View {
 	@SerialName("FormView")
 	class FormView(
 		val items: List<FormItem>,
-		val actions: List<FormAction>
+		val actionStyle: FormActionStyle,
+		val actions: FormActions
 	) : View()
 }
 
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("$")
 @Serializable
-sealed class FormAction {
-	data class SubmitAction(
-		val color: ActionColor,
-		val text: String,
-
-		)
-
-	data class CancelAction(
-		val text: String
-	)
+sealed class FormActionStyle {
+	data object BottomFixed : FormActionStyle()
+	data object Relative : FormActionStyle()
+	data object TopBar : FormActionStyle()
 }
+
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("$")
+@Serializable
+data class Link(
+	val pageId: String,
+	val useSheet: Boolean = false
+)
+
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("$")
+@Serializable
+data class FormActions(
+	val primaryAction: FormAction,
+	val secondaryAction: FormAction? = null,
+)
+
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("$")
+@Serializable
+data class FormAction(
+	val title: String,
+	val link: Link?
+)
+
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("$")
+@Serializable
+sealed class FormActionColor {
+	data object Primary : FormActionColor()
+	data object Secondary : FormActionColor()
+	data object Error : FormActionColor()
+	data object Success : FormActionColor()
+	data object Warning : FormActionColor()
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("$")
+@Serializable
+sealed class FormActionLocation {
+	data object TopBar : FormActionLocation()
+	data object Page : FormActionLocation()
+}
+
 
 @Serializable
 data class FormItem(
-	val type: FormItemType,
-	val textValue: Binding<String>,
 	val submitStrategy: SubmitStrategy,
-	val label: String
+	val label: String?,
+	val description: String?,
+	val input: Input
 )
 
-enum class FormItemType {
-	Text,
-	File,
-	ProfilePicture,
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("$")
+@Serializable
+sealed class InputMode() {
+	data class Text(val multiline: Boolean = false, val trailingIcon: String? = null) : InputMode()
+	data object Ascii : InputMode()
+	data object Number : InputMode()
+	data object Phone : InputMode()
+	data object Uri : InputMode()
+	data object Email : InputMode()
+	data object Password : InputMode()
+	data object NumberPassword : InputMode()
+	data object Decimal : InputMode()
+
+	fun getKeyboardType(): KeyboardType {
+		return when (this) {
+			is Text -> KeyboardType.Text
+			is Ascii -> KeyboardType.Ascii
+			is Number -> KeyboardType.Number
+			is Phone -> KeyboardType.Phone
+			is Uri -> KeyboardType.Uri
+			is Email -> KeyboardType.Email
+			is Password -> KeyboardType.Password
+			is NumberPassword -> KeyboardType.NumberPassword
+			is Decimal -> KeyboardType.Decimal
+		}
+	}
 }
 
-enum class SubmitStrategy {
-	OnBlur,
-	OnKeyUp,
-	OnSubmit,
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("$")
+@Serializable
+sealed class Input() {
+	@Serializable
+	data class Text(
+		var startingValue: Binding<String>,
+		var readOnly: Boolean = false,
+		val fieldStatus: TextFieldStatus? = null,
+		val placeholder: String? = null,
+		val mode: InputMode
+	) : Input()
+
+	@Serializable
+	data object File : Input()
+
+	@Serializable
+	data object ProfilePicture : Input()
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("$")
+@Serializable
+sealed class TextFieldStatus {
+	data object Error : TextFieldStatus()
+	data object Disabled : TextFieldStatus()
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("$")
+@Serializable
+sealed class SubmitStrategy {
+	data object OnBlur : SubmitStrategy()
+	data object OnKeyUp : SubmitStrategy()
+	data object OnSubmit : SubmitStrategy()
 }
 
 

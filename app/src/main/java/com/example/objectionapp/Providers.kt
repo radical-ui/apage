@@ -29,7 +29,8 @@ private var LocalNavController = compositionLocalOf<NavHostController?> { null }
 fun Provider(controller: Controller = Controller.fromConstants()) {
 	CompositionLocalProvider(LocalController provides controller) {
 		val navController = rememberNavController()
-		val hasInternet = remember { mutableStateOf(controller.bridge.onHasInternet.getLastValue() ?: true) }
+		val hasInternet =
+			remember { mutableStateOf(controller.bridge.onHasInternet.getLastValue() ?: true) }
 		val error = remember { mutableStateOf(controller.bridge.onError.getLastValue()) }
 		val isDark = isSystemInDarkTheme()
 		val isLoading = useObject(defaultThemeId) === null || useObject(defaultLayoutId) === null
@@ -160,7 +161,8 @@ fun useDefaultTheme(): Theme {
 
 @Composable
 fun useDefaultLayout(): Layout {
-	val obj = useObject(defaultLayoutId) ?: throw Exception("No object exists for '$defaultLayoutId'")
+	val obj =
+		useObject(defaultLayoutId) ?: throw Exception("No object exists for '$defaultLayoutId'")
 
 	return if (obj is Object.Layout) obj.def else throw Exception("Object '$defaultLayoutId' was not a layout")
 }
@@ -173,8 +175,16 @@ fun usePage(id: String?): Page? {
 }
 
 @Composable
+fun useObjectVersion(objectId: String?): Int? {
+	objectId ?: return null
+	val controller = useController()
+	return controller.objectStore.getCurrentVersion(objectId)
+}
+
+@Composable
 fun useNavController(): NavHostController {
-	val navController = LocalNavController.current ?: throw Exception("useNavController can only be used in a child of Provider")
+	val navController = LocalNavController.current
+		?: throw Exception("useNavController can only be used in a child of Provider")
 
 	return navController
 }

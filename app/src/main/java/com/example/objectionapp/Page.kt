@@ -6,6 +6,7 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,7 +30,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
-import java.io.Serial
 
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -85,11 +85,13 @@ fun SharedTransitionScope.PageRender(
 	id: String,
 	bottomPadding: Dp,
 	animatedVisibilityScope: AnimatedVisibilityScope?,
-) {
+
+	) {
 	val page = usePage(id) ?: return
 	val navController = useNavController()
 	val layout = useDefaultLayout()
 	val isRoot = layout.getRoots().contains(id)
+
 
 	val scrollBehavior = if (isRoot) {
 		TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
@@ -104,6 +106,7 @@ fun SharedTransitionScope.PageRender(
 			LargeTopAppBar(
 				title = { Text("${page.title}") },
 				scrollBehavior = scrollBehavior,
+				actions = page.view?.let { viewActions(it) } ?: {}
 			)
 		} else {
 			TopAppBar(
@@ -114,6 +117,7 @@ fun SharedTransitionScope.PageRender(
 				},
 				title = { Text("${page.title}") },
 				scrollBehavior = scrollBehavior,
+				actions = page.view?.let { viewActions(it) } ?: {}
 			)
 		}
 
@@ -226,5 +230,18 @@ fun SharedTransitionScope.PostPageRender(
 				.height(300.dp)
 				.fillMaxWidth()
 		)
+	}
+}
+
+@Composable
+fun viewActions(view: View): (@Composable RowScope.() -> Unit) {
+	println("FUNCTION CALLED, ${view}")
+
+
+	return {
+		if (view is View.FormView && view.actionStyle is FormActionStyle.TopBar) {
+			actionLayout(view)
+			println("INSIDE THE IF")
+		}
 	}
 }
