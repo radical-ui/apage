@@ -104,21 +104,11 @@ private fun getStringSchema(annotations: List<Annotation>): ItemSchema {
 }
 
 @OptIn(ExperimentalSerializationApi::class)
-private fun getSealedSchema(descriptor: SerialDescriptor): ItemSchema.EnumSchema {
+private fun getSealedSchema(rootDescriptor: SerialDescriptor): ItemSchema.EnumSchema {
     val variants = mutableListOf<EnumVariantSchema>()
-    val child = descriptor.getElementDescriptor(1)
+    val descriptor = rootDescriptor.getElementDescriptor(1)
     var discriminatorKey: String? = null
     var contentKey: String? = null
-
-    for (variant in child.elementDescriptors) {
-        variants.add(
-            EnumVariantSchema(
-                name = variant.serialName, description = getDescription(listOf()), // FIXME
-                type = if (variant.kind == StructureKind.OBJECT) null
-                else getItemSchema(variant)
-            )
-        )
-    }
 
     for (annotation in descriptor.annotations) {
         if (annotation is JsonClassDiscriminator) {
@@ -129,6 +119,19 @@ private fun getSealedSchema(descriptor: SerialDescriptor): ItemSchema.EnumSchema
         }
     }
 
+    for (childIndex in 0..<descriptor.elementsCount) {
+        val variant = descriptor.getElementDescriptor(childIndex)
+        val variantAnnotations = descriptor.getElementAnnotations(childIndex)
+
+        variants.add(
+            EnumVariantSchema(
+                name = variant.serialName, description = getDescription(variantAnnotations),
+                type = if (variant.kind == StructureKind.OBJECT) null
+                else getItemSchema(if (contentKey == null) variant else extractContentKey(contentKey, variant))
+            )
+        )
+    }
+
     if (discriminatorKey == null) {
         throw Exception(
             "All sealed classes must have a JsonDiscriminatorKey annotation. Failed at: $descriptor"
@@ -136,6 +139,15 @@ private fun getSealedSchema(descriptor: SerialDescriptor): ItemSchema.EnumSchema
     }
 
     return ItemSchema.EnumSchema(discriminatorKey, contentKey, variants)
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+private fun extractContentKey(contentKey: String, descriptor: SerialDescriptor): SerialDescriptor {
+    if (descriptor.kind is StructureKind.CLASS) {
+        return descriptor.getElementDescriptor(descriptor.getElementIndex(contentKey))
+    }
+
+    throw Exception("Expected the child of a contentKey enum descriptor to be a class")
 }
 
 @OptIn(ExperimentalSerializationApi::class)
