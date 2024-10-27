@@ -11,77 +11,68 @@
 					"$": "struct",
 					"properties": [
 						{
-							"name": "def",
-							"description": null,
+							"name": "tabBar",
+							"description": "The tab bar is shown at the bottom of the application. If there is no current page set, the current page will default to the first tab bar item.",
 							"type": {
-								"$": "struct",
-								"properties": [
-									{
-										"name": "tabBar",
-										"description": "The tab bar is shown at the bottom of the application. If there is no current page set, the current page will default to the first tab bar item.",
-										"type": {
-											"$": "optional",
-											"child": {
-												"$": "struct",
-												"properties": [
-													{
-														"name": "stupid",
-														"description": null,
-														"type": {
-															"$": "boolean"
+								"$": "optional",
+								"child": {
+									"$": "struct",
+									"properties": [
+										{
+											"name": "stupid",
+											"description": null,
+											"type": {
+												"$": "boolean"
+											}
+										},
+										{
+											"name": "buttons",
+											"description": null,
+											"type": {
+												"$": "list",
+												"item": {
+													"$": "struct",
+													"properties": [
+														{
+															"name": "pageId",
+															"description": null,
+															"type": {
+																"$": "reference",
+																"expected_top_level_variant": "Page"
+															}
+														},
+														{
+															"name": "icon",
+															"description": null,
+															"type": {
+																"$": "string"
+															}
 														}
-													},
-													{
-														"name": "buttons",
-														"description": null,
-														"type": {
-															"$": "list",
-															"item": {
-																"$": "struct",
-																"properties": [
-																	{
-																		"name": "pageId",
-																		"description": null,
-																		"type": {
-																			"$": "reference",
-																			"expected_top_level_variant": "Page"
-																		}
-																	},
-																	{
-																		"name": "icon",
-																		"description": null,
-																		"type": {
-																			"$": "string"
-																		}
-																	}
-																]
-															},
-															"batch_size": 50
-														}
-													},
-													{
-														"name": "useSheet",
-														"description": null,
-														"type": {
-															"$": "boolean"
-														}
-													}
-												]
+													]
+												},
+												"batch_size": 50
+											}
+										},
+										{
+											"name": "useSheet",
+											"description": null,
+											"type": {
+												"$": "boolean"
 											}
 										}
-									},
-									{
-										"name": "currentPageId",
-										"description": "The page that is to be shown by default",
-										"type": {
-											"$": "optional",
-											"child": {
-												"$": "reference",
-												"expected_top_level_variant": "Page"
-											}
-										}
-									}
-								]
+									]
+								}
+							}
+						},
+						{
+							"name": "currentPageId",
+							"description": "The page that is to be shown by default",
+							"type": {
+								"$": "optional",
+								"child": {
+									"$": "reference",
+									"expected_top_level_variant": "Page"
+								}
 							}
 						}
 					]
@@ -94,413 +85,274 @@
 					"$": "struct",
 					"properties": [
 						{
-							"name": "def",
+							"name": "title",
+							"description": "The page title will be displayed prominently at the top of the screen",
+							"type": {
+								"$": "optional",
+								"child": {
+									"$": "string"
+								}
+							}
+						},
+						{
+							"name": "subtitle",
+							"description": "The page subtitle is displayed directly under any images on the page",
+							"type": {
+								"$": "optional",
+								"child": {
+									"$": "string"
+								}
+							}
+						},
+						{
+							"name": "searchPageId",
+							"description": "The page that will be pulled up for a presumed search through the contents of this page",
+							"type": {
+								"$": "optional",
+								"child": {
+									"$": "reference",
+									"expected_top_level_variant": "Page"
+								}
+							}
+						},
+						{
+							"name": "view",
 							"description": null,
 							"type": {
-								"$": "struct",
-								"properties": [
-									{
-										"name": "title",
-										"description": "The page title will be displayed prominently at the top of the screen",
-										"type": {
-											"$": "optional",
-											"child": {
-												"$": "string"
-											}
-										}
-									},
-									{
-										"name": "subtitle",
-										"description": "The page subtitle is displayed directly under any images on the page",
-										"type": {
-											"$": "optional",
-											"child": {
-												"$": "string"
-											}
-										}
-									},
-									{
-										"name": "searchPageId",
-										"description": "The page that will be pulled up for a presumed search through the contents of this page",
-										"type": {
-											"$": "optional",
-											"child": {
-												"$": "reference",
-												"expected_top_level_variant": "Page"
-											}
-										}
-									},
-									{
-										"name": "view",
-										"description": null,
-										"type": {
-<<<<<<< HEAD
-											"$": "optional",
-											"child": {
-												"$": "enum",
-												"discriminator_key": "$",
-												"content_key": null,
-												"variants": [
+								"$": "optional",
+								"child": {
+									"$": "enum",
+									"discriminator_key": "$",
+									"content_key": null,
+									"variants": [
+										{
+											"name": "CardView",
+											"description": null,
+											"type": {
+												"$": "struct",
+												"properties": [
 													{
-														"name": "CardView",
+														"name": "containers",
 														"description": null,
 														"type": {
-															"$": "struct",
-															"properties": [
-																{
-																	"name": "containers",
-																	"description": null,
-																	"type": {
-=======
-											"$": "enum",
-											"discriminator_key": "$",
-											"content_key": null,
-											"variants": [
-												{
-													"name": "CardView",
-													"description": null,
-													"type": {
-														"$": "struct",
-														"properties": [
-															{
-																"name": "containers",
-																"description": null,
-																"type": {
-																	"$": "list",
-																	"option": {
-																		"$": "enum",
-																		"discriminator_key": "$",
-																		"content_key": null,
-																		"variants": [
-																			{
-																				"name": "PluralCardContainer",
-																				"description": null,
-																				"type": {
-																					"$": "struct",
-																					"properties": [
-																						{
-																							"name": "objectIds",
-																							"description": null,
-																							"type": {
-																								"$": "list",
-																								"option": {
-																									"$": "string"
-																								}
-																							},
-																							"optional": false
-																						},
-																						{
-																							"name": "title",
-																							"description": null,
-																							"type": {
-																								"$": "string"
-																							},
-																							"optional": true
-																						}
-																					]
-																				}
-																			},
-																			{
-																				"name": "SingularCardContainer",
-																				"description": null,
-																				"type": {
-																					"$": "struct",
-																					"properties": [
-																						{
-																							"name": "objectId",
-																							"description": null,
-																							"type": {
-																								"$": "string"
-																							},
-																							"optional": false
-																						}
-																					]
-																				}
-																			}
-																		]
-																	}
-																},
-																"optional": false
-															}
-														]
-													}
-												},
-												{
-													"name": "FormView",
-													"description": null,
-													"type": {
-														"$": "struct",
-														"properties": [
-															{
-																"name": "items",
-																"description": null,
-																"type": {
-																	"$": "list",
-																	"option": {
-																		"$": "struct",
-																		"properties": [
-																			{
-																				"name": "submitStrategy",
-																				"description": null,
-																				"type": {
-																					"$": "enum",
-																					"discriminator_key": "$",
-																					"content_key": null,
-																					"variants": []
-																				},
-																				"optional": false
-																			},
-																			{
-																				"name": "label",
-																				"description": null,
-																				"type": {
-																					"$": "string"
-																				},
-																				"optional": true
-																			},
-																			{
-																				"name": "description",
-																				"description": null,
-																				"type": {
-																					"$": "string"
-																				},
-																				"optional": true
-																			},
-																			{
-																				"name": "input",
-																				"description": null,
-																				"type": {
-																					"$": "enum",
-																					"discriminator_key": "$",
-																					"content_key": null,
-																					"variants": [
-																						{
-																							"name": "com.example.objectionapp.Input.File",
-																							"description": null,
-																							"type": null
-																						},
-																						{
-																							"name": "com.example.objectionapp.Input.ProfilePicture",
-																							"description": null,
-																							"type": null
-																						},
-																						{
-																							"name": "com.example.objectionapp.Input.Text",
-																							"description": null,
-																							"type": {
-																								"$": "struct",
-																								"properties": [
-																									{
-																										"name": "startingValue",
-																										"description": null,
-																										"type": {
-																											"$": "binding",
-																											"child": {
-																												"$": "string"
-																											}
-																										},
-																										"optional": false
-																									},
-																									{
-																										"name": "readOnly",
-																										"description": null,
-																										"type": {
-																											"$": "boolean"
-																										},
-																										"optional": false
-																									},
-																									{
-																										"name": "fieldStatus",
-																										"description": null,
-																										"type": {
-																											"$": "enum",
-																											"discriminator_key": "$",
-																											"content_key": null,
-																											"variants": []
-																										},
-																										"optional": true
-																									},
-																									{
-																										"name": "placeholder",
-																										"description": null,
-																										"type": {
-																											"$": "string"
-																										},
-																										"optional": true
-																									},
-																									{
-																										"name": "mode",
-																										"description": null,
-																										"type": {
-																											"$": "enum",
-																											"discriminator_key": "$",
-																											"content_key": null,
-																											"variants": []
-																										},
-																										"optional": false
-																									}
-																								]
-																							}
-																						}
-																					]
-																				},
-																				"optional": false
-																			}
-																		]
-																	}
-																},
-																"optional": false
-															},
-															{
-																"name": "actionStyle",
-																"description": null,
-																"type": {
-																	"$": "enum",
-																	"discriminator_key": "$",
-																	"content_key": null,
-																	"variants": []
-																},
-																"optional": false
-															},
-															{
-																"name": "actions",
-																"description": null,
-																"type": {
-																	"$": "struct",
-																	"properties": [
-																		{
-																			"name": "primaryAction",
-																			"description": null,
-																			"type": {
-																				"$": "struct",
-																				"properties": [
-																					{
-																						"name": "title",
-																						"description": null,
-																						"type": {
+															"$": "list",
+															"item": {
+																"$": "enum",
+																"discriminator_key": "$",
+																"content_key": null,
+																"variants": [
+																	{
+																		"name": "CustomCardContainer",
+																		"description": null,
+																		"type": {
+																			"$": "struct",
+																			"properties": [
+																				{
+																					"name": "objectId",
+																					"description": null,
+																					"type": {
+																						"$": "optional",
+																						"child": {
 																							"$": "string"
-																						},
-																						"optional": false
-																					},
-																					{
-																						"name": "link",
-																						"description": null,
-																						"type": {
-																							"$": "struct",
-																							"properties": [
-																								{
-																									"name": "pageId",
-																									"description": null,
-																									"type": {
-																										"$": "string"
-																									},
-																									"optional": false
-																								},
-																								{
-																									"name": "useSheet",
-																									"description": null,
-																									"type": {
-																										"$": "boolean"
-																									},
-																									"optional": false
-																								}
-																							]
-																						},
-																						"optional": true
+																						}
 																					}
-																				]
-																			},
-																			"optional": false
-																		},
-																		{
-																			"name": "secondaryAction",
-																			"description": null,
-																			"type": {
-																				"$": "struct",
-																				"properties": [
-																					{
-																						"name": "title",
-																						"description": null,
-																						"type": {
+																				},
+																				{
+																					"name": "title",
+																					"description": null,
+																					"type": {
+																						"$": "optional",
+																						"child": {
 																							"$": "string"
-																						},
-																						"optional": false
-																					},
-																					{
-																						"name": "link",
-																						"description": null,
-																						"type": {
-																							"$": "struct",
-																							"properties": [
-																								{
-																									"name": "pageId",
-																									"description": null,
-																									"type": {
-																										"$": "string"
-																									},
-																									"optional": false
-																								},
-																								{
-																									"name": "useSheet",
-																									"description": null,
-																									"type": {
-																										"$": "boolean"
-																									},
-																									"optional": false
-																								}
-																							]
-																						},
-																						"optional": true
+																						}
 																					}
-																				]
-																			},
-																			"optional": true
+																				},
+																				{
+																					"name": "icon",
+																					"description": null,
+																					"type": {
+																						"$": "optional",
+																						"child": {
+																							"$": "string"
+																						}
+																					}
+																				},
+																				{
+																					"name": "imageUrl",
+																					"description": null,
+																					"type": {
+																						"$": "optional",
+																						"child": {
+																							"$": "string"
+																						}
+																					}
+																				}
+																			]
 																		}
-																	]
-																},
-																"optional": false
-															}
-														]
+																	},
+																	{
+																		"name": "PluralCardContainer",
+																		"description": null,
+																		"type": {
+																			"$": "struct",
+																			"properties": [
+																				{
+																					"name": "objectIds",
+																					"description": null,
+																					"type": {
+																						"$": "list",
+																						"item": {
+																							"$": "string"
+																						},
+																						"batch_size": 50
+																					}
+																				},
+																				{
+																					"name": "title",
+																					"description": null,
+																					"type": {
+																						"$": "optional",
+																						"child": {
+																							"$": "string"
+																						}
+																					}
+																				}
+																			]
+																		}
+																	},
+																	{
+																		"name": "SingularCardContainer",
+																		"description": null,
+																		"type": {
+																			"$": "struct",
+																			"properties": [
+																				{
+																					"name": "objectId",
+																					"description": null,
+																					"type": {
+																						"$": "string"
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															},
+															"batch_size": 50
+														}
 													}
-												},
-												{
-													"name": "ListView",
-													"description": null,
-													"type": {
-														"$": "struct",
-														"properties": [
-															{
-																"name": "items",
-																"description": null,
-																"type": {
-																	"$": "list",
-																	"option": {
->>>>>>> 340587a (run getSchema)
-																		"$": "list",
-																		"item": {
+												]
+											}
+										},
+										{
+											"name": "FormView",
+											"description": null,
+											"type": {
+												"$": "struct",
+												"properties": [
+													{
+														"name": "items",
+														"description": null,
+														"type": {
+															"$": "list",
+															"item": {
+																"$": "struct",
+																"properties": [
+																	{
+																		"name": "submitStrategy",
+																		"description": null,
+																		"type": {
+																			"$": "enum",
+																			"discriminator_key": "$",
+																			"content_key": null,
+																			"variants": []
+																		}
+																	},
+																	{
+																		"name": "label",
+																		"description": null,
+																		"type": {
+																			"$": "optional",
+																			"child": {
+																				"$": "string"
+																			}
+																		}
+																	},
+																	{
+																		"name": "description",
+																		"description": null,
+																		"type": {
+																			"$": "optional",
+																			"child": {
+																				"$": "string"
+																			}
+																		}
+																	},
+																	{
+																		"name": "input",
+																		"description": null,
+																		"type": {
 																			"$": "enum",
 																			"discriminator_key": "$",
 																			"content_key": null,
 																			"variants": [
 																				{
-																					"name": "PluralCardContainer",
+																					"name": "com.example.objectionapp.Input.Switch",
 																					"description": null,
 																					"type": {
 																						"$": "struct",
 																						"properties": [
 																							{
-																								"name": "objectIds",
+																								"name": "switched",
 																								"description": null,
 																								"type": {
-																									"$": "list",
-																									"item": {
+																									"$": "binding",
+																									"child": {
+																										"$": "boolean"
+																									}
+																								}
+																							}
+																						]
+																					}
+																				},
+																				{
+																					"name": "com.example.objectionapp.Input.Text",
+																					"description": null,
+																					"type": {
+																						"$": "struct",
+																						"properties": [
+																							{
+																								"name": "startingValue",
+																								"description": null,
+																								"type": {
+																									"$": "binding",
+																									"child": {
 																										"$": "string"
-																									},
-																									"batch_size": 50
+																									}
 																								}
 																							},
 																							{
-																								"name": "title",
+																								"name": "readOnly",
+																								"description": null,
+																								"type": {
+																									"$": "boolean"
+																								}
+																							},
+																							{
+																								"name": "fieldStatus",
+																								"description": null,
+																								"type": {
+																									"$": "optional",
+																									"child": {
+																										"$": "enum",
+																										"discriminator_key": "$",
+																										"content_key": null,
+																										"variants": []
+																									}
+																								}
+																							},
+																							{
+																								"name": "placeholder",
 																								"description": null,
 																								"type": {
 																									"$": "optional",
@@ -508,71 +360,128 @@
 																										"$": "string"
 																									}
 																								}
-																							}
-																						]
-																					}
-																				},
-																				{
-																					"name": "SingularCardContainer",
-																					"description": null,
-																					"type": {
-																						"$": "struct",
-																						"properties": [
+																							},
 																							{
-																								"name": "objectId",
+																								"name": "mode",
 																								"description": null,
 																								"type": {
-																									"$": "string"
+																									"$": "enum",
+																									"discriminator_key": "$",
+																									"content_key": null,
+																									"variants": []
 																								}
 																							}
 																						]
 																					}
 																				}
 																			]
-																		},
-																		"batch_size": 50
+																		}
 																	}
-																}
-															]
+																]
+															},
+															"batch_size": 50
 														}
 													},
 													{
-														"name": "ListView",
+														"name": "actionStyle",
+														"description": null,
+														"type": {
+															"$": "enum",
+															"discriminator_key": "$",
+															"content_key": null,
+															"variants": []
+														}
+													},
+													{
+														"name": "actions",
 														"description": null,
 														"type": {
 															"$": "struct",
 															"properties": [
 																{
-																	"name": "items",
+																	"name": "primaryAction",
 																	"description": null,
 																	"type": {
-																		"$": "list",
-																		"item": {
-																			"$": "list",
-																			"item": {
-																				"$": "struct",
-																				"properties": [
-																					{
-																						"name": "pageId",
-																						"description": null,
-																						"type": {
-																							"$": "string"
-																						}
-																					}
-																				]
+																		"$": "struct",
+																		"properties": [
+																			{
+																				"name": "title",
+																				"description": null,
+																				"type": {
+																					"$": "string"
+																				}
 																			},
-																			"batch_size": 50
-																		},
-																		"batch_size": 50
+																			{
+																				"name": "link",
+																				"description": null,
+																				"type": {
+																					"$": "optional",
+																					"child": {
+																						"$": "struct",
+																						"properties": [
+																							{
+																								"name": "pageId",
+																								"description": null,
+																								"type": {
+																									"$": "string"
+																								}
+																							},
+																							{
+																								"name": "useSheet",
+																								"description": null,
+																								"type": {
+																									"$": "boolean"
+																								}
+																							}
+																						]
+																					}
+																				}
+																			}
+																		]
 																	}
 																},
 																{
-																	"name": "trailingIcon",
+																	"name": "secondaryAction",
 																	"description": null,
 																	"type": {
 																		"$": "optional",
 																		"child": {
-																			"$": "string"
+																			"$": "struct",
+																			"properties": [
+																				{
+																					"name": "title",
+																					"description": null,
+																					"type": {
+																						"$": "string"
+																					}
+																				},
+																				{
+																					"name": "link",
+																					"description": null,
+																					"type": {
+																						"$": "optional",
+																						"child": {
+																							"$": "struct",
+																							"properties": [
+																								{
+																									"name": "pageId",
+																									"description": null,
+																									"type": {
+																										"$": "string"
+																									}
+																								},
+																								{
+																									"name": "useSheet",
+																									"description": null,
+																									"type": {
+																										"$": "boolean"
+																									}
+																								}
+																							]
+																						}
+																					}
+																				}
+																			]
 																		}
 																	}
 																}
@@ -581,99 +490,142 @@
 													}
 												]
 											}
+										},
+										{
+											"name": "ListView",
+											"description": null,
+											"type": {
+												"$": "struct",
+												"properties": [
+													{
+														"name": "items",
+														"description": null,
+														"type": {
+															"$": "list",
+															"item": {
+																"$": "list",
+																"item": {
+																	"$": "struct",
+																	"properties": [
+																		{
+																			"name": "pageId",
+																			"description": null,
+																			"type": {
+																				"$": "string"
+																			}
+																		}
+																	]
+																},
+																"batch_size": 50
+															},
+															"batch_size": 50
+														}
+													},
+													{
+														"name": "trailingIcon",
+														"description": null,
+														"type": {
+															"$": "optional",
+															"child": {
+																"$": "string"
+															}
+														}
+													}
+												]
+											}
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "type",
+							"description": null,
+							"type": {
+								"$": "enum",
+								"discriminator_key": "$",
+								"content_key": null,
+								"variants": [
+									{
+										"name": "Plain",
+										"description": null,
+										"type": {
+											"$": "struct",
+											"properties": [
+												{
+													"name": "icon",
+													"description": null,
+													"type": {
+														"$": "optional",
+														"child": {
+															"$": "string"
+														}
+													}
+												}
+											]
 										}
 									},
 									{
-										"name": "type",
+										"name": "Post",
 										"description": null,
 										"type": {
-											"$": "enum",
-											"discriminator_key": "$",
-											"content_key": null,
-											"variants": [
+											"$": "struct",
+											"properties": [
 												{
-													"name": "Plain",
-													"description": null,
+													"name": "imageUrls",
+													"description": "The images will be displayed in carousel form, directly below the title",
 													"type": {
-														"$": "struct",
-														"properties": [
-															{
-																"name": "icon",
-																"description": null,
-																"type": {
-																	"$": "optional",
-																	"child": {
-																		"$": "string"
-																	}
-																}
-															}
-														]
+														"$": "optional",
+														"child": {
+															"$": "list",
+															"item": {
+																"$": "string"
+															},
+															"batch_size": 50
+														}
 													}
 												},
 												{
-													"name": "Post",
-													"description": null,
+													"name": "supertitle",
+													"description": "The page supertitle is displayed directly below any images on the page",
 													"type": {
-														"$": "struct",
-														"properties": [
-															{
-																"name": "imageUrls",
-																"description": "The images will be displayed in carousel form, directly below the title",
-																"type": {
-																	"$": "optional",
-																	"child": {
-																		"$": "list",
-																		"item": {
-																			"$": "string"
-																		},
-																		"batch_size": 50
-																	}
-																}
-															},
-															{
-																"name": "supertitle",
-																"description": "The page supertitle is displayed directly below any images on the page",
-																"type": {
-																	"$": "optional",
-																	"child": {
-																		"$": "string"
-																	}
-																}
-															},
-															{
-																"name": "additionalInfo",
-																"description": "The additional info is displayed directly below any images on the page",
-																"type": {
-																	"$": "optional",
-																	"child": {
-																		"$": "string"
-																	}
-																}
-															}
-														]
+														"$": "optional",
+														"child": {
+															"$": "string"
+														}
 													}
 												},
 												{
-													"name": "Profile",
-													"description": null,
+													"name": "additionalInfo",
+													"description": "The additional info is displayed directly below any images on the page",
 													"type": {
-														"$": "struct",
-														"properties": [
-															{
-																"name": "bannerImageUrl",
-																"description": "The the banner image for the user profile",
-																"type": {
-																	"$": "string"
-																}
-															},
-															{
-																"name": "avatarImageUrl",
-																"description": "The avatar image for the user profile",
-																"type": {
-																	"$": "string"
-																}
-															}
-														]
+														"$": "optional",
+														"child": {
+															"$": "string"
+														}
+													}
+												}
+											]
+										}
+									},
+									{
+										"name": "Profile",
+										"description": null,
+										"type": {
+											"$": "struct",
+											"properties": [
+												{
+													"name": "bannerImageUrl",
+													"description": "The the banner image for the user profile",
+													"type": {
+														"$": "string"
+													}
+												},
+												{
+													"name": "avatarImageUrl",
+													"description": "The avatar image for the user profile",
+													"type": {
+														"$": "string"
 													}
 												}
 											]
@@ -692,781 +644,772 @@
 					"$": "struct",
 					"properties": [
 						{
-							"name": "def",
-							"description": null,
+							"name": "disableDynamicTheme",
+							"description": "Unless otherwise specified, the supplied light and dark color schemes will be overridden with the android-supplied color scheme, which is computed from the home screen background.",
+							"type": {
+								"$": "boolean"
+							}
+						},
+						{
+							"name": "lightColorScheme",
+							"description": "The color scheme that will be applied when the system is in light mode, when the dynamic theme is disabled",
 							"type": {
 								"$": "struct",
 								"properties": [
 									{
-										"name": "disableDynamicTheme",
-										"description": "Unless otherwise specified, the supplied light and dark color schemes will be overridden with the android-supplied color scheme, which is computed from the home screen background.",
+										"name": "primary",
+										"description": null,
 										"type": {
-											"$": "boolean"
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
 										}
 									},
 									{
-										"name": "lightColorScheme",
-										"description": "The color scheme that will be applied when the system is in light mode, when the dynamic theme is disabled",
+										"name": "onPrimary",
+										"description": null,
 										"type": {
-											"$": "struct",
-											"properties": [
-												{
-													"name": "primary",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onPrimary",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "primaryContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onPrimaryContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "inversePrimary",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "secondary",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onSecondary",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "secondaryContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onSecondaryContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "tertiary",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onTertiary",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "tertiaryContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onTertiaryContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "background",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onBackground",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surface",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onSurface",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceVariant",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onSurfaceVariant",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceTint",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "inverseSurface",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "inverseOnSurface",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "error",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onError",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "errorContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onErrorContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "outline",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "outlineVariant",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "scrim",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceBright",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceContainerHigh",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceContainerHighest",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceContainerLow",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceContainerLowest",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceDim",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												}
-											]
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
 										}
 									},
 									{
-										"name": "darkColorScheme",
-										"description": "The color scheme that will be applied when the system is in dark mode, when the dynamic theme is disabled",
+										"name": "primaryContainer",
+										"description": null,
 										"type": {
-											"$": "struct",
-											"properties": [
-												{
-													"name": "primary",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onPrimary",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "primaryContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onPrimaryContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "inversePrimary",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "secondary",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onSecondary",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "secondaryContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onSecondaryContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "tertiary",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onTertiary",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "tertiaryContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onTertiaryContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "background",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onBackground",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surface",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onSurface",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceVariant",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onSurfaceVariant",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceTint",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "inverseSurface",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "inverseOnSurface",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "error",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onError",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "errorContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "onErrorContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "outline",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "outlineVariant",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "scrim",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceBright",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceContainer",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceContainerHigh",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceContainerHighest",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceContainerLow",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceContainerLowest",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												},
-												{
-													"name": "surfaceDim",
-													"description": null,
-													"type": {
-														"$": "optional",
-														"child": {
-															"$": "color"
-														}
-													}
-												}
-											]
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
 										}
 									},
 									{
-										"name": "iconPack",
-										"description": "The type of icons that will be displayed in other parts of the app",
+										"name": "onPrimaryContainer",
+										"description": null,
 										"type": {
-											"$": "enum",
-											"discriminator_key": "$",
-											"content_key": null,
-											"variants": [
-												{
-													"name": "com.example.objectionapp.IconPack.Filled",
-													"description": null,
-													"type": null
-												},
-												{
-													"name": "com.example.objectionapp.IconPack.Rounded",
-													"description": null,
-													"type": null
-												},
-												{
-													"name": "com.example.objectionapp.IconPack.Sharp",
-													"description": null,
-													"type": null
-												}
-											]
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
 										}
+									},
+									{
+										"name": "inversePrimary",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "secondary",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onSecondary",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "secondaryContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onSecondaryContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "tertiary",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onTertiary",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "tertiaryContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onTertiaryContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "background",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onBackground",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surface",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onSurface",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceVariant",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onSurfaceVariant",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceTint",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "inverseSurface",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "inverseOnSurface",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "error",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onError",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "errorContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onErrorContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "outline",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "outlineVariant",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "scrim",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceBright",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceContainerHigh",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceContainerHighest",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceContainerLow",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceContainerLowest",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceDim",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									}
+								]
+							}
+						},
+						{
+							"name": "darkColorScheme",
+							"description": "The color scheme that will be applied when the system is in dark mode, when the dynamic theme is disabled",
+							"type": {
+								"$": "struct",
+								"properties": [
+									{
+										"name": "primary",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onPrimary",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "primaryContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onPrimaryContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "inversePrimary",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "secondary",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onSecondary",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "secondaryContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onSecondaryContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "tertiary",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onTertiary",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "tertiaryContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onTertiaryContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "background",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onBackground",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surface",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onSurface",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceVariant",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onSurfaceVariant",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceTint",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "inverseSurface",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "inverseOnSurface",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "error",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onError",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "errorContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "onErrorContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "outline",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "outlineVariant",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "scrim",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceBright",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceContainer",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceContainerHigh",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceContainerHighest",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceContainerLow",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceContainerLowest",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									},
+									{
+										"name": "surfaceDim",
+										"description": null,
+										"type": {
+											"$": "optional",
+											"child": {
+												"$": "color"
+											}
+										}
+									}
+								]
+							}
+						},
+						{
+							"name": "iconPack",
+							"description": "The type of icons that will be displayed in other parts of the app",
+							"type": {
+								"$": "enum",
+								"discriminator_key": "$",
+								"content_key": null,
+								"variants": [
+									{
+										"name": "com.example.objectionapp.IconPack.Filled",
+										"description": null,
+										"type": null
+									},
+									{
+										"name": "com.example.objectionapp.IconPack.Rounded",
+										"description": null,
+										"type": null
+									},
+									{
+										"name": "com.example.objectionapp.IconPack.Sharp",
+										"description": null,
+										"type": null
 									}
 								]
 							}

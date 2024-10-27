@@ -185,6 +185,8 @@ sealed class CardContainer {
 		val title: String? = null,
 	) : CardContainer()
 
+	@Serializable
+	@SerialName("CustomCardContainer")
 	data class CustomCardContainer(
 		val objectId: String? = null,
 		val title: String? = null,
