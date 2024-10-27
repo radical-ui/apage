@@ -110,7 +110,7 @@ private fun getSealedSchema(rootDescriptor: SerialDescriptor): ItemSchema.EnumSc
     var discriminatorKey: String? = null
     var contentKey: String? = null
 
-    for (annotation in descriptor.annotations) {
+    for (annotation in rootDescriptor.annotations) {
         if (annotation is JsonClassDiscriminator) {
             discriminatorKey = annotation.discriminator
         }
