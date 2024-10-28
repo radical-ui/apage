@@ -2,7 +2,7 @@ package com.example.objectionapp
 
 import androidx.compose.ui.graphics.Color
 
-const val wsUrl = "ws://10.0.2.2:8000/apage.ws"
+const val wsUrl = "ws://10.0.2.2:8000/ui"
 const val appName = "Objection App"
 const val noInternetHeader = "No Internet"
 const val noInternetContent = "This app requires an internet connection to function"

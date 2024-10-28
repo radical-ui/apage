@@ -12,6 +12,9 @@ class ObjectStore<T>(
 	private val json = Json { ignoreUnknownKeys = true; isLenient = true }
 
 	init {
+		objects[defaultThemeId] = Listener(logger) {}
+		objects[defaultLayoutId] = Listener(logger) {}
+
 		bridge.onObjectSet.listen(ListenId()) { (objectId, obj) ->
 			val listener = objects[objectId]
 

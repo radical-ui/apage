@@ -22,6 +22,7 @@ import java.net.SocketTimeoutException
 import java.util.UUID
 import kotlin.coroutines.CoroutineContext
 import kotlinx.serialization.Serializable
+import java.net.UnknownHostException
 import kotlin.math.log
 
 class Bridge(private var logger: Logger, private var session: Session) : CoroutineScope {
@@ -91,7 +92,10 @@ class Bridge(private var logger: Logger, private var session: Session) : Corouti
     }
 
     private fun acknowledge(requestId: String?, error: String?) {
-        if (error != null) logger.error(error)
+        if (error != null) {
+            logger.error(error)
+            onError.emit(error)
+        }
 
         if (requestId != null) {
             val callback = outgoingMessages[requestId]
@@ -158,7 +162,7 @@ class Bridge(private var logger: Logger, private var session: Session) : Corouti
 
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
                 when (t) {
-                    is ConnectException, is SocketTimeoutException -> {
+                    is ConnectException, is SocketTimeoutException, is UnknownHostException -> {
                         isOffline = true
                         onHasInternet.emit(false)
                         queueRetry()
@@ -179,8 +183,6 @@ class Bridge(private var logger: Logger, private var session: Session) : Corouti
     }
 
     private fun handleIncomingMessage(message: IncomingMessage) {
-        println(message)
-
         when (message) {
             is IncomingMessage.RemoveObject -> onObjectRemoved.emit(message.id)
             is IncomingMessage.SetObject -> onObjectSet.emit(Pair(message.id, message.data))

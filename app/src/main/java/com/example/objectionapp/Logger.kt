@@ -2,11 +2,11 @@ package com.example.objectionapp
 
 class Logger(private var session: Session, private var scope: String) {
     fun critical(message: String) {
-        session.pushLog("CRITICAL: $message")
+        session.pushLog("[$scope] CRITICAL: $message")
     }
 
     fun error(message: String) {
-        session.pushLog("ERROR: $message")
+        session.pushLog("[$scope] ERROR: $message")
     }
 
     fun warn(message: String) {
@@ -14,7 +14,7 @@ class Logger(private var session: Session, private var scope: String) {
     }
 
     fun info(message: String) {
-        session.pushLog("INFO: $message")
+        session.pushLog("[$scope] INFO: $message")
     }
 
     fun scope(name: String): Logger {

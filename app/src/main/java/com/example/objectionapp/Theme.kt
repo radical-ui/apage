@@ -93,7 +93,10 @@ fun RenderTheme(content: @Composable () -> Unit) {
 	val theme = useDefaultTheme()
 	val isDarkTheme = isSystemInDarkTheme()
 	val supportsDynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-	val shouldDoDynamicTheme = theme.disableDynamicTheme
+	val shouldDoDynamicTheme = !theme.disableDynamicTheme
+
+	println(supportsDynamicColor && isDarkTheme && shouldDoDynamicTheme)
+	println(supportsDynamicColor && !isDarkTheme && shouldDoDynamicTheme)
 
 	val colorScheme = when {
 		supportsDynamicColor && isDarkTheme && shouldDoDynamicTheme -> dynamicDarkColorScheme(

@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -69,7 +70,7 @@ fun PostCardRender(
 				type.supertitle?.let {
 					Text(
 						it,
-						color = MaterialTheme.colorScheme.onSurfaceVariant,
+						color = MaterialTheme.colorScheme.onSurface,
 						fontSize = 10.sp,
 						fontWeight = FontWeight.SemiBold,
 					)
@@ -77,7 +78,7 @@ fun PostCardRender(
 				title?.let {
 					Text(
 						it,
-						color = MaterialTheme.colorScheme.onSurfaceVariant,
+						color = MaterialTheme.colorScheme.onSurface,
 						fontSize = 16.sp,
 						fontWeight = FontWeight.Bold,
 					)
@@ -86,14 +87,14 @@ fun PostCardRender(
 					Text(
 						it,
 						fontSize = 12.sp,
-						color = MaterialTheme.colorScheme.primary
+						color = MaterialTheme.colorScheme.secondary
 					)
 				}
 				type.additionalInfo?.let {
 					Text(
 						it,
 						fontSize = 14.sp,
-						color = MaterialTheme.colorScheme.onSurfaceVariant,
+						color = MaterialTheme.colorScheme.onSurface,
 						fontWeight = FontWeight.Bold
 					)
 				}
@@ -116,6 +117,12 @@ fun CardRender(
 			.padding(horizontal = 20.dp, vertical = 10.dp)
 			.fillMaxWidth(),
 		elevation = CardDefaults.elevatedCardElevation(defaultElevation = 5.dp),
+		colors = CardColors(
+			containerColor = MaterialTheme.colorScheme.surfaceContainer,
+			contentColor = MaterialTheme.colorScheme.onSurface,
+			disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+			disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant
+		),
 		onClick = {
 			navController.navigate(route = encodeObjectIdIntoPageRoute(objectId))
 		},

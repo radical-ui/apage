@@ -26,7 +26,7 @@ data class Layout(
 	}
 
 	fun getInitialPageId(): String? {
-		return currentPageId ?: tabBar?.buttons?.first()?.pageId
+		return currentPageId ?: tabBar?.buttons?.getOrNull(0)?.pageId
 	}
 }
 
@@ -87,8 +87,7 @@ fun SingleLayoutTest() {
 		"layout_default", Object.Layout(
 			Layout(
 				tabBar = TabBar(
-					useSheet = true,
-					stupid = false, buttons = listOf(
+					useSheet = true, stupid = false, buttons = listOf(
 						TabBarButton("Products", "ShoppingBasket"),
 						TabBarButton("Home", "Home"),
 						TabBarButton("Services", "Group"),
@@ -126,8 +125,7 @@ fun SingleLayoutTest() {
 							ListViewItem("Products"),
 							ListViewItem("Products"),
 						)
-					),
-					trailingIcon = "ChevronRight"
+					), trailingIcon = "ChevronRight"
 				)
 			)
 		)
@@ -163,5 +161,26 @@ fun SingleLayoutTest() {
 			)
 		)
 	)
+	TestProvider(controller)
+}
+
+// TODO Fixme
+@Composable
+@Preview()
+fun EmptyLayoutTest() {
+	val controller = Controller.fromConstants()
+	controller.objectStore.preload(
+		"theme_default", Object.Theme(Theme(iconPack = IconPack.Rounded))
+	)
+	controller.objectStore.preload(
+		"layout_default", Object.Layout(
+			Layout(
+				tabBar = TabBar(
+					useSheet = true, stupid = false, buttons = listOf()
+				)
+			)
+		)
+	)
+
 	TestProvider(controller)
 }

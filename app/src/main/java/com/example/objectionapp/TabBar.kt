@@ -129,8 +129,7 @@ private fun SearchRender(currentPageId: String?, useSheet: Boolean) {
 
 @Composable
 private fun StupidSearchRender(
-	currentPageId: String?,
-	useSheet: Boolean
+	currentPageId: String?, useSheet: Boolean
 ) {
 	val navController = useNavController()
 
@@ -224,6 +223,7 @@ private fun StupidNavigationRender(tabBar: TabBar) {
 					NavButton(pageId = button.pageId) { didClick, isActive ->
 						val color = if (isActive) MaterialTheme.colorScheme.primary
 						else MaterialTheme.colorScheme.surfaceVariant
+
 						Button(colors = ButtonDefaults.buttonColors(
 							containerColor = color,
 							contentColor = Color.Black,

@@ -51,6 +51,7 @@ fun Provider(controller: Controller = Controller.fromConstants()) {
 		}
 
 		LaunchedEffect(Unit) {
+			println("main run")
 			controller.bridge.start(controller.wsUrl)
 
 			controller.bridge.onHasInternet.listen(ListenId()) {
@@ -130,6 +131,7 @@ fun useObject(id: String?): Object? {
 
 	DisposableEffect(id) {
 		if (id != null) {
+			println("use object listen")
 			val listenId = ListenId()
 			controller.objectStore.listen(listenId, id) { newObj ->
 				obj = newObj
