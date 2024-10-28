@@ -40,12 +40,15 @@ data class Theme(
 @Serializable
 sealed class IconPack {
 	@Serializable
+	@SerialName("rounded")
 	data object Rounded : IconPack()
 
 	@Serializable
+	@SerialName("sharp")
 	data object Sharp : IconPack()
 
 	@Serializable
+	@SerialName("filled")
 	data object Filled : IconPack()
 
 	fun getJavaName(): String {

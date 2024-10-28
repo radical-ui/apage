@@ -1402,17 +1402,17 @@
 								"content_key": null,
 								"variants": [
 									{
-										"name": "com.example.objectionapp.IconPack.Filled",
+										"name": "filled",
 										"description": null,
 										"type": null
 									},
 									{
-										"name": "com.example.objectionapp.IconPack.Rounded",
+										"name": "rounded",
 										"description": null,
 										"type": null
 									},
 									{
-										"name": "com.example.objectionapp.IconPack.Sharp",
+										"name": "sharp",
 										"description": null,
 										"type": null
 									}
