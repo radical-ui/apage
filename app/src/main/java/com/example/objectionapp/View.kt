@@ -48,7 +48,7 @@ sealed class FormActionStyle {
 @JsonClassDiscriminator("$")
 @Serializable
 data class Link(
-	val pageId: String,
+	@ObjectReference(Object.Page::class) val pageId: String,
 	val useSheet: Boolean = false
 )
 
@@ -175,20 +175,20 @@ sealed class CardContainer {
 	@Serializable
 	@SerialName("SingularCardContainer")
 	data class SingularCardContainer(
-		val objectId: String,
+		@ObjectReference(Object.Page::class) val objectId: String,
 	) : CardContainer()
 
 	@Serializable
 	@SerialName("PluralCardContainer")
 	data class PluralCardContainer(
-		val objectIds: List<String>,
+		@ObjectReference(Object.Page::class) val objectIds: List<String>,
 		val title: String? = null,
 	) : CardContainer()
 
 	@Serializable
 	@SerialName("CustomCardContainer")
 	data class CustomCardContainer(
-		val objectId: String? = null,
+		@ObjectReference(Object.Page::class) val objectId: String? = null,
 		val title: String? = null,
 		val icon: String? = null,
 		val imageUrl: String? = null

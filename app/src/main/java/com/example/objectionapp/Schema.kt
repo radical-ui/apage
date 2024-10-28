@@ -74,7 +74,7 @@ private fun getItemSchema(
         PrimitiveKind.FLOAT -> ItemSchema.NumberSchema
         PrimitiveKind.INT -> ItemSchema.NumberSchema
         PrimitiveKind.BOOLEAN -> ItemSchema.BooleanSchema
-        StructureKind.LIST -> getListSchema(descriptor)
+        StructureKind.LIST -> getListSchema(descriptor, annotations)
         PolymorphicKind.SEALED -> getSealedSchema(descriptor)
         SerialKind.ENUM -> throw Exception(
             "Use a sealed class with objects instead of an enum. Failed at: $descriptor"
@@ -125,9 +125,14 @@ private fun getSealedSchema(rootDescriptor: SerialDescriptor): ItemSchema.EnumSc
 
         variants.add(
             EnumVariantSchema(
-                name = variant.serialName, description = getDescription(variantAnnotations),
+                name = variant.serialName,
+                description = getDescription(variantAnnotations),
                 type = if (variant.kind == StructureKind.OBJECT) null
-                else getItemSchema(if (contentKey == null) variant else extractContentKey(contentKey, variant))
+                else getItemSchema(
+                    if (contentKey == null) variant else extractContentKey(
+                        contentKey, variant
+                    )
+                )
             )
         )
     }
@@ -151,9 +156,27 @@ private fun extractContentKey(contentKey: String, descriptor: SerialDescriptor):
 }
 
 @OptIn(ExperimentalSerializationApi::class)
-private fun getListSchema(descriptor: SerialDescriptor): ItemSchema {
+private fun getListSchema(descriptor: SerialDescriptor, annotations: List<Annotation>): ItemSchema {
     if (descriptor.elementsCount != 1) {
         throw Exception("A list must have exactly on child element")
+    }
+
+    for (annotation in annotations) {
+        when (annotation) {
+            is ObjectReference -> return ItemSchema.ListSchema(
+                item = ItemSchema.ReferenceSchema(
+                    expectedTopLevelVariant = serialDescriptor(
+                        annotation.expectedTopLevelVariant.createType()
+                    ).serialName
+                )
+            )
+
+            is AnyObjectReference -> return ItemSchema.ListSchema(
+                item = ItemSchema.ReferenceSchema(
+                    expectedTopLevelVariant = null
+                )
+            )
+        }
     }
 
     return ItemSchema.ListSchema(item = getItemSchema(descriptor.getElementDescriptor(0)))
@@ -280,7 +303,8 @@ sealed class ItemSchema {
     @Serializable
     @SerialName("list")
     data class ListSchema(val item: ItemSchema) : ItemSchema() {
-        @SerialName("batch_size") val batchSize = 50
+        @SerialName("batch_size")
+        val batchSize = 50
     }
 
     @Serializable

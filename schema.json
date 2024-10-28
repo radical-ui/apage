@@ -153,7 +153,8 @@
 																					"type": {
 																						"$": "optional",
 																						"child": {
-																							"$": "string"
+																							"$": "reference",
+																							"expected_top_level_variant": "Page"
 																						}
 																					}
 																				},
@@ -202,7 +203,8 @@
 																					"type": {
 																						"$": "list",
 																						"item": {
-																							"$": "string"
+																							"$": "reference",
+																							"expected_top_level_variant": "Page"
 																						},
 																						"batch_size": 50
 																					}
@@ -230,7 +232,8 @@
 																					"name": "objectId",
 																					"description": null,
 																					"type": {
-																						"$": "string"
+																						"$": "reference",
+																						"expected_top_level_variant": "Page"
 																					}
 																				}
 																			]
@@ -423,7 +426,8 @@
 																								"name": "pageId",
 																								"description": null,
 																								"type": {
-																									"$": "string"
+																									"$": "reference",
+																									"expected_top_level_variant": "Page"
 																								}
 																							},
 																							{
@@ -467,7 +471,8 @@
 																									"name": "pageId",
 																									"description": null,
 																									"type": {
-																										"$": "string"
+																										"$": "reference",
+																										"expected_top_level_variant": "Page"
 																									}
 																								},
 																								{
