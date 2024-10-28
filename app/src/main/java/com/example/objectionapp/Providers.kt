@@ -131,7 +131,6 @@ fun useObject(id: String?): Object? {
 
 	DisposableEffect(id) {
 		if (id != null) {
-			println("use object listen")
 			val listenId = ListenId()
 			controller.objectStore.listen(listenId, id) { newObj ->
 				obj = newObj
@@ -158,7 +157,7 @@ fun useLogger(scope: String): Logger {
 fun useDefaultTheme(): Theme {
 	val obj = useObject(defaultThemeId) ?: throw Exception("No object exists for '$defaultThemeId'")
 
-	return if (obj is Object.Theme) obj.def else throw Exception("Object '$defaultThemeId' was not a theme")
+	return if (obj is Theme) obj else throw Exception("Object '$defaultThemeId' was not a theme")
 }
 
 @Composable
@@ -166,14 +165,14 @@ fun useDefaultLayout(): Layout {
 	val obj =
 		useObject(defaultLayoutId) ?: throw Exception("No object exists for '$defaultLayoutId'")
 
-	return if (obj is Object.Layout) obj.def else throw Exception("Object '$defaultLayoutId' was not a layout")
+	return if (obj is Layout) obj else throw Exception("Object '$defaultLayoutId' was not a layout")
 }
 
 @Composable
 fun usePage(id: String?): Page? {
 	val obj = useObject(id) ?: return null
 
-	return if (obj is Object.Page) obj.def else throw Exception("Object '$id' was not a page")
+	return if (obj is Page) obj else throw Exception("Object '$id' was not a page")
 }
 
 @Composable

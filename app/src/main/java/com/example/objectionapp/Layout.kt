@@ -10,23 +10,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName("Layout")
 data class Layout(
 	@Description(
 		"The tab bar is shown at the bottom of the application. If there is no current page set, the current page will default to the first tab bar item."
 	) val tabBar: TabBar? = null,
 
-	@Description("The page that is to be shown by default") @ObjectReference(Object.Page::class) val currentPageId: String? = null,
-) {
+	@Description("The page that is to be shown by default") @ObjectReference(Page::class) val currentPageId: String? = null,
+) : Object() {
 	fun getRoots(): List<String> {
-		return (tabBar?.buttons?.map { it.pageId } ?: listOf()) + (currentPageId?.let { listOf(it) }
+		return (tabBar?.pages?.map { it } ?: listOf()) + (currentPageId?.let { listOf(it) }
 			?: listOf())
 	}
 
 	fun getInitialPageId(): String? {
-		return currentPageId ?: tabBar?.buttons?.getOrNull(0)?.pageId
+		return currentPageId ?: tabBar?.pages?.getOrNull(0)
 	}
 }
 
@@ -78,89 +80,45 @@ fun RenderDefaultLayout() {
 
 @Composable
 @Preview()
-fun SingleLayoutTest() {
+private fun SinglePageTest() {
 	val controller = Controller.fromConstants()
+	controller.objectStore.preload("theme_default", Theme())
+	controller.objectStore.preload("layout_default", Layout(currentPageId = "some_page"))
 	controller.objectStore.preload(
-		"theme_default", Object.Theme(Theme(iconPack = IconPack.Rounded))
-	)
-	controller.objectStore.preload(
-		"layout_default", Object.Layout(
-			Layout(
-				tabBar = TabBar(
-					useSheet = true, stupid = false, buttons = listOf(
-						TabBarButton("Products", "ShoppingBasket"),
-						TabBarButton("Home", "Home"),
-						TabBarButton("Services", "Group"),
-					)
-				)
-			)
+		"some_page", Page(
+			title = "Some Page", type = PageType.Plain("settings")
 		)
 	)
-	controller.objectStore.preload(
-		"Services", Object.Page(
-			Page(
-				title = "Services", type = PageType.Plain("settings"), view = View.ListView(
-					mutableListOf(
-						mutableListOf(
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-							ListViewItem("Products"),
-						)
-					), trailingIcon = "ChevronRight"
-				)
-			)
-		)
-	)
-	controller.objectStore.preload(
-		"Home", Object.Page(
-			Page(
-				title = "Home", type = PageType.Plain("Settings"), view = View.CardView(
-					listOf(
-						CardContainer.SingularCardContainer("Products"),
-						CardContainer.SingularCardContainer("Products"),
-						CardContainer.SingularCardContainer("Products"),
-					)
-				)
-			)
-		)
-	)
-	controller.objectStore.preload(
-		"Post", Object.Page(
-			Page(
-				title = "Home",
-				type = PageType.Plain("Settings"),
 
-				)
-		)
-	)
+	TestProvider(controller)
+}
+
+@Preview
+@Composable
+private fun TabViewTest() {
+	val controller = Controller.fromConstants()
+
+	controller.objectStore.preload("theme_default", Theme())
 	controller.objectStore.preload(
-		"Products", Object.Page(
-			Page(
-				title = "Products",
-				type = PageType.Plain("Settings"),
-				subtitle = "This is a subtitle. I had to add it so that the listview has enough content."
-			)
+		"layout_default", Layout(tabBar = TabBar(pages = listOf("darkness", "lightness")))
+	)
+
+	controller.objectStore.preload(
+		"darkness", Page(
+			title = "Darkness",
+			type = PageType.Plain("ShoppingBasket"),
+			subtitle = "Hello darkness my old friend, I've come to talk with you again"
 		)
 	)
+
+	controller.objectStore.preload(
+		"lightness", Page(
+			title = "Lightness",
+			type = PageType.Plain("Lightbulb"),
+			subtitle = "The light shines, and darkness cannot hide from it"
+		)
+	)
+
 	TestProvider(controller)
 }
 
@@ -170,17 +128,9 @@ fun SingleLayoutTest() {
 fun EmptyLayoutTest() {
 	val controller = Controller.fromConstants()
 	controller.objectStore.preload(
-		"theme_default", Object.Theme(Theme(iconPack = IconPack.Rounded))
+		"theme_default", Theme(iconPack = IconPack.Rounded)
 	)
-	controller.objectStore.preload(
-		"layout_default", Object.Layout(
-			Layout(
-				tabBar = TabBar(
-					useSheet = true, stupid = false, buttons = listOf()
-				)
-			)
-		)
-	)
+	controller.objectStore.preload("layout_default", Layout(tabBar = TabBar(pages = listOf())))
 
 	TestProvider(controller)
 }

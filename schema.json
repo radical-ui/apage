@@ -2,7 +2,7 @@
 	"object": {
 		"$": "enum",
 		"discriminator_key": "$",
-		"content_key": "def",
+		"content_key": null,
 		"variants": [
 			{
 				"name": "Layout",
@@ -19,45 +19,46 @@
 									"$": "struct",
 									"properties": [
 										{
-											"name": "stupid",
+											"name": "floating",
 											"description": null,
 											"type": {
 												"$": "boolean"
 											}
 										},
 										{
-											"name": "buttons",
+											"name": "pages",
 											"description": null,
 											"type": {
 												"$": "list",
 												"item": {
-													"$": "struct",
-													"properties": [
-														{
-															"name": "pageId",
-															"description": null,
-															"type": {
-																"$": "reference",
-																"expected_top_level_variant": "Page"
-															}
-														},
-														{
-															"name": "icon",
-															"description": null,
-															"type": {
-																"$": "string"
-															}
-														}
-													]
+													"$": "reference",
+													"expected_top_level_variant": "Page"
 												},
 												"batch_size": 50
 											}
 										},
 										{
-											"name": "useSheet",
+											"name": "searchEmbedStrategy",
 											"description": null,
 											"type": {
-												"$": "boolean"
+												"$": "optional",
+												"child": {
+													"$": "enum",
+													"discriminator_key": "$",
+													"content_key": null,
+													"variants": [
+														{
+															"name": "page",
+															"description": null,
+															"type": null
+														},
+														{
+															"name": "sheet",
+															"description": null,
+															"type": null
+														}
+													]
+												}
 											}
 										}
 									]
@@ -131,6 +132,29 @@
 											"type": {
 												"$": "struct",
 												"properties": [
+													{
+														"name": "options",
+														"description": null,
+														"type": {
+															"$": "struct",
+															"properties": [
+																{
+																	"name": "excessiveRounding",
+																	"description": null,
+																	"type": {
+																		"$": "boolean"
+																	}
+																},
+																{
+																	"name": "useCardPadding",
+																	"description": null,
+																	"type": {
+																		"$": "boolean"
+																	}
+																}
+															]
+														}
+													},
 													{
 														"name": "containers",
 														"description": null,

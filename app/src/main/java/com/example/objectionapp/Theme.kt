@@ -21,6 +21,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
 
 @Serializable
+@SerialName("Theme")
 data class Theme(
 	@Description("Unless otherwise specified, the supplied light and dark color schemes will be overridden with the android-supplied color scheme, which is computed from the home screen background.")
 	val disableDynamicTheme: Boolean = false,
@@ -32,8 +33,8 @@ data class Theme(
 	val darkColorScheme: ColorScheme = ColorScheme(),
 
 	@Description("The type of icons that will be displayed in other parts of the app")
-	val iconPack: IconPack,
-)
+	val iconPack: IconPack = IconPack.Rounded,
+) : Object()
 
 @OptIn(ExperimentalSerializationApi::class)
 @JsonClassDiscriminator("$")

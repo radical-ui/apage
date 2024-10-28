@@ -15,6 +15,8 @@ import kotlinx.serialization.descriptors.SerialKind
 import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.descriptors.elementDescriptors
 import kotlinx.serialization.descriptors.serialDescriptor
+import kotlinx.serialization.encoding.CompositeDecoder
+import kotlinx.serialization.encoding.CompositeEncoder
 import kotlinx.serialization.json.JsonClassDiscriminator
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -149,7 +151,10 @@ private fun getSealedSchema(rootDescriptor: SerialDescriptor): ItemSchema.EnumSc
 @OptIn(ExperimentalSerializationApi::class)
 private fun extractContentKey(contentKey: String, descriptor: SerialDescriptor): SerialDescriptor {
     if (descriptor.kind is StructureKind.CLASS) {
-        return descriptor.getElementDescriptor(descriptor.getElementIndex(contentKey))
+        val index = descriptor.getElementIndex(contentKey)
+        if (index == CompositeDecoder.UNKNOWN_NAME) throw Exception("Property $contentKey (referenced by @ContentKey) does not exist on ${descriptor.serialName}")
+
+        return descriptor.getElementDescriptor(index)
     }
 
     throw Exception("Expected the child of a contentKey enum descriptor to be a class")

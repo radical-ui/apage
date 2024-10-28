@@ -13,27 +13,31 @@ import kotlinx.serialization.json.JsonClassDiscriminator
 @JsonClassDiscriminator("$")
 @Serializable
 sealed class View {
-	@Serializable
-	@SerialName("CardView")
-	class CardView(
-		val containers: List<CardContainer>,
-	) : View()
 
 	@Serializable
 	@SerialName("ListView")
-	class ListView(
-		val items: List<List<ListViewItem>>,
-		val trailingIcon: String?
+	data class ListView(
+		val items: List<List<ListViewItem>>, val trailingIcon: String?
 	) : View()
 
 	@Serializable
 	@SerialName("FormView")
-	class FormView(
-		val items: List<FormItem>,
-		val actionStyle: FormActionStyle,
-		val actions: FormActions
+	data class FormView(
+		val items: List<FormItem>, val actionStyle: FormActionStyle, val actions: FormActions
 	) : View()
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ViewRender(view: View, scrollBehavior: TopAppBarScrollBehavior) {
+	when (view) {
+		is CardView -> CardViewRender(view, scrollBehavior)
+		is View.ListView -> ListView(view, scrollBehavior)
+		is View.FormView -> FormViewRender(view, scrollBehavior)
+	}
+}
+
+
 
 @OptIn(ExperimentalSerializationApi::class)
 @JsonClassDiscriminator("$")
@@ -48,8 +52,7 @@ sealed class FormActionStyle {
 @JsonClassDiscriminator("$")
 @Serializable
 data class Link(
-	@ObjectReference(Object.Page::class) val pageId: String,
-	val useSheet: Boolean = false
+	@ObjectReference(Page::class) val pageId: String, val useSheet: Boolean = false
 )
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -64,8 +67,7 @@ data class FormActions(
 @JsonClassDiscriminator("$")
 @Serializable
 data class FormAction(
-	val title: String,
-	val link: Link?
+	val title: String, val link: Link?
 )
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -175,35 +177,22 @@ sealed class CardContainer {
 	@Serializable
 	@SerialName("SingularCardContainer")
 	data class SingularCardContainer(
-		@ObjectReference(Object.Page::class) val objectId: String,
+		@ObjectReference(Page::class) val objectId: String,
 	) : CardContainer()
 
 	@Serializable
 	@SerialName("PluralCardContainer")
 	data class PluralCardContainer(
-		@ObjectReference(Object.Page::class) val objectIds: List<String>,
+		@ObjectReference(Page::class) val objectIds: List<String>,
 		val title: String? = null,
 	) : CardContainer()
 
 	@Serializable
 	@SerialName("CustomCardContainer")
 	data class CustomCardContainer(
-		@ObjectReference(Object.Page::class) val objectId: String? = null,
+		@ObjectReference(Page::class) val objectId: String? = null,
 		val title: String? = null,
 		val icon: String? = null,
 		val imageUrl: String? = null
 	) : CardContainer()
 }
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ViewRender(view: View, scrollBehavior: TopAppBarScrollBehavior) {
-	when (view) {
-		is View.CardView -> CardViewRender(view, scrollBehavior)
-		is View.ListView -> ListView(view, scrollBehavior)
-		is View.FormView -> FormViewRender(view, scrollBehavior)
-	}
-}
-
-

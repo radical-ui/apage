@@ -31,22 +31,19 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
 
-
-@OptIn(ExperimentalSerializationApi::class)
-@JsonClassDiscriminator("$")
 @Serializable
+@SerialName("Page")
 data class Page(
 	@Description("The page title will be displayed prominently at the top of the screen") val title: String? = null,
 	@Description("The page subtitle is displayed directly under any images on the page") val subtitle: String? = null,
 	@Description(
 		"The page that will be pulled up for a presumed search through the contents of this page"
-	) @ObjectReference(Object.Page::class) val searchPageId: String? = null,
-
+	) @ObjectReference(Page::class) val searchPageId: String? = null,
 
 	val view: View? = null,
 
 	val type: PageType,
-)
+) : Object()
 
 @OptIn(ExperimentalSerializationApi::class)
 @JsonClassDiscriminator("$")
@@ -55,27 +52,22 @@ sealed class PageType {
 	@Serializable
 	@SerialName("Post")
 	data class Post(
-		@Description("The images will be displayed in carousel form, directly below the title")
-		val imageUrls: List<String>? = null,
-		@Description("The page supertitle is displayed directly below any images on the page")
-		val supertitle: String? = null,
-		@Description("The additional info is displayed directly below any images on the page")
-		val additionalInfo: String? = null,
+		@Description("The images will be displayed in carousel form, directly below the title") val imageUrls: List<String>? = null,
+		@Description("The page supertitle is displayed directly below any images on the page") val supertitle: String? = null,
+		@Description("The additional info is displayed directly below any images on the page") val additionalInfo: String? = null,
 	) : PageType()
 
 	@Serializable
 	@SerialName("Profile")
 	data class Profile(
-		@Description("The the banner image for the user profile")
-		val bannerImageUrl: String,
-		@Description("The avatar image for the user profile")
-		val avatarImageUrl: String,
+		@Description("The the banner image for the user profile") val bannerImageUrl: String,
+		@Description("The avatar image for the user profile") val avatarImageUrl: String,
 	) : PageType()
 
 	@Serializable
 	@SerialName("Plain")
 	data class Plain(
-		val icon: String?
+		val icon: String? = null
 	) : PageType()
 }
 
@@ -103,22 +95,18 @@ fun SharedTransitionScope.PageRender(
 		Modifier.padding(bottom = bottomPadding)
 	) {
 		if (isRoot) {
-			LargeTopAppBar(
-				title = { Text("${page.title}") },
+			LargeTopAppBar(title = { Text("${page.title}") },
 				scrollBehavior = scrollBehavior,
-				actions = page.view?.let { viewActions(it) } ?: {}
-			)
+				actions = page.view?.let { viewActions(it) } ?: {})
 		} else {
-			TopAppBar(
-				navigationIcon = {
-					IconButton(onClick = { navController.popBackStack() }) {
-						StandardIcon("ArrowBack")
-					}
-				},
+			TopAppBar(navigationIcon = {
+				IconButton(onClick = { navController.popBackStack() }) {
+					StandardIcon("ArrowBack")
+				}
+			},
 				title = { Text("${page.title}") },
 				scrollBehavior = scrollBehavior,
-				actions = page.view?.let { viewActions(it) } ?: {}
-			)
+				actions = page.view?.let { viewActions(it) } ?: {})
 		}
 
 		when (page.type) {

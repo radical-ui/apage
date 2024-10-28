@@ -59,11 +59,11 @@ fun FormViewRender(view: View.FormView, scrollBehavior: TopAppBarScrollBehavior)
 				.nestedScroll(scrollBehavior.nestedScrollConnection),
 			verticalArrangement = Arrangement.spacedBy(8.dp)
 		) {
-				view.items.map {
-					item {
-						FormItemRender(it)
-					}
+			view.items.map {
+				item {
+					FormItemRender(it)
 				}
+			}
 		}
 		Box {
 			if (view.actionStyle is FormActionStyle.Relative || view.actionStyle is FormActionStyle.BottomFixed) actionLayout(
@@ -134,8 +134,7 @@ fun SwitchRender(item: FormItem, input: Input.Switch) {
 			item.label?.let { Text(it, fontSize = MaterialTheme.typography.bodyLarge.fontSize) }
 			item.description?.let {
 				Text(
-					it,
-					fontSize = MaterialTheme.typography.labelSmall.fontSize
+					it, fontSize = MaterialTheme.typography.labelSmall.fontSize
 				)
 			}
 		}
@@ -208,63 +207,48 @@ fun TextFieldRender(
 fun FormViewTest() {
 	val controller = Controller.fromConstants()
 
-	controller.objectStore.preload(
-		"theme_default", Object.Theme(Theme(iconPack = IconPack.Rounded))
-	)
+	controller.objectStore.preload("theme_default", Theme())
+	controller.objectStore.preload("layout_default", Layout(currentPageId = "Products"))
 
 	controller.objectStore.preload(
-		"layout_default", Object.Layout(
-			Layout(
-				tabBar = TabBar(
-					useSheet = true, stupid = false, buttons = listOf(
-						TabBarButton("Products", "ShoppingBasket"),
-					)
-				)
-			)
-		)
-	)
-
-	controller.objectStore.preload(
-		"Products", Object.Page(
-			Page(
-				title = "Products",
-				type = PageType.Plain("ShoppingBasket"),
-				subtitle = "Hello darkness my old friend, I've come to talk with you again",
-				view = View.FormView(
-					items = listOf(
-						FormItem(
-							submitStrategy = SubmitStrategy.OnSubmit,
-							label = "Text Input",
-							description = "some supporting text",
-							input = Input.Text(
-								startingValue = Binding("start", ""),
-								placeholder = "not a little note",
-								mode = InputMode.Text(trailingIcon = "Bolt"),
-							)
-						),
-						FormItem(
-							submitStrategy = SubmitStrategy.OnSubmit,
-							label = "Password Input",
-							description = "Your password is too gay. Try again.",
-							input = Input.Text(
-								fieldStatus = TextFieldStatus.Error,
-								startingValue = Binding("start", ""),
-								placeholder = "not a little note",
-								mode = InputMode.Password,
-							)
-						),
-						FormItem(
-							submitStrategy = SubmitStrategy.OnSubmit,
-							label = "Switch Input",
-							description = "A quick description of what is getting switched.",
-							input = Input.Switch(switched = Binding("key", true))
-						),
-					), actionStyle = FormActionStyle.TopBar, actions = FormActions(
-						primaryAction = FormAction(
-							title = "Login", link = Link("Products")
-						), secondaryAction = FormAction(
-							title = "Sign up", link = Link("Products")
+		"Products", Page(
+			title = "Products",
+			type = PageType.Plain("ShoppingBasket"),
+			subtitle = "Hello darkness my old friend, I've come to talk with you again",
+			view = View.FormView(
+				items = listOf(
+					FormItem(
+						submitStrategy = SubmitStrategy.OnSubmit,
+						label = "Text Input",
+						description = "some supporting text",
+						input = Input.Text(
+							startingValue = Binding("start", ""),
+							placeholder = "not a little note",
+							mode = InputMode.Text(trailingIcon = "Bolt"),
 						)
+					),
+					FormItem(
+						submitStrategy = SubmitStrategy.OnSubmit,
+						label = "Password Input",
+						description = "Your password is too gay. Try again.",
+						input = Input.Text(
+							fieldStatus = TextFieldStatus.Error,
+							startingValue = Binding("start", ""),
+							placeholder = "not a little note",
+							mode = InputMode.Password,
+						)
+					),
+					FormItem(
+						submitStrategy = SubmitStrategy.OnSubmit,
+						label = "Switch Input",
+						description = "A quick description of what is getting switched.",
+						input = Input.Switch(switched = Binding("key", true))
+					),
+				), actionStyle = FormActionStyle.TopBar, actions = FormActions(
+					primaryAction = FormAction(
+						title = "Login", link = Link("Products")
+					), secondaryAction = FormAction(
+						title = "Sign up", link = Link("Products")
 					)
 				)
 			)
