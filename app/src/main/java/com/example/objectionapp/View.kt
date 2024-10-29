@@ -34,7 +34,7 @@ fun ViewRender(view: View, scrollBehavior: TopAppBarScrollBehavior) {
 		is CardView -> CardViewRender(view, scrollBehavior)
 		is View.ListView -> ListView(view, scrollBehavior)
 		is View.FormView -> FormViewRender(view, scrollBehavior)
-		is ContentView -> ContentViewRender(view)
+		is ContentView -> ContentViewRender(view, scrollBehavior.nestedScrollConnection)
 	}
 }
 

@@ -56,7 +56,6 @@ fun CardViewRender(view: CardView, scrollBehavior: TopAppBarScrollBehavior) {
 			.nestedScroll(scrollBehavior.nestedScrollConnection),
 		verticalArrangement = Arrangement.spacedBy(10.dp),
 	) {
-
 		view.containers.map {
 			item {
 				when (it) {
