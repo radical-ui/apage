@@ -17,7 +17,7 @@ fun main() {
         prettyPrint = true
         prettyPrintIndent = "\t"
     }
-    val schema = getSchema(Object::class)
+    val schema = SchemaBuilder().build(Object::class)
     val text = json.encodeToString(Schema.serializer(), schema)
     val path = Paths.get("schema.json")
 
