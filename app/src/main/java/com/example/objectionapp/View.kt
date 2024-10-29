@@ -4,6 +4,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.navigation.NavController
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -13,7 +14,6 @@ import kotlinx.serialization.json.JsonClassDiscriminator
 @JsonClassDiscriminator("$")
 @Serializable
 sealed class View {
-
 	@Serializable
 	@SerialName("ListView")
 	data class ListView(
@@ -34,10 +34,9 @@ fun ViewRender(view: View, scrollBehavior: TopAppBarScrollBehavior) {
 		is CardView -> CardViewRender(view, scrollBehavior)
 		is View.ListView -> ListView(view, scrollBehavior)
 		is View.FormView -> FormViewRender(view, scrollBehavior)
+		is ContentView -> ContentViewRender(view)
 	}
 }
-
-
 
 @OptIn(ExperimentalSerializationApi::class)
 @JsonClassDiscriminator("$")
@@ -53,7 +52,14 @@ sealed class FormActionStyle {
 @Serializable
 data class Link(
 	@ObjectReference(Page::class) val pageId: String, val useSheet: Boolean = false
-)
+) {
+	fun follow(navController: NavController) {
+		navController.navigate(
+			if (useSheet) encodeObjectIdIntoSheetRoute(pageId)
+			else encodeObjectIdIntoPageRoute(pageId)
+		)
+	}
+}
 
 @OptIn(ExperimentalSerializationApi::class)
 @JsonClassDiscriminator("$")

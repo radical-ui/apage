@@ -158,6 +158,7 @@ private fun FloatingSearchRender(
 				onClick = {
 					openSearch(navController, searchPageId, searchEmbedStrategy)
 				},
+				shadowElevation = 5.dp,
 				modifier = Modifier
 					.clip(RoundedCornerShape(60))
 					.height(50.dp)
@@ -169,7 +170,8 @@ private fun FloatingSearchRender(
 					horizontalArrangement = Arrangement.spacedBy(10.dp),
 					modifier = Modifier.padding(horizontal = 10.dp)
 				) {
-					StandardIcon("Search")
+					RenderIcon(searchPage, modifier = Modifier.size(30.dp))
+
 					searchPage.title?.let {
 						Text(
 							it,
@@ -178,6 +180,7 @@ private fun FloatingSearchRender(
 							fontWeight = FontWeight.Bold
 						)
 					}
+
 					searchPage.subtitle?.let {
 						Text(
 							it,
@@ -285,7 +288,6 @@ private data class NavButton(
 	val component: @Composable (() -> Unit, Boolean) -> Unit,
 )
 
-
 @Composable
 private fun NavigableTabBar(buttons: List<NavButton>) {
 	val navController = useNavController()
@@ -348,7 +350,7 @@ private fun FloatingTabBarTest() {
 		)
 	)
 	controller.objectStore.preload(
-		"search_page", Page(title = "Boston", type = PageType.Plain(icon = null))
+		"search_page", Page(title = "Boston", type = PageType.Plain(icon = "Search"))
 	)
 
 	TestProvider(controller)
