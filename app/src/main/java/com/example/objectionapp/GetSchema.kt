@@ -14,8 +14,8 @@ fun main() {
         ignoreUnknownKeys = true
         isLenient = true
         encodeDefaults = true
-        prettyPrint = true
-        prettyPrintIndent = "\t"
+//        prettyPrint = true
+//        prettyPrintIndent = "\t"
     }
     val schema = SchemaBuilder().build(Object::class)
     val text = json.encodeToString(Schema.serializer(), schema)

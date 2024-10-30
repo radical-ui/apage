@@ -13,7 +13,9 @@ class Controller(
     val lightBackgroundColor: Color,
     val darkBackgroundColor: Color,
     val lightForegroundColor: Color,
-    val darkForegroundColor: Color
+    val darkForegroundColor: Color,
+    val lightLoaderColor: Color,
+    val darkLoaderColor: Color,
 ) {
     val session = Session()
     val logger = Logger(session, scope = appName)
@@ -32,6 +34,8 @@ class Controller(
                 darkBackgroundColor = darkBackgroundColor,
                 lightForegroundColor = lightForegroundColor,
                 darkForegroundColor = darkForegroundColor,
+                lightLoaderColor = lightLoaderColor,
+                darkLoaderColor = darkLoaderColor,
             )
         }
     }

@@ -50,6 +50,8 @@ const lightBackgroundColor = Color.from(getConfigValue('light_background_color')
 const lightForegroundColor = Color.from(getConfigValue('light_foreground_color'))
 const darkBackgroundColor = Color.from(getConfigValue('dark_background_color'))
 const darkForegroundColor = Color.from(getConfigValue('dark_foreground_color'))
+const lightLoaderColor = Color.from(getConfigValue('light_loader_color'))
+const darkLoaderColor = Color.from(getConfigValue('dark_loader_color'))
 
 await replaceLine('app/src/main/java/com/example/objectionapp/Constants.kt', [
 	{ match: 'const val appName', write: `const val appName = "${appName}"` },
@@ -61,6 +63,8 @@ await replaceLine('app/src/main/java/com/example/objectionapp/Constants.kt', [
 	{ match: 'val lightForegroundColor', write: `val lightForegroundColor = ${lightForegroundColor.toKotlin()}` },
 	{ match: 'val darkBackgroundColor', write: `val darkBackgroundColor = ${darkBackgroundColor.toKotlin()}` },
 	{ match: 'val darkForegroundColor', write: `val darkForegroundColor = ${darkForegroundColor.toKotlin()}` },
+	{ match: 'val lightLoaderColor', write: `val lightLoaderColor = ${lightLoaderColor.toKotlin()}` },
+	{ match: 'val darkLoaderColor', write: `val darkLoaderColor = ${darkLoaderColor.toKotlin()}` },
 ])
 await replaceLine('app/src/main/res/values/colors.xml', [
 	{ match: '<color name="foreground"', write: `<color name="foreground">${lightForegroundColor.toHex()}</color>` },

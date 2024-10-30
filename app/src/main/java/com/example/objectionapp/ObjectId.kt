@@ -38,8 +38,8 @@ fun encodeObjectIdIntoSheetRoute(objectId: String): String {
 }
 
 @OptIn(ExperimentalEncodingApi::class)
-fun decodeObjectIdFromRouteArgs(args: Bundle?): String {
-	val encodedId = args?.getString("encodedObjectId") ?: throw Exception("Invalid bundle")
+fun decodeObjectIdFromRouteArgs(args: Bundle): String {
+	val encodedId = args.getString("encodedObjectId") ?: throw Exception("Invalid bundle")
 
 	return String(bytes = Base64.UrlSafe.decode(encodedId))
 }

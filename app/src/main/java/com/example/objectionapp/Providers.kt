@@ -2,10 +2,14 @@ package com.example.objectionapp
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -16,7 +20,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
@@ -51,15 +58,10 @@ fun Provider(controller: Controller = Controller.fromConstants()) {
 		}
 
 		LaunchedEffect(Unit) {
-			println("main run")
 			controller.bridge.start(controller.wsUrl)
 
 			controller.bridge.onHasInternet.listen(ListenId()) {
 				hasInternet.value = it
-			}
-
-			controller.bridge.onHasInternet.listen(ListenId()) {
-				hasInternet.value = true
 			}
 
 			controller.bridge.onError.listen(ListenId()) {
@@ -79,24 +81,44 @@ fun Provider(controller: Controller = Controller.fromConstants()) {
 			}
 			if (isLoading) {
 				Box(modifier.zIndex(2f)) {
-					Column {
-						Text("Loading...", fontSize = 20.sp, color = textColor)
+					Column(
+						Modifier.fillMaxSize(),
+						verticalArrangement = Arrangement.Center,
+						horizontalAlignment = Alignment.CenterHorizontally
+					) {
+						CircularProgressIndicator(color = if (isDark) controller.darkLoaderColor else controller.lightLoaderColor)
 					}
 				}
 			}
 			if (!hasInternet.value) {
 				Box(modifier.zIndex(3f)) {
-					Column {
+					Column(
+						Modifier
+							.fillMaxSize()
+							.padding(16.dp),
+						verticalArrangement = Arrangement.Center,
+						horizontalAlignment = Alignment.CenterHorizontally
+					) {
 						Text(controller.noInternetHeader, fontSize = 30.sp, color = textColor)
-						Text(controller.noInternetContent, color = textColor)
+						Text(
+							controller.noInternetContent,
+							color = textColor,
+							textAlign = TextAlign.Center
+						)
 					}
 				}
 			}
 			if (error.value != null) {
 				Box(modifier.zIndex(3f)) {
-					Column {
+					Column(
+						Modifier
+							.fillMaxSize()
+							.padding(16.dp),
+						verticalArrangement = Arrangement.Center,
+						horizontalAlignment = Alignment.CenterHorizontally
+					) {
 						Text(controller.errorHeader, fontSize = 30.sp, color = textColor)
-						Text(error.value!!, color = textColor)
+						Text(error.value!!, color = textColor, textAlign = TextAlign.Center)
 					}
 				}
 			}
