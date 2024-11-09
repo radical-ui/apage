@@ -40,6 +40,12 @@ class Color {
 	}
 }
 
+console.log(`
+	NOTE: Currently this script does not change the app id (com.example.objectionapp).
+	This is somewhat difficult because, in addition to the two necessary substitutions
+	app/build.gradle.kt, all the app directories need to be renamed to match.
+`)
+
 const icon = getConfigValue('icon')
 const backendUrl = getConfigValue('backend_url')
 const appName = getConfigValue('app_name')
@@ -87,9 +93,9 @@ await writeIcon(216, 'mipmap-xhdpi')
 await writeIcon(324, 'mipmap-xxhdpi')
 await writeIcon(432, 'mipmap-xxxhdpi')
 
-await dtils.exec(['./gradlew', 'assemble'])
+await dtils.exec(['./gradlew', 'assembleDebug'])
 
-console.log('APK is located at: app/build/outputs/apk/release/app-release-unsigned.apk')
+console.log('APK is located at: app/build/outputs/apk/debug/app-debug.apk')
 
 async function writeIcon(height: number, space: string) {
 	console.log(`Writing icon to space ${space} with height=${height}`)
